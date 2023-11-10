@@ -33,10 +33,8 @@ const config = {
 			/** @type {import('@docusaurus/preset-classic').Options} */
 			({
 				docs: {
+					routeBasePath: '/',
 					sidebarPath: './sidebars.js',
-				},
-				blog: {
-					showReadingTime: true,
 				},
 				theme: {
 					customCss: './src/css/custom.css',
@@ -58,12 +56,25 @@ const config = {
 				},
 				items: [
 					{
-						type: 'docSidebar',
-						sidebarId: 'tutorialSidebar',
 						position: 'left',
-						label: 'Tutorial',
+						to: '/architecture',
+						label: 'Architecture',
 					},
-					{ to: '/blog', label: 'Blog', position: 'left' },
+					{
+						position: 'left',
+						to: '/toolbox',
+						label: 'Toolbox',
+					},
+					{
+						position: 'left',
+						to: '/components',
+						label: 'Components',
+					},
+					{
+						position: 'left',
+						to: '/use_cases',
+						label: 'Use cases',
+					},
 					{
 						href: 'https://github.com/VALAWAI/docs',
 						label: 'GitHub',
@@ -75,11 +86,23 @@ const config = {
 				style: 'dark',
 				links: [
 					{
-						title: 'Docs',
+						title: 'Index',
 						items: [
 							{
-								label: 'Tutorial',
-								to: '/docs/intro',
+								label: 'Architecture',
+								to: '/architecture',
+							},
+							{
+								label: 'Toolbox',
+								to: '/toolbox',
+							},
+							{
+								label: 'Components',
+								to: '/components',
+							},
+							{
+								label: 'Use cases',
+								to: '/use_cases',
 							},
 						],
 					},
