@@ -70,11 +70,6 @@ const config = {
 				items: [
 					{
 						position: 'left',
-						to: '/architecture',
-						label: 'Architecture',
-					},
-					{
-						position: 'left',
 						to: '/toolbox',
 						label: 'Toolbox',
 					},
@@ -87,6 +82,11 @@ const config = {
 						position: 'left',
 						to: '/use_cases',
 						label: 'Use cases',
+					},
+					{
+						position: 'left',
+						to: '/tutorials',
+						label: 'Tutorials',
 					},
 					{
 						href: 'https://github.com/VALAWAI/docs',
@@ -102,10 +102,6 @@ const config = {
 						title: 'Index',
 						items: [
 							{
-								label: 'Architecture',
-								to: '/architecture',
-							},
-							{
 								label: 'Toolbox',
 								to: '/toolbox',
 							},
@@ -117,6 +113,14 @@ const config = {
 								label: 'Use cases',
 								to: '/use_cases',
 							},
+							{
+								label: 'Tutorials',
+								to: '/tutorials',
+							},
+							{
+								label: 'Glossary',
+								to: '/glossary',
+							}
 						],
 					},
 					{

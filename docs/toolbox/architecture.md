@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Toolbox
+# RGNW architecture
 
 the tolbox RNGW toolbox is based on something
 

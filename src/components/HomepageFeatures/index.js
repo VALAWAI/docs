@@ -4,21 +4,11 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Architecture',
-    Svg: require('@site/static/img/architecture.svg').default,
-    description: (
-      <>
-        Prototype, engineer and release a toolbox for value-aware AI.
-      </>
-    ),
-  },
-  {
-    title: 'toolbox',
+    title: 'Toolbox',
     Svg: require('@site/static/img/toolbox.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Prototype, engineer and release a toolbox for value-aware AI.
       </>
     ),
   },
@@ -27,8 +17,7 @@ const FeatureList = [
     Svg: require('@site/static/img/components.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Create value-aware applications with the defined components.
       </>
     ),
   },
@@ -37,8 +26,7 @@ const FeatureList = [
     Svg: require('@site/static/img/use_cases.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Do studies with real users addind value-awareness.
       </>
     ),
   }
