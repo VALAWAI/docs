@@ -18,7 +18,7 @@ const config = {
 	baseUrl: '/docs',
 	organizationName: 'VALAWAI', // Usually your GitHub org/user name.
 	projectName: 'docs', // Usually your repo name.
-
+	deploymentBranch: 'gh-pages',
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'warn',
 
