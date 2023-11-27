@@ -129,7 +129,7 @@ const config = {
 							{
 								html: '<p>VALAWAI project is funded by the European Union under the European Innovation Council (EIC) research and innovation programme under Grant Agreement number 101070930.</p>'
 							}, {
-								html: '<img loading="lazy" decoding="async" class="alignleft wp-image-2239" src="https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-325x217.png" alt="" width="300" height="63" srcset="https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-768x161.png 768w, https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-1536x322.png 1536w, https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-2048x430.png 2048w, https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-1280x269.png 1280w" sizes="(max-width: 300px) 100vw, 300px">'
+								html: '<img loading="lazy" decoding="async" class="alignleft wp-image-2239" src="img/EN-Funded-by-the-EU-NEG-325x217.png" alt="" width="300" height="63" srcset="https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-768x161.png 768w, https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-1536x322.png 1536w, https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-2048x430.png 2048w, https://valawai.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-NEG-1280x269.png 1280w" sizes="(max-width: 300px) 100vw, 300px">'
 							}
 						]
 					},
