@@ -171,7 +171,62 @@ The Master Of VALAWAI has the next software dependencies:
 
 ## Asyncapi
 
-VALAWAY ayncapi
+The services provided by the Master Of VALAWAI are described in the file
+[asyncapi.yml](https://github.com/VALAWAI/MOV/blob/main/asyncapi.yml).
+In the next sections, you can read more about them.
+
+
+### Register a component
+
+When a component want to be visible by other VALAWAI components it must use this service
+to register it as a possible topology node. For this pourposes teh component must send
+a message send to the queue **valawai/component/register** with the next payload:
+
+ - **type** of the component to register. It may be C0, C1 or C2.
+ - **name** of the component to register. It must satisfy the ___c[0|1|2]_\\w+___.
+ - **version** of the component. It must match the pattern ___\d\.\d\.\d___.
+ - **asyncAPI** this is a string with the specification of the services that provides the component
+ in [YAML](https://en.wikipedia.org/wiki/YAML) and using the [asyncapi](https://www.asyncapi.com/en) specification.
+
+The MOV validate that the provided information is valid and if it is stored this information
+on the database and automatically creates any possible connection of this component with the rest
+of the components that are already registered. By default, if the new connections are between
+different types of components they are enabled, and otherwise it is disabled.
+
+The next JSON is an example of the message payload to register a component.
+
+```
+{
+  "type": "C0",
+  "name": "c0_voice_to_text",
+  "version": "1.0.0",
+  "asyncapi_yaml": "asyncapi: 2.6.0\ninfo:\n  title: Service To test\n  version: 1.5.0\n  description: This service is in charge of processing user signups\nchannels:\n  valawai/test_input:\n    subscribe:\n      message:\n        payload:\n          type: object\n          properties:\n            content:\n              type: string"
+}
+```
+
+### Search for some components
+
+query
+
+
+### Unregister a component
+
+
+compoennt id
+
+
+### Create topology connection
+
+
+### Search for some topology connections
+
+
+### Modify topology connection
+
+
+### Add a log message
+
+
 
 
 ## Web user interface
