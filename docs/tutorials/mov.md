@@ -183,7 +183,7 @@ In the next sections, we describe the services that the MOV provides.
 
 When a component wants to be visible by other VALAWAI components it must use this service
 to register it as a possible topology node. For this purpose, the component must send
-a message to send to the queue **valawai/component/register** with the next payload:
+a message to the queue **valawai/component/register** with the next payload:
 
  - **type** of the component to register. It may be C0, C1 or C2.
  - **name** of the component to register. It must satisfy the ___c[0|1|2]_\\w+___.
@@ -300,8 +300,22 @@ The next JSON is an example of the payload of a message that responds to a query
 
 ### Unregister a component
 
+When a component does not want to be visible by other VALAWAI components it must use this service
+to unregister it. For this purpose, the component must send
+a message to the queue **valawai/component/unregister** with the next payload:
 
-compoennt id
+ - **component_id** The identifier of the component to unregister.
+
+The MOV mark the registered component as finished and it is not more visible by other components.
+It also disables and removes any topology connection that this component is involved.
+
+The next JSON is an example of the message payload to unregister a component.
+
+```
+{
+  "component_id": "65c1f59ea4cb169f42f5edc4"
+}
+```
 
 
 ### Create topology connection
