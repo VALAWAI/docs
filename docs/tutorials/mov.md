@@ -320,11 +320,49 @@ The next JSON is an example of the message payload to unregister a component.
 
 ### Create topology connection
 
+When a component is registered, the Master Of VALAWAi automatically create any connection
+of this new component with any other registered component.Thus, this service is something
+that rarely will be used but we provide for any case that may be necessary. For example
+if a connection is removed and want to create again. For this purpose, a message
+has to send to the queue **valawai/topology/create** with the next payload:
+
+ - **A**
+
+
+The next JSON is an example of the message payload to unregister a component.
+
+```
+{
+  "component_id": "65c1f59ea4cb169f42f5edc4"
+}
+```
+
 
 ### Search for some topology connections
 
 
 ### Modify topology connection
+
+As we describe on the [value awareness architecture](/toolbox/architecture/value_awareness_architecture)
+the data and control flow of messages intechanged by the VALAWAi components as described by
+a topology that in our case will be managed by the Master Of VALAWAI(MOV). On the previous
+section we describe the services to create and search for these connections, the service that remains
+is the capability of the C2 components to enable, disable or remove these connections.
+For this purpose, the C2 component must send to the queue **valawai/topology/change** a message
+with the following payload:
+
+
+ - **A**
+
+
+The next JSON is an example of the message payload to unregister a component.
+
+```
+{
+  "component_id": "65c1f59ea4cb169f42f5edc4"
+}
+```
+
 
 
 ### Add a log message
