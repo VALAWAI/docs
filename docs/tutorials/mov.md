@@ -171,21 +171,24 @@ The Master Of VALAWAI has the next software dependencies:
 
 ## Asyncapi
 
-The services provided by the Master Of VALAWAI are described in the file
-[asyncapi.yml](https://github.com/VALAWAI/MOV/blob/main/asyncapi.yml).
-In the next sections, you can read more about them.
+The services provided by the Master Of VALAWAI are fully described in the file
+[asyncapi.yml](https://github.com/VALAWAI/MOV/blob/main/asyncapi.yml), that you
+can read it using the [swagger editor](https://editor-next.swagger.io/)
+importing the URL of this file.
+
+In the next sections, we describe the services that the MOV provides.
 
 
 ### Register a component
 
-When a component want to be visible by other VALAWAI components it must use this service
-to register it as a possible topology node. For this pourposes teh component must send
-a message send to the queue **valawai/component/register** with the next payload:
+When a component wants to be visible by other VALAWAI components it must use this service
+to register it as a possible topology node. For this purpose, the component must send
+a message to send to the queue **valawai/component/register** with the next payload:
 
  - **type** of the component to register. It may be C0, C1 or C2.
  - **name** of the component to register. It must satisfy the ___c[0|1|2]_\\w+___.
  - **version** of the component. It must match the pattern ___\d\.\d\.\d___.
- - **asyncAPI** this is a string with the specification of the services that provides the component
+ - **asyncAPI** This is a string with the specification of the services that provides the component
  in [YAML](https://en.wikipedia.org/wiki/YAML) and using the [asyncapi](https://www.asyncapi.com/en) specification.
 
 The MOV validate that the provided information is valid and if it is stored this information
@@ -206,8 +209,94 @@ The next JSON is an example of the message payload to register a component.
 
 ### Search for some components
 
-query
+If you want to obtain information on the registered components you can send a message with a query
+to the queue **valawai/component/query** and you will receive the found component on the queue
+**valawai/component/page**.
 
+The payload of the query must have the following fields:
+
+ - **id** is an optional field that defines the identifier query. This is used to know
+ the found components to which the query is related.
+ - **pattern** to match the name or description of the components to return. If it is
+ defined between ___/___ it is considered a PCRE regular expression.
+ - **type** to match the components to return. If it is defined between ___/___
+ it is considered a PCRE regular expression.
+ - **order**  in which the components have to be returned. It is formed by the field names,
+ separated by a comma, and each of it with the ___-___ prefix for descending order or
+ ___+___ for ascending. The possible fields are type, description, name or since.
+ By default is ___+since___.
+ - **offset** The index of the first component to return. It must be an integer number greater
+ or equal to 0, By default is 0.
+ - **limit** The maximum number of components to return. It must be an integer number greater than 0.
+ By default is 20.
+
+The next JSON is an example of the query payload.
+
+```
+{
+  "id": "1elkjfg289",
+  "pattern": "/.+voice.+/i",
+  "type": "C0",
+  "order": "type,name",
+  "offset": "1",
+  "limit": "5"
+}
+```
+
+The MOV when receives the query a request on the database and publishes the result as a message
+on the queue **valawai/component/page** with the following payload:
+
+ - **query_id** is an optional field that defines the identifier query that this is the answer.
+ - **total** The number of components that satisfy the query.
+ - **components** that satisfy the query. It must be an array or ___null___ if any component
+ matches the query. Each component will have the following fields:
+   - **id** The identifier of the component.
+   - **name** of the component.
+   - **description** of the component.
+   - **version** of the component.
+   - **api_version** The version of the asyncapi that describes the services of the component.
+   - **type** of the component. It can be C0, C1 or C2.
+   - **since** The epoch time, in seconds, since the component is available.
+   - **channels** the description of the services that the component provides. It must be an array
+    or ___null___ if the component does not provide services. Each channel is described by the fields:
+     - **id** The identifier of the channel it match the queue name.
+     - **description** of the channel
+     - **subscribe** The type of payload that the channel can receive. If it is ___null___ the channel
+     not receive any message. The possible types are string, integer, boolean, object or an array.
+     - **publish** The type of payload that the channel can send. If it is ___null___ the channel
+     not send any message. The possible types are string, integer, boolean, object or an array.
+
+The next JSON is an example of the payload of a message that responds to a query.
+
+```
+{
+  "query_id": "1elkjfg289",
+  "total": "5",
+  "components": [
+    {
+      "id": "65c1f59ea4cb169f42f5edc4",
+      "name": "c0_voice_to_text",
+      "description": "Generate text from the ambient audio",
+      "version": "1.0.5",
+      "api_version": "2.3.0",
+      "type": "C0",
+      "since": "1709902001",
+      "channels": [
+        {
+          "id": "valawai/c0_voice_to_text/audio",
+          "description": "Provide the audio to convert to text",
+          "subscribe": {
+            "type": "BASIC"
+          },
+          "publish": {
+            "type": "BASIC"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
 
 ### Unregister a component
 
