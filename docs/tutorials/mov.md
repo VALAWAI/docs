@@ -457,12 +457,12 @@ The next JSON is an example of the payload of a message that responds to a query
 ### Modify a topology connection
 
 As we describe on the [value awareness architecture](/toolbox/architecture/value_awareness_architecture)
-the data and control flow of messages are interchanged by the VALAWAi components as described by
-a topology that in our case will be managed by the Master Of VALAWAI(MOV). In the previous
-section, we describe the services to create and search for these connections, the service
-that remains is the capability of the C2 components to enable, disable or remove these
-connections. For this purpose, the C2 component must send to the queue **valawai/topology/change**
-a message with the following payload:
+the data and control flow of messages are interchanged by the VALAWAi components
+as described by a topology that in our case will be managed by the Master Of VALAWAI(MOV).
+In the previous section, we describe the services to create and search for these connections,
+the service that remains is the capability of the C2 components to enable, disable or
+remove these connections. For this purpose, the C2 component must send to the queue
+**valawai/topology/change** a message with the following payload:
 
  - **action** to change the topology connection. It can be ENABLE, DISABLE or REMOVE.
  - **connection_id** The identifier of the topology connection to change.
@@ -494,8 +494,9 @@ the log messages. The payload of this message must have:
 
 
  - **level** of the log message. It can be ERROR, WARN, INFO or DEBUG.
- - **message** of the log. It can be ERROR, WARN, INFO or DEBUG.
- - **payload** Extra information to rich the log message. By default is expected a json value encoded as a string.
+ - **message** of the log.
+ - **payload** Extra information to rich the log message. By default is expected
+ a json value encoded as a string.
 
 
 The next JSON is an example of the message payload to add a new
@@ -511,26 +512,103 @@ log message.
 
 ## Web user interface
 
-Actions to do over the UI
+When you start the Master Of VALAWAI (MOV) you can access to
+the web user interface if you go to [http://localhost:8080](http://localhost:8080).
 
-Show components
+In the next sections, we describe what you can do on this user interface.
 
-register a component
+### Manage components
 
-unregister a component
+If you click on the upper left a menu appears and you select **Components**, or you click
+over **Components** on the footer left menu, you will see all the registered components
+on the Master of VALAWAI (MOv) as you can see in the next image.
 
-show topology connections
+![Screen shot of the components view](/img/tutorials/mov/components.png)
 
-create a connection
+As you can see in the previous image on the top you have a form that you can use to filter
+the components to view. This form has the following fields:
 
-enable/diasable/remove connections
+ - The first field is used to return the components that the name or description matches
+ the text written on it. You can use __*__ as a wildcard to match any character.
+ - The seconds are used to define in which order the components to return.
+ You can order by type name or description of the component. Also if you check the box,
+ the returned components will be in reverse order.
+ - The last form is used to select the types of components to return.
 
-Show logs
+
+This view does not load dynamically the components, so if you want to obtain the last
+components that satisfy the query that you have filled in you must click the button **Reload**.
+
+The last column of the table has the next actions that can be done over a component:
+
+ - **Show** This action opens a new page where you can see all the details of
+ the component as you can see on the below image.
+ - **Unregister** This action is used to remove a component from the infrastructure.
+ This action automatically removes and disables any connection in which this component
+ is involved.
+ - **Show connections** This action is used to show all the topology connections
+ where this component is involved. Thus, the component is the source or the target
+ of the topology connection.
+
+![Screen shot of a component view](/img/tutorials/mov/component.png)
+
+You can notify the MOV that exist a new component if you click on the button
+**Register a new component**. We discourage you from using it, because is the new component,
+when is available, that has to do this action over the VALAWAI infrastructure.
 
 
-## Web API
+### Manage topology
+
+If you click on the upper left a menu appears and you select **Topology**, or you click
+over **Topology** on the footer left menu, you will see all the registered topology
+connections on the Master of VALAWAI (MOv) as you can see in the next image.
+
+![Screen shot of the topology connections view](/img/tutorials/mov/topology_connections.png)
+
+As you can see in the previous image on the top, you can specify the text to match
+the source or target of the connections to return. You can use __*__ as a wildcard
+to match any character. After that, you can define the order to return the connections.
+
+This view does not load dynamically the topology connections, so if you want to obtain the last
+connections that satisfy the query that you have filled in you must click the button **Reload**.
+
+The actions that you can do over the found connections are:
+
+ - **Show** This action opens a new page where you can see all the details of
+ the topology connection as you can see on the below image.
+ - **Enable** This action is used to enable the connection if it is disabled.
+ - **Disable** This action is used to disable the connection if it is enabled.
+ - **Remove** This action is used to remove the connections. If the connection is enabled
+ it is disabled before removing it.
+
+![Screen shot of the topology connections view](/img/tutorials/mov/topology_connection.png)
+
+You can create a new topology connection if you click on the button **Create a new connection**.
+We discourage you from using it because the connections are automatically created
+when a component is registered. We provide it if you want to restore a removed connection.
+Otherwise, if you use it to create a connection you must be sure that the source channel content
+is equal to the target channel content.
 
 
+### Manage logs
+
+If you click on the upper left a menu appear and you select **Logs**, or you click
+over **Logs** on the footer left menu, you will see all the notified logs on
+the Master of VALAWAI (MOv) as you can see in the next image.
+
+![Screen shot of the logs view](/img/tutorials/mov/logs.png)
+
+As you can see in the previous image on the top, you can specify a text that has
+to match for the log messages to return. You can use __*__ as a wildcard
+to match any character. After that, you can define the order to return the logs,
+and finally, you have select the level of the log messages to return.
+This view does not load dynamically the logs, so if you want to obtain the last logs
+that satisfy the query that you have filled in you must click the button **Reload**.
+
+
+### API
+
+The Master Of VALAWAi also provides some web services that allow to the userAs a result
 
 
 
