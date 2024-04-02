@@ -186,7 +186,7 @@ to register it as a possible topology node. For this purpose, the component must
 a message to the queue **valawai/component/register** with the next payload:
 
  - **type** of the component to register. It may be C0, C1 or C2.
- - **name** of the component to register. It must satisfy the ___c[0|1|2]_\\w+___.
+ - **name** of the component to register. It must satisfy the ___c[0|1|2]_\w+___.
  - **version** of the component. It must match the pattern ___\d\.\d\.\d___.
  - **asyncAPI** This is a string with the specification of the services that provides the component
  in [YAML](https://en.wikipedia.org/wiki/YAML) and using the [asyncapi](https://www.asyncapi.com/en) specification.
@@ -209,9 +209,9 @@ The next JSON is an example of the message payload to register a component.
 
 ### Search for some components
 
-If you want to obtain information on the registered components you can send a message with a query
-to the queue **valawai/component/query** and you will receive the found component on the queue
-**valawai/component/page**.
+If you want to obtain information on the registered components you can send a message with
+a query to the queue **valawai/component/query** and you will receive the found component
+on the queue **valawai/component/page**.
 
 The payload of the query must have the following fields:
 
@@ -219,16 +219,18 @@ The payload of the query must have the following fields:
  the found components to which the query is related.
  - **pattern** to match the name or description of the components to return. If it is
  defined between ___/___ it is considered a PCRE regular expression.
+If it is __null__ this field is not used on the query.
  - **type** to match the components to return. If it is defined between ___/___
  it is considered a PCRE regular expression.
+If it is __null__ this field is not used on the query.
  - **order**  in which the components have to be returned. It is formed by the field names,
  separated by a comma, and each of it with the ___-___ prefix for descending order or
  ___+___ for ascending. The possible fields are type, description, name or since.
  By default is ___+since___.
  - **offset** The index of the first component to return. It must be an integer number greater
- or equal to 0, By default is 0.
- - **limit** The maximum number of components to return. It must be an integer number greater than 0.
- By default is 20.
+ or equal to 0.
+ - **limit** The maximum number of components to return. It must be an integer number
+ greater than 0.
 
 The next JSON is an example of the query payload.
 
@@ -238,8 +240,8 @@ The next JSON is an example of the query payload.
   "pattern": "/.+voice.+/i",
   "type": "C0",
   "order": "type,name",
-  "offset": "1",
-  "limit": "5"
+  "offset": 1,
+  "limit": 5
 }
 ```
 
@@ -257,14 +259,16 @@ on the queue **valawai/component/page** with the following payload:
    - **api_version** The version of the asyncapi that describes the services of the component.
    - **type** of the component. It can be C0, C1 or C2.
    - **since** The epoch time, in seconds, since the component is available.
-   - **channels** the description of the services that the component provides. It must be an array
-    or ___null___ if the component does not provide services. Each channel is described by the fields:
-     - **id** The identifier of the channel it match the queue name.
+   - **channels** the description of the services that the component provides. It must
+    be an array or ___null___ if the component does not provide services. Each channel
+    is described by the fields:
+     - **id** The identifier of the channel that matches the queue name.
      - **description** of the channel
-     - **subscribe** The type of payload that the channel can receive. If it is ___null___ the channel
-     not receive any message. The possible types are string, integer, boolean, object or an array.
+     - **subscribe** The type of payload that the channel can receive. If it is ___null___
+     the channel does not receive any messages. The possible types are string, integer, boolean,
+     object or an array.
      - **publish** The type of payload that the channel can send. If it is ___null___ the channel
-     not send any message. The possible types are string, integer, boolean, object or an array.
+     does not send any message. The possible types are string, integer, boolean, object or an array.
 
 The next JSON is an example of the payload of a message that responds to a query.
 
@@ -318,57 +322,192 @@ The next JSON is an example of the message payload to unregister a component.
 ```
 
 
-### Create topology connection
+### Create a topology connection
 
-When a component is registered, the Master Of VALAWAi automatically create any connection
-of this new component with any other registered component.Thus, this service is something
-that rarely will be used but we provide for any case that may be necessary. For example
-if a connection is removed and want to create again. For this purpose, a message
-has to send to the queue **valawai/topology/create** with the next payload:
+When a component is registered, the Master Of VALAWAI automatically creates any connection
+of this new component with any other registered component. Thus, this service is something
+that rarely will be used but we provide for any case that may be necessary. For example,
+if a connection is removed and you want to create again. For this purpose, a message
+has to be sent to the queue **valawai/topology/create** with the next payload:
 
- - **A**
+ - **source** The information of the node that is the source of the
+ connection. For the node is necessary the next information:
+   * **component_id** The identifier of the component that the topology
+   connection starts.
+   * **channle_name** The name of the component's channel that
+   will publish the messages that enter into the connection.
+ - **target** he information of the node that is the connection's target.
+   For the node is necessary the next information:
+   * **component_id** The identifier of the component that the topology
+   connection ends.
+   * **channle_name** The name of the component's channel that
+   will subscribe to the messages that pass through the connection.
+ - **enabled** This is ___true___ if the connection must to be enabled.
 
 
-The next JSON is an example of the message payload to unregister a component.
+The next JSON is an example of the message payload to create a topology connection.
 
 ```
 {
-  "component_id": "65c1f59ea4cb169f42f5edc4"
+  "source": {
+    "component_id": "65c1f59ea4cb169f42f5edc4",
+    "channel_name": "valawai/C0_voice_to_text/audio"
+  },
+  "target": {
+    "component_id": "65c1f59ea4cb169f42f5edc4",
+    "channel_name": "valawai/C0_voice_to_text/audio"
+  },
+  "enabled": true
 }
 ```
 
 
 ### Search for some topology connections
 
+If you want to obtain information on the topology connections you can send a message with
+a query to the queue **valawai/topology/query** and you will receive the found connections
+on the queue **valawai/topology/page**.
 
-### Modify topology connection
+The payload of the query must have the following fields:
 
-As we describe on the [value awareness architecture](/toolbox/architecture/value_awareness_architecture)
-the data and control flow of messages intechanged by the VALAWAi components as described by
-a topology that in our case will be managed by the Master Of VALAWAI(MOV). On the previous
-section we describe the services to create and search for these connections, the service that remains
-is the capability of the C2 components to enable, disable or remove these connections.
-For this purpose, the C2 component must send to the queue **valawai/topology/change** a message
-with the following payload:
+ - **id** is an optional field that defines the identifier query. This is used to know
+ the found components to which the query is related.
+ - **source_channel_name** to match the name of the source channel of the connection.
+ If it is defined between ___/___ it is considered a PCRE regular expression.
+If it is __null__ this field is not used on the query.
+ - **source_component_id** to match the source component identifier to return.
+ If it is defined between ___/___ it is considered a PCRE regular expression.
+ If it is __null__ this field is not used on the query.
+ - **target_channel_name** to match the name of the target channel of the connection.
+ If it is defined between ___/___ it is considered a PCRE regular expression.
+ If it is __null__ this field is not used on the query.
+ - **target_component_id** to match the target component identifier to return.
+ If it is defined between ___/___ it is considered a PCRE regular expression.
+ If it is __null__ this field is not used on the query.
+ - **order**  in which the components have to be returned. It is formed by the field names,
+ separated by a comma, and each of it with the ___-___ prefix for descending order or
+ ___+___ for ascending. The possible fields are createTimestamp, updateTimestamp, enabled,
+ source.componentId, source.channelName, target.componentId or target.channelName.
+ By default is ___-updateTimestamp___.
+ - **offset** The index of the first component to return. It must be an integer number greater
+ or equal to 0.
+ - **limit** The maximum number of components to return. It must be an integer number
+ greater than 0.
 
-
- - **A**
-
-
-The next JSON is an example of the message payload to unregister a component.
+The next JSON is an example of the query payload.
 
 ```
 {
-  "component_id": "65c1f59ea4cb169f42f5edc4"
+  "id": "1elkjfg289",
+  "source_channel_name": "/.+voice.+/i",
+  "source_component_id": "/[65c1f59ea4cb169f42f5edc4|65c1f59ea4cb169f42f5edc5]/",
+  "target_channel_name": "c0_voice_to_text",
+  "target_component_id": "65c1f59ea4cb169f42f5edc6",
+  "order": "enabled",
+  "offset": 1,
+  "limit": 5
 }
 ```
 
+The MOV when receives the query a request on the database and publishes the result as a message
+on the queue **valawai/topology/page** with the following payload:
 
+ - **query_id** is an optional field that defines the identifier query that this is the answer.
+ - **total** The number of components that satisfy the query.
+ - **connections** that satisfy the query. It must be an array or ___null___ if any connection
+ matches the query. Each connection will have the following fields:
+   - **id** The identifier of the topology connection.
+   - **create_timestamp** The epoch time, in seconds, when the connection has been created.
+   - **update_timestamp** The epoch time, in seconds, when the connection has been updated.
+   - **source** The node that is the source of the connection.
+     * **component_id** The identifier of the component that the topology connection starts.
+     * **channle_name** The name of the component's channel that will publish the messages
+     that enter into the connection.
+   - **target** The node that is the target of the connection.
+     * **component_id** The identifier of the component that the topology connection ends.
+     * **channle_name** The name of the component's channel that will subscribe to the messages
+     that pass through the connection.
+   - **enabled** This is ___true___ if the connection is enabled.
+
+The next JSON is an example of the payload of a message that responds to a query.
+
+```
+{
+  "query_id": "1elkjfg289",
+  "total": 5,
+  "connections": [
+    {
+      "id": "65c1f59ea4cb169f42f5edc4",
+      "create_timestamp": "1709902001",
+      "update_timestamp": "1709902001",
+      "source": {
+        "component_id": "65c1f59ea4cb169f42f5edc4",
+        "channel_name": "valawai/C0_voice_to_text/audio"
+      },
+      "target": {
+        "component_id": "65c1f59ea4cb169f42f5edc4",
+        "channel_name": "valawai/C0_voice_to_text/audio"
+      },
+      "enabled": true
+    }
+  ]
+}
+```
+
+### Modify a topology connection
+
+As we describe on the [value awareness architecture](/toolbox/architecture/value_awareness_architecture)
+the data and control flow of messages are interchanged by the VALAWAi components as described by
+a topology that in our case will be managed by the Master Of VALAWAI(MOV). In the previous
+section, we describe the services to create and search for these connections, the service
+that remains is the capability of the C2 components to enable, disable or remove these
+connections. For this purpose, the C2 component must send to the queue **valawai/topology/change**
+a message with the following payload:
+
+ - **action** to change the topology connection. It can be ENABLE, DISABLE or REMOVE.
+ - **connection_id** The identifier of the topology connection to change.
+
+The MOV has to enable a topology connection it subscribes to the source channel and publishes
+the received messages on the target channel. On the other hand, when disabling the connection
+unsubscribe to the source channel. Finally, if the topology connection is also enabled
+before marking it as deleted on the database.
+
+The next JSON is an example of the message payload to modify a topology connection.
+
+```
+{
+  "action": "ENABLE",
+  "connection_id": "65c1f59ea4cb169f42f5edc4"
+}
+```
 
 ### Add a log message
 
+The [VALAWAI architecture](/toolbox/architecture) if formed by some
+components that interact sending messages following a topology.
+This generated by default a distributed architecture and to facilitate
+the monitoring and debugging of these interactions, the Master Of
+VALAWAI (MOV) provides a logging infrastructure. This is based on a
+web user interface where as used you can search and view the log
+messages, and the queue **valawai/log/add** where the components publish
+the log messages. The payload of this message must have:
 
 
+ - **level** of the log message. It can be ERROR, WARN, INFO or DEBUG.
+ - **message** of the log. It can be ERROR, WARN, INFO or DEBUG.
+ - **payload** Extra information to rich the log message. By default is expected a json value encoded as a string.
+
+
+The next JSON is an example of the message payload to add a new
+log message.
+
+```
+{
+  "level": "ERROR",
+  "message": "The component is active",
+  "payload": "{\"pattern:\"p1\"}"
+}
+```
 
 ## Web user interface
 
