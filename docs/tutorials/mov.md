@@ -608,8 +608,17 @@ that satisfy the query that you have filled in you must click the button **Reloa
 
 ### API
 
-The Master Of VALAWAi also provides some web services that allow to the userAs a result
+The Master Of VALAWAI provides also web services to interact as you can interact
+as the user interface. You can view the full documentation of these services
+on the file [openapi.yaml](https://editor.swagger.io/?url=https://raw.githubusercontent.com/VALAWAI/MOV/main/openapi.yaml)
+The provided services are:
 
-
-
+ - Get some components
+ - Get the information of a component.
+ - Register a component.
+ - Unregister a component.
+ - Get some topology connections.
+ - Get the information of a topology connection.
+ - Modify a topology connection.
+ - Get some log messages.
 
