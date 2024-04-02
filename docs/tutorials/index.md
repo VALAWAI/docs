@@ -6,5 +6,10 @@ sidebar_position: 4
 
  * [Master of VALAWAI (MOV)](/tutorials/mov) explains how to use the MOV.
 
- * [Hello world](/tutorials/hello_world) is a simple example of how to
- create a hello world application with vlaue awwarness of misogonism.
+ * How to define a VALAWAI component
+
+   - [With Python](/tutorials/how_python_component)
+   - [With Quarkus](/tutorials/how_quarkus_component)
+
+ * [Mail use case](/tutorials/mail_use_case) explain a simple example of integration
+ off all the components of the toolbox.
