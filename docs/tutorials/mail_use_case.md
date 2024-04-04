@@ -1,7 +1,3 @@
----
-sidebar_position: 4
----
-
 # Mail use case
 
 DEscription of the use case.
@@ -13,7 +9,8 @@ That components that will be used on the example
 This tutorial
 Tutorial for basic example for a hello world example.
 
-C0-mail-sendor
+ - [C0 Email sensor](/docs/components/C0/email_sensor) to obtain information
+ from received e-mails.
 
 c0-mail actuator-
 
