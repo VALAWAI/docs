@@ -68,57 +68,51 @@ if deemed necessary, may be constructed by connecting C0 components through the 
 
 ## Data Flow
 
-Figure ref fig:arch-data presents the data flow between components. 
 Each component may communicate with other components at the same layer as well as with components at other layers. In other words, C2 components may communicate amongst themselves; for example, to share their reflection over the behaviour, and possibly to try to reach agreements over the results of their value-driven reasoning. They may communicate with C1 components; for example, to provide feedback to a C1 component on value alignment, resulting in raising value awareness at C1. They may also communicate with C0 components; for example, to receive information from a C0 component about relevant values. C1 components may also communicate amongst themselves; for example, to collaborate on decision making. They may also communicate with C0 components; for example, to receive from a C0 component the extracted features describing the world or to send information to a C0 component about which actions to perform next. C0 components may communicate amongst themselves as well; for example, to allow them to agree amongst themselves which extracted features may prevail and will later need to be shared with C1.  
 
 In general, allowing components on the same layer to communicate amongst themselves opens the door to self-organisation and attention focusing, which is especially needed at the C1 and C2 layers. However, whether self-organisation and attention focusing is centralised or not is an implementation choice that we will analyse and make a decision on in future deliverables.  
 
-%The only missing data link is between C2 and C0 components. We believe there is no need for C2 components reflecting on behaviour to directly communicate with C0 components. If needed, we argue that communication between C2 and C0 may happen indirectly through C1 components.
+![The VALAWAI architecture and the data flow](/img/toolbox/rgnw-arch-data.png)
 
 
 
 ## Control Flow: Control over system components
 
-Figure ref fig:arch-components presents the control over system components. 
 We argue that C1 components, which are concerned with decision making, may have control over C0 components, allowing them to tune their behaviour as needed. Furthermore, C2 components that reflect on values and value alignment may also tune the functionalities of both C1 and C0 components to ensure value alignment. For the time being, we believe components on the same level should not control each other's behaviour, because self-organisation and attention focusing at each layer (especially the C1 and C2 layers) can be achieved through the data flow at that layer. 
 
 In summary, components may only control those in the layers below them. This raises the question, how do C2 components evolve? That is, who has control over C2 components? Since C2 components are concerned with reasoning with human values, their behaviour is dictated by those values. Control over C2 components is achieved by controlling the values deemed relevant. We argue that this is purely a decision for humans to make. For the time being, we leave the selection/specification of the preferred value systems to be done manually, offline. In the future, we may investigate having users directly influence the relevant value system.  
 
-
-![The VALAWAI architecture and the data flow](/img/toolbox/rgnw-arch-data.png)
-
 ![The VALAWAI architecture and the control flow over system components](/img/toolbox/rgnw-arch-control-comp.png)
-
-![The VALAWAI architecture and the control flow over the topology](/img/toolbox/rgnw-arch-control-topology.png)
-
-![The VALAWAI architecture and the control flow over the real world](/img/toolbox/rgnw-arch-control-world.png)
 
 
 ## Control Flow: Control over the topology
 
-Figure ref fig:arch-top presents the control over the topology. 
 For C2 components to have control over the behaviour of C1 and C0 components, an alternative approach is to control the topology between those components, allowing activating/inhibiting the data communication between them. 
 
 We argue that data flow from/to C2 components, however, should not be affected. This is because we believe communication with the components that reflect on values should be open to all.
 
+![The VALAWAI architecture and the control flow over the topology](/img/toolbox/rgnw-arch-control-topology.png)
 
 
 ## Control Flow: Control over the world
 
-Figure ref fig:arch-world presents the control over the world. 
 Control over the world is manifested by having sensors at C0 observing the real world and registering their observations to be later shared with C1 (represented by the incoming control arrows), and having actuators at C0 performing actions in the real world (represented by the outgoing control arrow). 
 
 This is the only possible interaction with the real world, and it can only happen through C0 components: C2 and C1 components may only impact the world through C0.
 
+![The VALAWAI architecture and the control flow over the real world](/img/toolbox/rgnw-arch-control-world.png)
+
+
 ## Component
 
-![The global neural workspace model (GNW)](/img/toolbox/component.png)
 
-The image above illustrates the generic architecture for a system component. There are different component
+The image below illustrates the generic architecture for a system component. There are different component
 types depending on their layer. The C$i$ tag specifies the component's type: C$i \in$ \{C0, C1, C2\}. 
 Each component has a set of parameters that define and describe its behaviour. These are the parameters
 presented at the top of the component in the previous image. Finally, there is the interaction
 with the environment, both within and outside the system. 
+
+![The global neural workspace model (GNW)](/img/toolbox/component.png)
 
 The interaction with the environment falls into two main categories: 1) a component may communicate
 with other system components, and 2) a component may have control over the behaviour of its environment
