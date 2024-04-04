@@ -14,4 +14,5 @@ The CO componets defined on the [RGNW toolbox](/docs/toolbox/) are:
  * [Text prepossessing](/docs/components/C0/text_prepossessing) preprocess texts from Twitter posts.
  * [Topic detection model](/docs/components/C0/topic_detection_model) extract
  the corresponding topics from Twitter post.
+ * [Email sensor](/docs/components/email_sensor) obtain information form received email into an account.
  
