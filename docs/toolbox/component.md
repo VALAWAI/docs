@@ -64,7 +64,7 @@ Any components defined on the RGNW toolbox must have the following files:
  - **CHANGELOG.md** will contain a description of the significant changes in all
  the public versions of the component, and any necessary instructions to upgrade
  between versions.
- - **asyncapi.yaml** that describe the services that provide the component.
+ - **asyncapi.yaml** that describes the services that provide the component.
  - **docker-compose.yml** that will be used to deploy the component.
  
 In the next sections, we explain in more detail what these files must have.
@@ -91,7 +91,7 @@ Below you can see an example of this kind of file.
 ```
 # C0_voice_to_text
 
-This C0 VALAWAI component obtain text from audio files.
+This C0 VALAWAI component obtains text from audio files.
 
 ## Summary
 
@@ -103,13 +103,68 @@ This C0 VALAWAI component obtain text from audio files.
  - Developed By: [IIIA-CSIC](https://www.iiia.csic.es)
  - License: [GPL 3](LICENSE)
  
- ## TO DO ....
+## Build docker image
+ 
+You can build the docker image of this component with the next command:
+
+DOCKER_BUILDKIT=1 docker build -f src/main/docker/Dockerfile -t valawai/co_voice_to_text:${TAG:-latest} .
+
+Where TAG has the value of the image version to create. If it is not
+specified it uses the **latest**.
+
+## Deploy component
+
+You must build the **latest** docker image of this component before deploying it
+( see previous section). After that, you can deploy this component with the command:
+
+docker-compose up -d
+
+If you want to start it with the Master Of VALAWAI you must add the **mov** profile.
+
+docker-compose --profile mov up -d
+
+Also, you can modify the default variables creating an 
+[**.env**](https://docs.docker.com/compose/environment-variables/env-file/).
+The defined variables are:
+
+ - **C0_VOICE_TO_TEXT_TAG** is the tag of this component to use.
+  The default value is ___latest___.
+ - **RABBITMQ_TAG** is the tag of the RabbitMQ docker image to use.
+  The default value is ___management___.
+ - **MQ_PORT** is the port of the message queue broker is available.
+  The default value is ___5672___.
+ - **MQ_UI_PORT** the port of the message queue broker user interface is available.
+  The default value is ___8081___.
+ - **MQ_USER** is the name of the user that can access the message queue broker.
+  The default value is ___mov___.
+ - **MQ_PASSWORD** is the password to authenticate the user that can access the message queue broker.
+  The default value is ___password___.
+ - **MOV_TAG** is the tag of the MOV docker image to use.
+  The default value is ___latest___.
+ - **MOV_UI_PORT** is the port where the MOV user interface is available.
+  The default value is ___8080___.
+ - **MONGODB_TAG** is the tag of the MongoDB docker image to be used by the MOV.
+  The default value is ___latest___.
+ - **MONGO_PORT** is the port where MongoDB is available.
+  The default value is ___27017___.
+ - **MONGO_ROOT_USER** is the name of the root user for the MongoDB.
+  The default value is ___root___.
+ - **MONGO_ROOT_PASSWORD** is the password of the root user for the MongoDB.
+  The default value is ___password___.
+ - **MONGO_LOCAL_DATA** is the local directory where the MongoDB will be stored.
+  The default value is ___~/mongo_data/movDB___.
+ - **DB_NAME** is the name of the database used by the MOV.
+  The default value is ___movDB___.
+ - **DB_USER_NAME** is the name of the user used by the MOV to access the database.
+  The default value is ___mov___.
+ - **DB_USER_PASSWORD** is the password of the user used by the MOV to access the database.
+  The default value is ___password___.
 
 ```
 
 ### asyncapi.yaml
 
-This file describe the services that provide the component using a 
+This file describes the services that provide the component using a 
 [asyncapi](https://www.asyncapi.com/en) specification. You must use
 version ___2.6.0___ which is a rich standard that allows defining 
 all the elements in the most-grained detail of how an asynchronous
@@ -256,11 +311,94 @@ components:
 
 ### docker-compose.yml
 
-435
+This file contains all the necessary to deploy the component with any other required
+resource, such as a database. The behaviour of this component must be modified using an 
+[**.env** file](https://docs.docker.com/compose/environment-variables/env-file/),
+and it must contain the variables necessary to connect the component to 
+the message broker used by the infrastructure. These variables may be:
 
-Below you can see an example of a [docker-compose.yml](https://github.com/VALAWAI/C0_email_sensor/blob/main/docker-compose.yml).
+ - **MQ_HOST** is the host of the message queue broker is available.
+ - **MQ_PORT** is the port of the message queue broker is available.
+ - **MQ_USER** is the name of the user that can access the message queue broker.
+ - **MQ_PASSWORD** is the password to authenticate the user that can access
+  the message queue broker.
+
+In the case that you want to provide an option to start the component with
+the [Master Of VALAWAI](/docs/tutorials/mov), you must add this option as a profile,
+such as you can see in the below example.
 
 ```
-step::
+version: '3.7'
+services:
+  voice_to_text:
+    image: valawai/c0_voice_to_text:${C0_VOICE_TO_TEXT_TAG:-latest}
+    container_name: c0_voice_to_text
+    networks:  
+      - valawai-net
+    depends_on:
+      mov:
+        condition: service_completed_successfully
+        required: false
+    environment:
+      RABBITMQ_HOST: ${MQ_HOST:-mq}
+      RABBITMQ_PORT: ${MQ_PORT:-5672}
+      RABBITMQ_USERNAME: ${MQ_USER:-mov}
+      RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
+
+  mq:
+    image: rabbitmq:${RABBITMQ_TAG:-management}
+    container_name: mov_mq
+    profiles: [mov]
+    ports:
+      - ${MQ_PORT:-5672}:5672
+      - ${MQ_UI_PORT:-8081}:15672
+    networks:
+      - valawai-net
+    environment:
+      RABBITMQ_DEFAULT_USER: ${MQ_USER:-mov}
+      RABBITMQ_DEFAULT_PASS: ${MQ_PASSWORD:-password}
+
+  mongo:
+    image: mongo:${MONGODB_TAG:-latest}
+    container_name: mov_db
+    profiles: [mov]
+    ports:
+      - ${MONGO_PORT:-27017}:27017
+    networks:
+      - valawai-net
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-password}
+      MONGO_INITDB_DATABASE: ${DB_NAME:-movDB}
+      DB_NAME: ${DB_NAME:-movDB}
+      DB_USER_NAME: ${DB_USER_NAME:-mov}
+      DB_USER_PASSWORD: ${DB_USER_PASSWORD:-password}
+    volumes:
+      - src/deploy/docker/initialize-movDB.js:/docker-entrypoint-initdb.d/init-mongo.js
+      - ${MONGO_LOCAL_DATA:-~/mongo_data/emailSensorMovDB}:/data/db
+  mov:
+    image: valawai/mov:${MOV_TAG:-latest}
+    container_name: mov
+    profiles: [mov]
+    depends_on:
+      - mongo
+      - mq
+    ports:
+      - ${MOV_UI_PORT:-8080}:8080
+    networks:  
+      - valawai-net
+    environment:
+      RABBITMQ_HOST: mq
+      RABBITMQ_PORT: ${MQ_PORT:-5672}
+      RABBITMQ_USERNAME: ${MQ_USER:-mov}
+      RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
+      QUARKUS_MONGODB_DATABASE: ${DB_NAME:-movDB}
+      QUARKUS_MONGODB_CREDENTIALS_USERNAME: ${DB_USER_NAME:-mov}
+      QUARKUS_MONGODB_CREDENTIALS_PASSWORD: ${DB_USER_PASSWORD:-password}
+      QUARKUS_MONGODB_HOSTS: mongo:${MONGO_PORT:-27017}
+
+networks:
+  valawai-net:
+
 ```
 
