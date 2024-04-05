@@ -42,7 +42,7 @@ you can view the MOV user interface. Also, you can access the RabbitMQ user inte
 at [http://localhost:8081](http://localhost:8081). The user credentials for this last
 one are **mov:password**.
 
-This script generates docker image [**valawai/mov:latest**](#create-docker-image-from-source),
+This script generates docker image [**valawai/mov:latest**](#create-a-docker-image-from-the-source),
 if it is necessary, and start the [required software](#dependencies) using a
 [docker-compose](https://github.com/VALAWAI/MOV/blob/main/src/main/docker/docker-compose.yml).
 This last one has some variables that you can modify using a file named [**.env**](https://docs.docker.com/compose/environment-variables/env-file/) in the same directory of the script. For example, the next file shows
