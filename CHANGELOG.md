@@ -1,6 +1,10 @@
 # docs
 
+## Version 0.3.0 (April 5,2024)
 
+ - Add tutorial for using the Master of VALAWAI
+
+ 
 ## Version 0.2.0 (March 27,2024)
 
 - Add MAster of VALAWAI information.
