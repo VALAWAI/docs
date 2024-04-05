@@ -45,7 +45,7 @@ one are **mov:password**.
 This script generates docker image [**valawai/mov:latest**](#create-docker-image-from-source),
 if it is necessary, and start the [required software](#dependencies) using a
 [docker-compose](https://github.com/VALAWAI/MOV/blob/main/src/main/docker/docker-compose.yml).
-This last one has some variables that you can modify using a file named [**.env**](https://docs.docker.com/compose/environment-variables/env-file/) in the same directory of the script.For example, the next file shows
+This last one has some variables that you can modify using a file named [**.env**](https://docs.docker.com/compose/environment-variables/env-file/) in the same directory of the script. For example, the next file shows
 how to change the MOV port to 8043.
 
 ```
@@ -55,35 +55,35 @@ MOV_UI_PORT=8043
 
 The defined variables are:
 
- - **RABBITMQ_TAG** the tag of the RabbitMQ docker image to use.
+ - **RABBITMQ_TAG** is the tag of the RabbitMQ docker image to use.
   The default value is ___management___.
- - **MQ_PORT** the port the message queue broker is available.
+ - **MQ_PORT** is the port of the message queue broker is available.
   The default value is ___5672___.
- - **MQ_UI_PORT** the port the message queue broker user interface is available.
+ - **MQ_UI_PORT** is the port of the message queue broker user interface is available.
   The default value is ___8081___.
- - **MQ_USER** the name of the user that can access the message queue broker.
+ - **MQ_USER** is the name of the user that can access the message queue broker.
   The default value is ___mov___.
- - **MQ_PASSWORD** the password to authenticate the user that can access the message queue broker.
+ - **MQ_PASSWORD** is the password to authenticate the user that can access the message queue broker.
   The default value is ___password___.
- - **MONGODB_TAG** the tag of the MongoDB docker image to use.
+ - **MONGODB_TAG** is the tag of the MongoDB docker image to use.
   The default value is ___latest___.
- - **MONGO_PORT** the port where MongoDB is available.
+ - **MONGO_PORT** is the port where MongoDB is available.
   The default value is ___27017___.
- - **MONGO_ROOT_USER** the name of the root user for the MongoDB.
+ - **MONGO_ROOT_USER** is the name of the root user for the MongoDB.
   The default value is ___root___.
- - **MONGO_ROOT_PASSWORD** the password of the root user for the MongoDB.
+ - **MONGO_ROOT_PASSWORD** is the password of the root user for the MongoDB.
   The default value is ___password___.
- - **MONGO_LOCAL_DATA** the local directory where the MongoDB will be stored.
+ - **MONGO_LOCAL_DATA** is the local directory where the MongoDB will be stored.
   The default value is ___~/mongo_data/movDB___.
- - **DB_NAME** the name of the database used by the MOV.
+ - **DB_NAME** is the name of the database used by the MOV.
   The default value is ___movDB___.
- - **DB_USER_NAME** the name of the user used by the MOV to access to the database.
+ - **DB_USER_NAME** is the name of the user used by the MOV to access the database.
   The default value is ___mov___.
- - **DB_USER_PASSWORD** the password of the user used by the MOV to access to the database.
+ - **DB_USER_PASSWORD** is the password of the user used by the MOV to access the database.
   The default value is ___password___.
- - **MOV_TAG** the tag of the MOV docker image to use.
+ - **MOV_TAG** is the tag of the MOV docker image to use.
   The default value is ___latest___.
- - **MOV_UI_PORT** the port where MOV user interface is available.
+ - **MOV_UI_PORT** is the port where the MOV user interface is available.
   The default value is ___8080___.
 
 The database is only created the first time where script is called. So, if you modify
@@ -99,7 +99,7 @@ You can stop the MOV using the script:
 This also stops the started dependencies of the MOV (RabbitMQ and MongoDB).
 
 
-### Create docker image from source
+### Create a Docker image from the source
 
 If you want to create the docker container for the MOV you must follow the next steps:
 
@@ -122,7 +122,7 @@ git clone https://github.com/VALAWAI/MOV.git
 At the end you must have the docker image **valawai/mov:Z.Y.Z**
 where **X.Y.Z** will be the version of the MOV. If you want to have
 the image with another tag for example **latest** you must call the script
-with this tag as parameter, for example:
+with this tag as a parameter, for example:
 
 ```
 ./buildDockerImages.sh latest
@@ -161,7 +161,7 @@ variable [defined on it](https://quarkus.io/guides/all-config).
 
 ### Dependencies
 
-The Master Of VALAWAI has the next software dependencies:
+The Master Of VALAWAI has the following software dependencies:
 
 - [RabbitMQ](https://www.rabbitmq.com/) the broker that is used to exchange
  messages between the VALAWAi components.
@@ -188,7 +188,7 @@ a message to the queue **valawai/component/register** with the next payload:
  - **type** of the component to register. It may be C0, C1 or C2.
  - **name** of the component to register. It must satisfy the ___c[0|1|2]_\w+___.
  - **version** of the component. It must match the pattern ___\d\.\d\.\d___.
- - **asyncAPI** This is a string with the specification of the services that provides the component
+ - **asyncAPI** This is a string with the specification of the services that provide the component
  in [YAML](https://en.wikipedia.org/wiki/YAML) and using the [asyncapi](https://www.asyncapi.com/en) specification.
 
 The MOV validate that the provided information is valid and if it is stored this information
@@ -336,7 +336,7 @@ has to be sent to the queue **valawai/topology/create** with the next payload:
    connection starts.
    * **channle_name** The name of the component's channel that
    will publish the messages that enter into the connection.
- - **target** he information of the node that is the connection's target.
+ - **target** The information of the node that is the connection's target.
    For the node is necessary the next information:
    * **component_id** The identifier of the component that the topology
    connection ends.
@@ -461,7 +461,7 @@ the data and control flow of messages are interchanged by the VALAWAi components
 as described by a topology that in our case will be managed by the Master Of VALAWAI(MOV).
 In the previous section, we describe the services to create and search for these connections,
 the service that remains is the capability of the C2 components to enable, disable or
-remove these connections. For this purpose, the C2 component must send to the queue
+remove these connections. For this purpose, the C2 component must be sent to the queue
 **valawai/topology/change** a message with the following payload:
 
  - **action** to change the topology connection. It can be ENABLE, DISABLE or REMOVE.
@@ -601,7 +601,7 @@ the Master of VALAWAI (MOv) as you can see in the next image.
 As you can see in the previous image on the top, you can specify a text that has
 to match for the log messages to return. You can use __*__ as a wildcard
 to match any character. After that, you can define the order to return the logs,
-and finally, you have select the level of the log messages to return.
+and finally, you have to select the level of the log messages to return.
 This view does not load dynamically the logs, so if you want to obtain the last logs
 that satisfy the query that you have filled in you must click the button **Reload**.
 
@@ -618,7 +618,7 @@ The provided services are:
  - Register a component.
  - Unregister a component.
  - Get some topology connections.
- - Get the information of a topology connection.
+ - Get the information on a topology connection.
  - Modify a topology connection.
  - Get some log messages.
 
