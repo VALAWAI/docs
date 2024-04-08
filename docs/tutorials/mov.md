@@ -327,8 +327,12 @@ The next JSON is an example of the message payload to unregister a component.
 When a component is registered, the Master Of VALAWAI automatically creates any connection
 of this new component with any other registered component. Thus, this service is something
 that rarely will be used but we provide for any case that may be necessary. For example,
-if a connection is removed and you want to create again. For this purpose, a message
-has to be sent to the queue **valawai/topology/create** with the next payload:
+if a connection is removed and you want to create again. In any case, if you use this service
+you must be sure that the message that is published by the source component of the connection
+matches the messages that the target component expects to receive.
+
+To create a topology connection you must send a message to the queue **valawai/topology/create**
+with the following payload:
 
  - **source** The information of the node that is the source of the
  connection. For the node is necessary the next information:
