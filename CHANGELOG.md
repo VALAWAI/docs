@@ -1,5 +1,13 @@
 # docs
 
+
+## Version 0.3.0 (April 8,2024)
+
+ - Tutorial of how to create a component with Qarkus.
+ - Tutorial of how to create a component with Python.
+ - Tutorial for a simple Value-Awarness application.
+ 
+
 ## Version 0.2.0 (April 8,2024)
 
  - Add tutorial for using the Master of VALAWAI
