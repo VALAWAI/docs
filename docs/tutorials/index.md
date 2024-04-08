@@ -11,5 +11,5 @@ sidebar_position: 4
    - [With Python](/tutorials/how_python_component)
    - [With Quarkus](/tutorials/how_quarkus_component)
 
- * [Mail use case](/tutorials/mail_use_case) explain a simple example of integration
- off all the components of the toolbox.
+ * [Simple Value-awareness application](/tutorials/email_use_case) explain
+ how to use the VALAWAI Toolbox to create a value-awareness email responder.
