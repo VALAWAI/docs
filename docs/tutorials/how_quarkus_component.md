@@ -1,5 +1,8 @@
 # How to define a VALAWAI component with Quarkus
 
+
+** WORK IN PROGRESS **
+
 In this tutorial, we explain how to define a [VALAWAI component](/toolbox/component)
 that is developed using [Quarkus framework](https://quarkus.io/). We are going
 to use the [C0 e-mail sensor](/docs/components/C0/email_sensor) as example of this process.

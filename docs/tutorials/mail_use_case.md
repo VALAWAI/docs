@@ -1,5 +1,7 @@
 # Mail use case
 
+** WORK IN PROGRESS **
+
 DEscription of the use case.
 
 
