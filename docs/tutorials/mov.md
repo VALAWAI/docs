@@ -207,6 +207,36 @@ The next JSON is an example of the message payload to register a component.
 }
 ```
 
+If the [specification](/docs/toolbox/component#asyncapi.yaml) has a channel that starts with **valawai**
+plus the type of component, plus the name of the component and finishes with **/control/registered**,
+thus that matches the pattern **valawai/c[0|1|2]/\w+/control/registered**. Also, if it has a subscription
+to receive messages with an object payload with the fields:
+
+ - **id** The identifier of the component.
+ - **name** of the component.
+ - **description** of the component.
+ - **version** of the component.
+ - **api_version** The version of the asyncapi that describes the services of the component.
+ - **type** of the component. It can be C0, C1 or C2.
+ - **since** The epoch time, in seconds, since the component is available.
+ - **channels** the description of the services that the component provides. It must
+   be an array or ___null___ if the component does not provide services. Each channel
+   is described by the fields:
+    - **id** The identifier of the channel that matches the queue name.
+    - **description** of the channel
+    - **subscribe** The type of payload that the channel can receive. If it is ___null___
+     the channel does not receive any messages. The possible types are string, integer, boolean,
+     object, an array, a constant, a reference to another object, or a type combination that must
+     select one of, any of or all of.
+    - **publish** The type of payload that the channel can send. If it is ___null___ the channel
+     does not send any message. The possible types are string, integer, boolean, object, an array,
+     a constant, a reference to another object, or a type combination that must select one of,
+     any of or all of.
+   
+The Master of VALAWAI (MOV) will notify the component when the component is registered
+with a message containing the component information.
+
+
 ### Search for some components
 
 If you want to obtain information on the registered components you can send a message with
@@ -266,9 +296,12 @@ on the queue **valawai/component/page** with the following payload:
      - **description** of the channel
      - **subscribe** The type of payload that the channel can receive. If it is ___null___
      the channel does not receive any messages. The possible types are string, integer, boolean,
-     object or an array.
+     object, an array, a constant, a reference to another object, or a type combination that must
+     select one of, any of or all of.
      - **publish** The type of payload that the channel can send. If it is ___null___ the channel
-     does not send any message. The possible types are string, integer, boolean, object or an array.
+     does not send any message. The possible types are string, integer, boolean, object, an array,
+     a constant, a reference to another object, or a type combination that must select one of,
+     any of or all of.
 
 The next JSON is an example of the payload of a message that responds to a query.
 

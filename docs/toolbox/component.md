@@ -97,9 +97,9 @@ This C0 VALAWAI component obtains text from audio files.
 
  - Type: C0
  - Name: Voice to text
- - Version: 1.7.2 (September 23, 2023)
- - API: [1.0.0 (February 3,2023)](asyncapi.yaml)
- - VALAWAI API: [0.1.0 (August 2, 2023)](https://raw.githubusercontent.com/VALAWAI/MOV/ASYNCAPI_0.1.0/asyncapi.yml)
+ - Version: 1.7.2 (September 23, 2024)
+ - API: [1.0.0 (June 3,2024)](asyncapi.yaml)
+ - VALAWAI API: [1.0.0 (April 2, 2023)](https://raw.githubusercontent.com/VALAWAI/MOV/ASYNCAPI_1.1.0/asyncapi.yml)
  - Developed By: [IIIA-CSIC](https://www.iiia.csic.es)
  - License: [GPL 3](LICENSE)
  
@@ -190,13 +190,14 @@ ___valawai/c[0|1|2]/component_name/[control/data]/operation_name___. This templa
 contains lowercase letters, Python case separation and satisfies 
 the [RFC 6570 URI template](https://tools.ietf.org/html/rfc6570). For example, a **C0** component
 named **voice to text** that provides a service to process an audio file can be named as
-___valawai/C0/voice_to_text/data/audio_to_process___. The only field that you must define on the channel
-is publish (when the channel sends a message) or subscribe (when the channel receives a message).
-In both cases, you must add a **summary** (one-sentence description of the operation)
-and the message as a reference of a component. If you need to add a more extensive explanation
-you can use the **description** field.
+___valawai/C0/voice_to_text/data/audio_to_process___. You can explain the channel action
+using the **description** field, but you must define the channel as **publish** 
+(when the channel sends a message) or **subscribe** (when the channel receives a message).
+When you use both on the same channel specification you must use the  **summary** field
+with a one-sentence description of the operation. In any case, you must add a reference
+to the message that is sent or received on the channel.
 
-Finally, the **components** section will have two subsections: **messages** and **schemas**.
+The last section is the **components**, which will have two subsections: **messages** and **schemas**.
 The first one is used to describe the messages associated with the channels and the second one
 is to describe the message content (payload). The name of a message or a schema has to follow
 the lowercase and Python case. For the messages, you must set as **contentType** the MIME
@@ -206,6 +207,36 @@ to provide a more extended explanation. For the **schemas**, you only have to ad
 if the schema is not the payload of a message. The object **properties** names have to follow
 the lowercase and Python case and you must define the fields **type** and **description**,
 and if the value is not too complex add values on the **examples** field.
+
+When you create the specification you can define a special channel that starts with **valawai**
+plus the type of component, plus the name of the component and finish with **/control/registered**,
+thus that match the pattern **valawai/c[0|1|2]/\w+/control/registered**. This channel must be subscribed
+to receive messages with an object payload with the fields:
+
+ - **id** The identifier of the component.
+ - **name** of the component.
+ - **description** of the component.
+ - **version** of the component.
+ - **api_version** The version of the asyncapi that describes the services of the component.
+ - **type** of the component. It can be C0, C1 or C2.
+ - **since** The epoch time, in seconds, since the component is available.
+ - **channels** the description of the services that the component provides. It must
+   be an array or ___null___ if the component does not provide services. Each channel
+   is described by the fields:
+    - **id** The identifier of the channel that matches the queue name.
+    - **description** of the channel
+    - **subscribe** The type of payload that the channel can receive. If it is ___null___
+     the channel does not receive any messages. The possible types are string, integer, boolean,
+     object, an array, a constant, a reference to another object, or a type combination that must
+     select one of, any of or all of.
+    - **publish** The type of payload that the channel can send. If it is ___null___ the channel
+     does not send any message. The possible types are string, integer, boolean, object, an array,
+     a constant, a reference to another object, or a type combination that must select one of,
+     any of or all of.
+ 
+If this is present the [Master of VALAWAI](/docs/tutorials/mov#register-a-component) will notify this component
+when it has been registered send a message to this channel with the information of the 
+registered component. 
 
 Below is an example of an asyncapi description of a **C0** component that can extract text
 from an audio file. This component listens for messages with the audio data to process and
@@ -227,23 +258,29 @@ info:
     url: https://opensource.org/license/gpl-3-0
 
 channels:
-  valawai/C0/voice_to_text/data/audio_to_process:
+  valawai/c0/voice_to_text/data/audio_to_process:
     subscribe:
       summary: Provide the audio text to extract the text.
       message:
         $ref: '#/components/messages/audio_content'
 
-  valawai/C0/voice_to_text/data/text_extracted:
+  valawai/c0/voice_to_text/data/text_extracted:
     publish:
       summary: Notify about the extracted text from a received audio.
       message:
         $ref: '#/components/messages/text_content'
 
-  valawai/C0/voice_to_text/control/set_paremeters:
+  valawai/c0/voice_to_text/control/set_paremeters:
     subscribe:
       summary: Modify the parameters of the component.
       message:
         $ref: '#/components/messages/parameters_content'
+
+  valawai/c0/voice_to_text/control/registered:
+    description: The message to notify when the component has been registered.
+    subscribe:
+      message:
+        $ref: '#/components/messages/registered_component'
 
 components:
   messages:
@@ -261,6 +298,11 @@ components:
       contentType: application/json
       payload:
         $ref: "#/components/schemas/parameters_payload"
+
+    registered_component:
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/component_payload'
 
   schemas:
     audio_payload:
@@ -305,9 +347,231 @@ components:
           description: The language to use if it is not possible to infer the audio language.
           examples:
             - 'English'
+
+    component_payload:
+      type: object
+      properties:
+        id:
+          description: The identifier of the component.
+          type: string
+          pattern: '[0-9a-fA-F]{24}'
+          examples: 
+            - '65c1f59ea4cb169f42f5edc4'
+        name:
+          description: The name of the component.
+          type: string
+          examples: 
+            - 'c0_voice_to_text'
+        description:
+          description: The description of the component.
+          type: string
+          examples: 
+            - 'Generate text from the ambient audio'
+        version:
+          description: The component version.
+          type: string
+          pattern: '\d+\.\d+\.\d+'
+          examples: 
+            - '1.0.5'
+        api_version:
+          description: The version of the component API.
+          type: string
+          pattern: '\d+\.\d+\.\d+'
+          examples: 
+            - '2.3.0'
+        type:
+          description: The type level of the component in the VALAWAI.
+          oneOf:
+            - $ref: '#/components/schemas/component_type'
+        since:
+          description: The epoch time, in seconds, since the component is available in VALAWAI.
+          type: integer
+          minimum: 0
+          examples: 
+            - '1709902001'
+        channels:
+          description: The channels that the component have.
+          type: array
+          items:
+            - $ref: '#/components/schemas/channel_schema'
+
+    component_type:
+      type: string
+      enum:
+        - 'C0'
+        - 'C1'
+        - 'C2'
+
+    channel_schema:
+      type: object
+      description: A schema that define the messages that a channel can receive or send.
+      properties:
+        id:
+          description: The identifier of the channel.
+          type: string
+          examples: 
+            - 'valawai/c0_voice_to_text/audio'
+        description:
+          description: The description of the channel.
+          type: string
+          examples: 
+            - 'Provide the audio to convert to text'
+        subscribe:
+          description: The type of payload that the channel can receive.
+          oneOf:
+            - $ref: '#/components/schemas/payload_schema'
+        publish:
+          description: The type of payload that the channel can send.
+          oneOf:
+            - $ref: '#/components/schemas/payload_schema'
+
+    payload_schema:
+      type: object
+      discriminator: type
+      properties:
+        type:
+          type: string
+          enum:
+            - BASIC
+            - ENUM
+            - OBJECT
+            - ARRAY
+            - CONST
+            - REF
+            - ONE_OF
+            - ANY_OF
+            - ALL_OF
+      required:
+        - type
+
+    basic_payload_schema:
+      description: The basic payload schema.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'BASIC'
+            format:
+              type: string
+              description: The format of the basic type.
+              enum:
+                - 'INTEGER'
+                - 'NUMBER'
+                - 'BOOLEAN'
+                - 'STRING'
+
+    enum_payload_schema:
+      description: A payload that is defined of one value of a set.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ENUM'
+            values:
+              type: array
+              description: The possible enum values.
+              items:
+                - type: string
+
+    object_payload_schema:
+      description: A definition of a schema that describe an object.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'OBJECT'
+            id:
+              type: integer
+              description: The identifier used whne this schme is refer by other components.
+            properties:
+              description: The properties that define the object.
+              additionalProperties:
+                $ref: '#/components/schemas/payload_schema'
+            
+    array_payload_schema:
+      description: A payload that is represented by an array of values.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ARRAY'
+            items:
+              description: The type for the elements on the array.
+              type: array
+              items:
+                - $ref: '#/components/schemas/payload_schema'
+
+    constant_payload_schema:
+      description: A payload that is a consatnt value.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'CONST'
+            value:
+              type: string
+              description: The constant of the schema.
+
+    reference_payload_schema:
+      description: A payload that is a reference to another schema.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'REF'
+            value:
+              type: integer
+              description: The identifier of the schema that this a reference.
+
+    one_of_payload_schema:
+      description: A payload that is one of the possible schemas.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ONE_OF'
+            items:
+              description: The possible schemas.
+              type: array
+              items:
+                - $ref: '#/components/schemas/payload_schema'
+
+    any_of_payload_schema:
+      description: A payload that is any of the possible schemas.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ANY_OF'
+            items:
+              description: The possible schemas.
+              type: array
+              items:
+                - $ref: '#/components/schemas/payload_schema'
+
+    all_of_payload_schema:
+      description: A payload that is a set of schemas.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ALL_OF'
+            items:
+              description: The schemas that has to match.
+              type: array
+              items:
+                - $ref: '#/components/schemas/payload_schema'
+
 ```
-
-
 
 ### docker-compose.yml
 

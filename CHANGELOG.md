@@ -1,11 +1,9 @@
 # docs
 
 
-## Version 0.3.0 (April 8,2024)
-
- - Tutorial of how to create a component with Qarkus.
- - Tutorial of how to create a component with Python.
- - Tutorial for a simple Value-Awarness application.
+## Version 0.3.0 (April 15,2024)
+ 
+ - Explain how the component can be notified when the component is registered.
  
 
 ## Version 0.2.0 (April 8,2024)
