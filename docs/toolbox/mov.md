@@ -30,19 +30,25 @@ all the possible connections of this component with the rest of the registered c
 To determine if a to create a topology connection between two components it checks that
 the publish message schema of the source component matches the subscribe message
 schema of the target component. If the new topology connection is between components
-of different types, the MOV automatically enable it.
+of different types, the MOV automatically enable it. Also, checks if it has to be notified
+when the component will be registered and, if it is **C2** component, it 
+checks if the component must be notified when a message is interchanged between
+any defined connection.
 
 Apart from the register component the MOV provides the next services:
 
 - Search for information about all the registered components in the MOV.
 - Unregister a component from the application. After the action, the component
 will not be reachable by other components and any connection that it is involved
-will be disabled and removed from the topology.
+in will be disabled and removed from the topology.
 - Create a topology connection between components. This service is only
 provided for unexpected cases because the connection will be created
 at the moment a component is registered. If you use this service, you must
 guarantee that the message that is published by the source component is
-compatible with the messages that the target component is subscribed.
+compatible with the messages that the target component is subscribed to.
+It also checks for the special channel to be notified when the component is registered,
+and searches for any C2 component that will be notified when a message is interchanged
+following this connection.
 - Search for the defined topology connections and their status.
 - Enable a topology connection. When the connection is enabled the MOV 
 listen for all the messages that the source component publishes on the source
