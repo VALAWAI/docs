@@ -573,6 +573,132 @@ components:
 
 ```
 
+There is another special channel that can be defined only for the **C2** components.
+This service is used to notify these components of the messages that are
+interchanged in any topology connection.  The name of the channel must match the pattern
+**valawai/c2/\w+/control/\w+**. For example, for a service named __sent_text__ on
+a **C2** component named __text analyzer__, the channel must be named as
+**valawai/c2/text_analyzer/control/sent_text**. This channel must define a **subscribe**
+message with a payload with the following schema.
+
+ - **connection_id** The identifier of the topology connection that allows the message
+  interchanging.
+ - **source** The source component that has sent the message. It will have the identifier,
+  name and type of the source component.
+ - **target** The target component that has received the message.  It will have the
+  identifier,
+  name and type of the source component.
+ - **content** The payload of the message that has been through the connection.
+ - **timestamp** The epoch time, in seconds, when the message was sent. 
+ 
+When a connection is registered, it will be checked if exists any **C2**
+registered component with this kind of channel with a payload that matches the message
+that can be interchanged in the topology connection. If so, it will add to the connection
+the necessary information to notify the **C2** component of the messages that will
+be sent between the components through the connection.
+ 
+ 
+ ```
+ asyncapi: '2.6.0'
+info:
+  title: VALAWAI C2 text analyzer
+  version: '0.1.0'
+  description: |
+    This component analyses the alignment of a text with some values.
+
+channels:
+  valawai/c2/text_analyzer/control/sent_text:
+    subscribe:
+      summary: Notified every time two components interchange a text.
+      message:
+        $ref: '#/components/messages/text_notitication_content'
+
+components:
+  messages:
+    text_notitication_content:
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/text_notification_payload'
+
+  schemas:
+    text_notification_payload:
+      type: object
+      properties:
+        connection_id:
+          description: The identifier of the topology connection that allows the message interchanging.
+          type: string
+          pattern: '[0-9a-fA-F]{24}'
+          examples: 
+            - '65c1f59ea4cb169f42f5edc4'
+        source:
+          description: The component that has sent the text.
+          oneOf:
+            - $ref: '#/components/schemas/min_component_payload'
+        target:
+          description: The target component that has received the text.
+          oneOf:
+            - $ref: '#/components/schemas/min_component_payload'
+        content:
+          description: The text that is interchanged between the components.
+          oneOf: 
+            - $ref: '#/components/schemas/text_payload'
+        timestamp:
+          description: The epoch time, in seconds, when the message was sent.
+          type: integer
+          examples:
+            - '1709902001'
+    text_payload:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The speech is found on the audio.
+        language:
+          type: string
+          description: The detected language of the text.
+          examples:
+            - 'English'
+        accuracy:
+          type: number
+          min: 0
+          max: 100
+          description: The accuracy that the text i what can be listening on the audio.
+          examples:
+            - 98.7
+    min_component_payload:
+      type: object
+      description: The information of a component that is involved in a message.
+      properties:
+        id:
+          description: The identifier of the component.
+          type: string
+          pattern: '[0-9a-fA-F]{24}'
+          examples: 
+            - '65c1f59ea4cb169f42f5edc4'
+        name:
+          description: The name of the component.
+          type: string
+          examples: 
+            - 'c0_voice_to_text'
+        type:
+          description: The type level of the component in the VALAWAI.
+          oneOf:
+            - $ref: '#/components/schemas/component_type'
+    component_type:
+      type: string
+      enum:
+        - 'C0'
+        - 'C1'
+        - 'C2'
+
+ ```
+ 
+ The upper example shows you how this can be defined in this can of channels. In it,
+ you can see that the **C2_Text_analyzer** component needs to be notified every time
+ that two components interchange a text to validate if the text is aligned with some
+ specific values.
+ 
+
 ### docker-compose.yml
 
 This file contains all the necessary to deploy the component with any other required
