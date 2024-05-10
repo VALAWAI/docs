@@ -7,7 +7,7 @@ sidebar_position: 2
 To introduce value awareness into the GNW, we first need to understand what is awareness.
 The term ‘aware’ is ambiguous, but it commonly has to do with explicitly realising,
 perceiving or knowing something. For example, situation awareness (or situational awareness)
-[[Endsley, 2011]](/references#10.5555/2208018) refers to a mental state where all the relevant
+[[Endsley, 2011]](/references#endsley_2011) refers to a mental state where all the relevant
 elements of a situation and the way they hang together are known and it becomes possible
 to predict (or at least form sensible expectations about) what will happen next or what action
 should be taken.

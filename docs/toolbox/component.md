@@ -588,14 +588,11 @@ message with a payload with the following schema.
  - **target** The target component that has received the message.  It will have the
   identifier,
   name and type of the source component.
- - **content** The payload of the message that has been through the connection.
+ - **message_payload** The payload of the message that has been through the connection.
  - **timestamp** The epoch time, in seconds, when the message was sent. 
  
-When a connection is registered, it will be checked if exists any **C2**
-registered component with this kind of channel with a payload that matches the message
-that can be interchanged in the topology connection. If so, it will add to the connection
-the necessary information to notify the **C2** component of the messages that will
-be sent between the components through the connection.
+ In the next example, you can see how a **C2** analyzer component defines this kind of channel
+ to be notified when two components share a text.
  
  
  ```
@@ -638,7 +635,7 @@ components:
           description: The target component that has received the text.
           oneOf:
             - $ref: '#/components/schemas/min_component_payload'
-        content:
+        message_payload:
           description: The text that is interchanged between the components.
           oneOf: 
             - $ref: '#/components/schemas/text_payload'
@@ -693,11 +690,19 @@ components:
 
  ```
  
- The upper example shows you how this can be defined in this can of channels. In it,
- you can see that the **C2_Text_analyzer** component needs to be notified every time
- that two components interchange a text to validate if the text is aligned with some
- specific values.
- 
+When a [connection is registered](/tutorials/mov#create-a-topology-connection), it will be
+checked if any registered **C2** component that has this kind of channel with a ***message_payload**
+that matches the message that can be interchanged in the topology connection. If so, it will add
+to the connection the necessary information to [notify the **C2** component](/tutorials/mov#notify-about-a-sent-message-through-a-topology-connection)
+of the messages that will be sent between the components through the connection.
+
+Also, when a **C2** [component is registered](/tutorials/mov#register-a-component) and
+it has this kind of channel, it will be checked if any registered connection in which
+the exchange payload matches the **message_payload** defined on the channel. If so,
+it will add to the connection the necessary information to [notify this new registered 
+**C2** component](/tutorials/mov#notify-about-a-sent-message-through-a-topology-connection)
+of the messages that will be sent between the components through the connection.
+
 
 ### docker-compose.yml
 

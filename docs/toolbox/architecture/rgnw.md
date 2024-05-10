@@ -10,7 +10,7 @@ on distributed cognitive processing could converge on a unified description of a
 how decisions are made accordingly. But there is a second important facet of consciousness,
 namely the ability to reflect and engage in meta-level reasoning. This dual nature of processing
 is well documented for moral judgement, shown to involve both a direct intuitive judgement and
-rational symbolic decision-making [[Haidt, 2013]](/references#7294). Dual processing has also been confirmed in
+rational symbolic decision-making [[Haidt, 2013]](/references#haidt_2013). Dual processing has also been confirmed in
 neuro-imaging studies [[Greene et al., 2001]](/references#greene2001fmri).
 
 Processing at layer C0 (information extraction) and C1 (information integration) is often called

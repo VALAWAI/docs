@@ -191,11 +191,6 @@ a message to the queue **valawai/component/register** with the next payload:
  - **asyncAPI** This is a string with the specification of the services that provide the component
  in [YAML](https://en.wikipedia.org/wiki/YAML) and using the [asyncapi](https://www.asyncapi.com/en) specification.
 
-The MOV validate that the provided information is valid and if it is stored this information
-on the database and automatically creates any possible connection of this component with the rest
-of the components that are already registered. By default, if the new connections are between
-different types of components they are enabled, and otherwise it is disabled.
-
 The next JSON is an example of the message payload to register a component.
 
 ```
@@ -207,10 +202,24 @@ The next JSON is an example of the message payload to register a component.
 }
 ```
 
-If the [specification](/docs/toolbox/component#asyncapi.yaml) has a channel that starts with **valawai**
-plus the type of component, plus the name of the component and finishes with **/control/registered**,
-thus that matches the pattern **valawai/c[0|1|2]/\w+/control/registered**. Also, if it has a subscription
-to receive messages with an object payload with the fields:
+The MOV validate that the provided information is valid and if it is stored this information
+on the database and [automatically creates any possible connection](#create-a-topology-connection)
+of this component with the rest of the components that are already registered. By default,
+if the new connections are between different types of components they are enabled, and otherwise
+it is disabled. 
+
+If the specification of the new component has a channel to be [notified that the component is registered](#notify-registered-component)
+the MOV will send a message when the component has been registered. It also if the new component
+is of the type **C2** and has a channel to be [notified of a message interchanged on a topology connection](#notify-about-a-sent-message-through-a-topology-connection)
+the MOV will search for any registered connection that matches the expected message notification.
+
+
+### Notify registered component
+
+When a component is [registered](#register-a-component) if in the [specification](/docs/toolbox/component#asyncapi.yaml)
+has a channel that starts with **valawai** plus the type of component, plus the name of the component and
+finishes with **/control/registered**, thus that matches the pattern **valawai/c[0|1|2]/\w+/control/registered**. Also,
+if it has a subscription to receive messages with an object payload with the fields:
 
  - **id** The identifier of the component.
  - **name** of the component.
@@ -233,9 +242,110 @@ to receive messages with an object payload with the fields:
      a constant, a reference to another object, or a type combination that must select one of,
      any of or all of.
    
-The Master of VALAWAI (MOV) will notify the component when the component is registered
-with a message containing the component information.
+The next JSON is an example of the message payload to notify that the component is registered.
 
+```
+{
+   "id":"65c1f59ea4cb169f42f5edc4",
+   "name":"c0_voice_to_text",
+   "description":"Generate text from the ambient audio",
+   "version":"1.0.5",
+   "api_version":"2.3.0",
+   "type":"C0",
+   "since":"1709902001",
+   "channels":[
+      {
+         "id":"valawai/c0/voice_to_text/data/audio_to_process",
+         "description":"Provide the audio text to extract the text.",
+         "subscribe":{
+            "type":"OBJECT",
+            "properties":{
+               "sample_ratio":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               },
+               "encoded":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               },
+               "sample":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               }
+            }
+         }
+      },
+      {
+         "id":"valawai/c0/voice_to_text/data/text_extracted",
+         "description":"Notify about the extracted text from a received audio.",
+         "publish":{
+            "type":"OBJECT",
+            "properties":{
+               "text":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               },
+               "language":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               },
+               "accuracy":{
+                  "type":"BASIC",
+                  "format":"NUMBER"
+               }
+            }
+         }
+      }
+   ]
+}
+```
+
+
+### Notify about a sent message through a topology connection
+
+When a **C2** [component is registered](#register-a-component) if in the [specification](/docs/toolbox/component#asyncapi.yaml)
+has a channel that matches the pattern **valawai/c2/\w+/control/\w+**. And also, if it has
+a subscription to an object payload with the fields:
+
+ - **connection_id** The identifier of the topology connection that allows the message
+  interchanging.
+ - **source** The source component that has sent the message. It will have the identifier,
+  name and type of the source component.
+ - **target** The target component that has received the message.  It will have the
+  identifier,
+  name and type of the source component.
+ - **message_payload** The payload of the message that has been through the connection.
+ - **timestamp** The epoch time, in seconds, when the message was sent. 
+ 
+
+It also when a [connection is created](#create-a-topology-connection) the MOV will
+check if any registered component will be notified of the type of messages
+that are interchanged in the topology connection.
+
+
+The next JSON is an example of the message payload that will be sent to the **C2**
+component to notify of the sent message. Be aware that the **message_payload** may be different
+in each type of connection. 
+
+```
+{
+  "connection_id": "65c1f59ea4cb169f42f5edc4",
+  "source": {
+    "id": "65c1f59ea4cb169f42f5edc4",
+    "name": "c0_voice_to_text",
+    "type": "C0"
+  },
+  "target": {
+    "id": "65c1f59ea4cb169f42f5edc4",
+    "name": "c0_voice_to_text",
+    "type": "C0"
+  },
+  "message_payload": {
+  
+  },
+  "timestamp": "1709902001"
+}
+```
 
 ### Search for some components
 
@@ -397,6 +507,13 @@ The next JSON is an example of the message payload to create a topology connecti
   "enabled": true
 }
 ```
+
+After the topology connection is registered, the MOV will check if any registered **C2** must
+be notified of the messages that are interchanged on it. Thus, The MOV will search for all
+the **C2** component that has a subscribed channel witch name matches **valawai/c2/\w+/control/\w+**
+and the schema matches the [notification message](#notify-about-a-sent-message-through-a-topology-connection)
+where the field **message_payload** ahs to match the messages that are interchanged in the
+topology connection. 
 
 
 ### Search for some topology connections
