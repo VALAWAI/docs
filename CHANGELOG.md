@@ -1,6 +1,10 @@
 # docs
 
+## Version 0.4.0 (May 16, 2024)
 
+ - Write tutorial of how to create a component with Quarkus.
+ 
+ 
 ## Version 0.4.0 (May 16, 2024)
 
  - Explain the C0 E-mail sensor component.
