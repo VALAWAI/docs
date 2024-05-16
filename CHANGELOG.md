@@ -1,7 +1,12 @@
 # docs
 
 
-## Version 0.3.0 (May 19, 2024)
+## Version 0.4.0 (May 16, 2024)
+
+ - Explain the C0 E-mail sensor component.
+ 
+
+## Version 0.3.0 (May 9, 2024)
  
  - Explain how the component can be notified when the component is registered.
  - Explain how a C2 component will be notified when a message passes through a
