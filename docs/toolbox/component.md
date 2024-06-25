@@ -88,7 +88,7 @@ and how to deploy it.
 
 Below you can see an example of this kind of file.
 
-```
+```markdown
 # C0_voice_to_text
 
 This C0 VALAWAI component obtains text from audio files.
@@ -243,7 +243,7 @@ from an audio file. This component listens for messages with the audio data to p
 publish the extracted text from it. Also, it listens for changes in the default language
 to use if it is not possible to infer from the audio.
 
-```
+```yaml
 asyncapi: '2.6.0'
 info:
   title: VALAWAI C0 Voice to text
@@ -595,7 +595,7 @@ message with a payload with the following schema.
  to be notified when two components share a text.
  
  
- ```
+ ```yaml
  asyncapi: '2.6.0'
 info:
   title: VALAWAI C2 text analyzer
@@ -722,8 +722,7 @@ In the case that you want to provide an option to start the component with
 the [Master Of VALAWAI](/docs/tutorials/mov), you must add this option as a profile,
 such as you can see in the below example.
 
-```
-version: '3.7'
+```yaml
 services:
   voice_to_text:
     image: valawai/c0_voice_to_text:${C0_VOICE_TO_TEXT_TAG:-latest}

@@ -29,7 +29,7 @@ and publishes them into the channel **valawai/c0/email_sensor/data/e_mail**.
 
 The next JSON is an example of this data model.
 
-```
+```jsx
 {
   "address": [
     {
@@ -59,7 +59,7 @@ a payload with the **fetching_interval** value in seconds.
 The next JSON is an example of payload of the message to change the interval to check for new unread e-mails
 in intervlas of 5 minutes.
 
- ```
+```jsx
 {
   "fetching_interval": 300
 }
@@ -86,13 +86,13 @@ The easier way to create the C0 E-mail sensor docker image is by following the n
 
 2. Get the code from GitHub
 
-```
+```bash
 git clone https://github.com/VALAWAI/C0_email_sensor.git
 ```
 
 3. Generate the docker image calling the script:
 
-```
+```bash
 ./buildDockerImages.sh
 ```
 
@@ -101,7 +101,7 @@ where **X.Y.Z** will be the version of the component. If you want to have
 the image with another tag for example **latest** you must call the script
 with this tag as a parameter, for example:
 
-```
+```bash
 ./buildDockerImages.sh latest
 ```
 
@@ -145,7 +145,7 @@ the [Master Of Valawai (MOV)](https://github.com/VALAWAI/MOV) and the second one
 a [mocked e-mail server](https://github.com/dbck/docker-mailtrap). You can use the next
 command to start this component with the MOV and the mail server.
 
-```
+```bash
 COMPOSE_PROFILES=mov,mail docker-compose up -d
 ```
 
@@ -160,7 +160,7 @@ The docker-compose defines some variables that can be modified by creating a fil
 you write the name of the variable plus equals plus the value.  As you can see in
 the next example.
 
-```
+```properties
 MQ_HOST=rabbitmq.valawai.eu
 MQ_USERNAME=c0_email_sensor
 MQ_PASSWORD=lkjagb_ro82t¿134
@@ -223,6 +223,6 @@ the **docker-compose**.
 
 You can stop all the started containers with the command:
 
-```
+```bash
 COMPOSE_PROFILES=mov,mail docker-compose down
 ``` 

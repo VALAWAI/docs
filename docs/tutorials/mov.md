@@ -27,13 +27,13 @@ on the source repository. The next steps explain how to do it:
 
 2. Get the code from GitHub
 
-```
+```bash
 git clone https://github.com/VALAWAI/MOV.git
 ```
 
 3. Execute the script.
 
-```
+```bash
 ./runMOV.sh
 ```
 
@@ -48,7 +48,7 @@ if it is necessary, and start the [required software](#dependencies) using a
 This last one has some variables that you can modify using a file named [**.env**](https://docs.docker.com/compose/environment-variables/env-file/) in the same directory of the script. For example, the next file shows
 how to change the MOV port to 8043.
 
-```
+```properties
 # Changed MOV port from 8080 to 8043
 MOV_UI_PORT=8043
 ```
@@ -92,7 +92,7 @@ remove the directory defined by the parameter **MONGO_LOCAL_DATA** and start aga
 
 You can stop the MOV using the script:
 
-```
+```bash
 ./stopMOV.sh
 ```
 
@@ -109,13 +109,13 @@ If you want to create the docker container for the MOV you must follow the next 
 
 2. Get the code from GitHub
 
-```
+```bash
 git clone https://github.com/VALAWAI/MOV.git
 ```
 
 3. Generate the MOV docker image calling the script:
 
-```
+```bash
 ./buildDockerImages.sh
 ```
 
@@ -124,7 +124,7 @@ where **X.Y.Z** will be the version of the MOV. If you want to have
 the image with another tag for example **latest** you must call the script
 with this tag as a parameter, for example:
 
-```
+```bash
 ./buildDockerImages.sh latest
 ```
 
@@ -193,7 +193,7 @@ a message to the queue **valawai/component/register** with the next payload:
 
 The next JSON is an example of the message payload to register a component.
 
-```
+```json
 {
   "type": "C0",
   "name": "c0_voice_to_text",
@@ -244,7 +244,7 @@ if it has a subscription to receive messages with an object payload with the fie
    
 The next JSON is an example of the message payload to notify that the component is registered.
 
-```
+```json
 {
    "id":"65c1f59ea4cb169f42f5edc4",
    "name":"c0_voice_to_text",
@@ -327,7 +327,7 @@ The next JSON is an example of the message payload that will be sent to the **C2
 component to notify of the sent message. Be aware that the **message_payload** may be different
 in each type of connection. 
 
-```
+```json
 {
   "connection_id": "65c1f59ea4cb169f42f5edc4",
   "source": {
@@ -374,7 +374,7 @@ If it is __null__ this field is not used on the query.
 
 The next JSON is an example of the query payload.
 
-```
+```json
 {
   "id": "1elkjfg289",
   "pattern": "/.+voice.+/i",
@@ -415,7 +415,7 @@ on the queue **valawai/component/page** with the following payload:
 
 The next JSON is an example of the payload of a message that responds to a query.
 
-```
+```json
 {
   "query_id": "1elkjfg289",
   "total": "5",
@@ -458,7 +458,7 @@ It also disables and removes any topology connection that this component is invo
 
 The next JSON is an example of the message payload to unregister a component.
 
-```
+```json
 {
   "component_id": "65c1f59ea4cb169f42f5edc4"
 }
@@ -494,7 +494,7 @@ with the following payload:
 
 The next JSON is an example of the message payload to create a topology connection.
 
-```
+```json
 {
   "source": {
     "component_id": "65c1f59ea4cb169f42f5edc4",
@@ -550,7 +550,7 @@ If it is __null__ this field is not used on the query.
 
 The next JSON is an example of the query payload.
 
-```
+```json
 {
   "id": "1elkjfg289",
   "source_channel_name": "/.+voice.+/i",
@@ -585,7 +585,7 @@ on the queue **valawai/topology/page** with the following payload:
 
 The next JSON is an example of the payload of a message that responds to a query.
 
-```
+```json
 {
   "query_id": "1elkjfg289",
   "total": 5,
@@ -628,7 +628,7 @@ before marking it as deleted on the database.
 
 The next JSON is an example of the message payload to modify a topology connection.
 
-```
+```json
 {
   "action": "ENABLE",
   "connection_id": "65c1f59ea4cb169f42f5edc4"
@@ -656,7 +656,7 @@ the log messages. The payload of this message must have:
 The next JSON is an example of the message payload to add a new
 log message.
 
-```
+```json
 {
   "level": "ERROR",
   "message": "The component is active",
