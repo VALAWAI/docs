@@ -216,7 +216,7 @@ the MOV will search for any registered connection that matches the expected mess
 
 ### Notify registered component
 
-When a component is [registered](#register-a-component) if in the [specification](/docs/toolbox/component#asyncapi.yaml)
+When a component is [registered](#register-a-component) if in the [specification](/docs/toolbox/component#asyncapiyaml)
 has a channel that starts with **valawai** plus the type of component, plus the name of the component and
 finishes with **/control/registered**, thus that matches the pattern **valawai/c[0|1|2]/\w+/control/registered**. Also,
 if it has a subscription to receive messages with an object payload with the fields:
@@ -303,7 +303,7 @@ The next JSON is an example of the message payload to notify that the component 
 
 ### Notify about a sent message through a topology connection
 
-When a **C2** [component is registered](#register-a-component) if in the [specification](/docs/toolbox/component#asyncapi.yaml)
+When a **C2** [component is registered](#register-a-component) if in the [specification](/docs/toolbox/component#asyncapiyaml)
 has a channel that matches the pattern **valawai/c2/\w+/control/\w+**. And also, if it has
 a subscription to an object payload with the fields:
 

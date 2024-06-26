@@ -520,6 +520,6 @@ The minimum environment variables that must be defined when deploying the docker
  The default value is ___password___.
 
 All this information has to be used when you define the example of
-the [docker-compose.yml](docs/toolbox/component#docker-composeyml) 
+the [docker-compose.yml](/docs/toolbox/component#docker-composeyml) 
 to deploy the component.
 
