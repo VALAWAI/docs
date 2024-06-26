@@ -252,7 +252,7 @@ The next JSON is an example of the message payload to notify that the component 
    "version":"1.0.5",
    "api_version":"2.3.0",
    "type":"C0",
-   "since":"1709902001",
+   "since": 1709902001,
    "channels":[
       {
          "id":"valawai/c0/voice_to_text/data/audio_to_process",
@@ -343,7 +343,7 @@ in each type of connection.
   "message_payload": {
   
   },
-  "timestamp": "1709902001"
+  "timestamp": 1709902001
 }
 ```
 
@@ -427,7 +427,7 @@ The next JSON is an example of the payload of a message that responds to a query
       "version": "1.0.5",
       "api_version": "2.3.0",
       "type": "C0",
-      "since": "1709902001",
+      "since": 1709902001,
       "channels": [
         {
           "id": "valawai/c0_voice_to_text/audio",
@@ -592,8 +592,8 @@ The next JSON is an example of the payload of a message that responds to a query
   "connections": [
     {
       "id": "65c1f59ea4cb169f42f5edc4",
-      "create_timestamp": "1709902001",
-      "update_timestamp": "1709902001",
+      "create_timestamp": 1709902001,
+      "update_timestamp": 1709902001,
       "source": {
         "component_id": "65c1f59ea4cb169f42f5edc4",
         "channel_name": "valawai/C0_voice_to_text/audio"
