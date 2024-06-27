@@ -1,8 +1,9 @@
 # docs
 
-## Version 0.4.0 (May 16, 2024)
+## Version 0.5.0 (June 27, 2024)
 
  - Write tutorial of how to create a component with Quarkus.
+ - Colorize code.
  
  
 ## Version 0.4.0 (May 16, 2024)
