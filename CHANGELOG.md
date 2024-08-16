@@ -1,5 +1,11 @@
 # docs
 
+## Version 0.6.0 (August 16, 2024)
+
+ - Explain how to use the C0 email actuator.
+ - Upgrade Docosaurus.
+
+
 ## Version 0.5.0 (June 27, 2024)
 
  - Write tutorial of how to create a component with Quarkus.
