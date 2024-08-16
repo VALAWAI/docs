@@ -25,7 +25,7 @@ be used are:
  - [C2 E-mail analizer](/docs/components/C2/email_analizer) This component
  is used to check if an e-mail is aligned with some values.
 
-## Docker-composer
+## docker composer
 
 how to join all into a docker compose
 

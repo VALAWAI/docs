@@ -43,7 +43,7 @@ on a public on GitHub under [VALAWAI organization](https://github.com/VALAWAI).
 ### Deployment
 
 The components must be encapsulated in [Docker images](https://docs.docker.com/build/)
-that will deployed using the [docker-compose](https://docs.docker.com/compose/).
+that will deployed using the [docker compose](https://docs.docker.com/compose/).
 
 ### Interaction between components
 
@@ -117,11 +117,11 @@ specified it uses the **latest**.
 You must build the **latest** docker image of this component before deploying it
 ( see previous section). After that, you can deploy this component with the command:
 
-docker-compose up -d
+docker compose up -d
 
 If you want to start it with the Master Of VALAWAI you must add the **mov** profile.
 
-docker-compose --profile mov up -d
+docker compose --profile mov up -d
 
 Also, you can modify the default variables creating an 
 [**.env**](https://docs.docker.com/compose/environment-variables/env-file/).

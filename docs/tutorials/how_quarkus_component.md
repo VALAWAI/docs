@@ -59,7 +59,7 @@ After that, you must add the files:
  defined on the [C0 email sensor](https://github.com/VALAWAI/C0_email_sensor/blob/main/asyncapi.yaml).
  
  - **docker-compose.yml** that will be used to deploy the component following the conventions of 
- a [VALAWAI compoennt](/docs/toolbox/component#docker-composeyml). For example, you can see you can see
+ a [VALAWAI compoennt](/docs/toolbox/component#docker composeyml). For example, you can see you can see
  the deployment of the [C0 email sensor](https://github.com/VALAWAI/C0_email_sensor/blob/main/docker-compose.yml).
 
 
@@ -1610,6 +1610,6 @@ The minimum environment variables that must be defined when deploying the docker
  The default value is ___password___.
 
 All this information has to be used when you define the example of
-the [docker-compose.yml](/docs/toolbox/component#docker-composeyml) 
+the [docker-compose.yml](/docs/toolbox/component#docker composeyml) 
 to deploy the component.
 

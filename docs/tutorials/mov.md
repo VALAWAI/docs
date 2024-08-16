@@ -44,7 +44,7 @@ one are **mov:password**.
 
 This script generates docker image [**valawai/mov:latest**](#create-a-docker-image-from-the-source),
 if it is necessary, and start the [required software](#dependencies) using a
-[docker-compose](https://github.com/VALAWAI/MOV/blob/main/src/main/docker/docker-compose.yml).
+[docker compose](https://github.com/VALAWAI/MOV/blob/main/src/main/docker/docker-compose.yml).
 This last one has some variables that you can modify using a file named [**.env**](https://docs.docker.com/compose/environment-variables/env-file/) in the same directory of the script. For example, the next file shows
 how to change the MOV port to 8043.
 
