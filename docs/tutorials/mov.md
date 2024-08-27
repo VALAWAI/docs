@@ -651,6 +651,8 @@ the log messages. The payload of this message must have:
  - **message** of the log.
  - **payload** Extra information to rich the log message. By default is expected
  a json value encoded as a string.
+ - **component_id** This filed is optional and it sill contain the identifier
+ of the component that has generated the log.
 
 
 The next JSON is an example of the message payload to add a new
@@ -660,7 +662,8 @@ log message.
 {
   "level": "ERROR",
   "message": "The component is active",
-  "payload": "{\"pattern:\"p1\"}"
+  "payload": "{\"pattern:\"p1\"}",
+  "component_id": "66cde28c8a23fa5af0000c8b"
 }
 ```
 
