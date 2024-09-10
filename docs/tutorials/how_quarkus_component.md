@@ -3,11 +3,11 @@
 In this tutorial, we explain how to define a [VALAWAI component](/toolbox/component)
 that is developed using [Quarkus framework](https://quarkus.io/). The main steps will be:
 
-- Generate the Quakus project
-- Add the VALAWAI component required files
+- Generate the Quakus project.
+- Add the VALAWAI component required files.
 - Implements the channels that will receive/publish messages.
 - Interact with the Master Of VALAWAI.
-- How to build and deploy the docker image
+- How to build and deploy the docker image.
 
 
 ## Generate the project
@@ -50,7 +50,7 @@ After that, you must add the files:
  As you can see on the [C0 email sensor](https://github.com/VALAWAI/C0_email_sensor/blob/main/LICENSE)
  the VALAWAI component uses GPLv3 as a license.
 
- - **CAHNGELOG.md** that will contain a description of the significant changes in all the public versions
+ - **CHANGELOG.md** that will contain a description of the significant changes in all the public versions
  of the component, and any necessary instructions to upgrade between versions. For example, you can see
  you can see the changes in the [C0 email sensor](https://github.com/VALAWAI/C0_email_sensor/blob/main/CHANGELOG.md).
 

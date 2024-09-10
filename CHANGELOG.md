@@ -1,6 +1,11 @@
 # docs
 
 
+## Version 0.8.0 (September 10, 2024)
+
+ - Fill in tutorial to develop a component with Python and Pika.
+ 
+ 
 ## Version 0.7.1 (September 10, 2024)
 
  - Fix broken links.
