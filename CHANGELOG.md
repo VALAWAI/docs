@@ -1,5 +1,11 @@
 # docs
 
+
+## Version 0.7.1 (September 10, 2024)
+
+ - Fix broken links.
+
+
 ## Version 0.7.0 (September 10, 2024)
 
  - Explain how to use the C1 LLM e-mail replier.

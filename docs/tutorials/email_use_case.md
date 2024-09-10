@@ -1,4 +1,4 @@
-# Simple Value-awarness application
+# E-mail Value-awarness application
 
 ** WORK IN PROGRESS **
 
@@ -20,7 +20,7 @@ be used are:
  to obtain information from received e-mails.
  - [C0 E-mail actuator](/docs/components/C0/email_actuator) This component
  is used to send e-mails.
- - [C1 E-mail replier](/docs/components/C1/email_replier) This component
+ - [C1 E-mail replier](/docs/components/C1/llm_email_replier) This component
  is used to provide a reply message to a received e-mail.
  - [C2 E-mail analizer](/docs/components/C2/email_analizer) This component
  is used to check if an e-mail is aligned with some values.

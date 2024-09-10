@@ -196,7 +196,7 @@ The most useful environment variables on the docker image are:
 ### Deploy 
 
 After you have the **valawai/c1_llm_email_replier:latest** docker image you can deploy
-this component using the docker compose using the file [docker-compose.yml](docker-compose.yml)
+this component using the docker compose using the file [docker-compose.yml](https://github.com/VALAWAI/C1_llm_email_replier/blob/main/docker-compose.yml)
 defined on the [repository](https://github.com/VALAWAI/C1_llm_email_replier).
 
 This configuration defines the profile **mov** to launch the component at the same time that a 
