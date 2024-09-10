@@ -44,7 +44,7 @@ any other one that matches your requirements or preferences.
 The first thing to do is create the directory **tests**, which will contain the unit tests,
 and a directory with the component name, in which the component Python code will be.
 For example in the [C1 LLM e-mail replier component](https://github.com/VALAWAI/C1_llm_email_replier/tree/main)
-this last directory is named [C1_llm_email_replier]([https://github.com/VALAWAI/C1_llm_email_replier/tree/main/C1_llm_email_replier). 
+this last directory is named [C1_llm_email_replier](https://github.com/VALAWAI/C1_llm_email_replier/tree/main/C1_llm_email_replier). 
 To simplify the following explanations we use **CX_name** as the component name.
  
 The next step is to add the following files:
@@ -229,46 +229,157 @@ When you have finished creating all this infrastructure you can use the next com
 to so some common actions.
 
 * **pip install -e .** to install all the dependencies.
+
 * **RABBITMQ_HOST=host.docker.internal python CX_name** to start the component, using the **RabbitMQ**
 launched by **Docker**.
+
 * **python setup.py test** to run all the unit tests
+
 * **python -m unittest test/test_something.py** to run the tests defined on the file **test_something.py**
+
 * **python -m unittest test/test_something.py -k test_do_something** to run the test named **test_do_something** defined on the file **test_something.py**
+
+
+## Defining the services
+
+The services for the new VALAWAI component must be described in the **asyncapi.yaml** file.
+On the [component definition](/docs/toolbox/component#asyncapiyaml) documentation, you can read how these services must be defined.
 
 
 ## Implementing the services
 
-Quarkus offers a comprehensive suite of messaging that simplifies the interaction with different messaging
-infrastructures such as RabbitMQ. This tutorial only shows you the basics of this suite that allow you to develop
-a VALAWAI component. You can read more about this suite on 
-the [Quarkus documentation](https://quarkus.io/guides/messaging) and also you can find how it is integrated with the 
-[RabbitMQ](https://quarkus.io/guides/rabbitmq).
+To implement the services defined in the **asyncapi.yaml** file we are going to use 
+the [Pika libary](https://pika.readthedocs.io/en/stable/). This is not a full tutorial
+on how to use this library, we only show the minimum necessary to develop the services
+of a VALAWAI component. Below we refer to some important things about the **Pika library**
+that you need to keep in mind.
 
-The basic things you need to know about this suite are:
+- When a new connection is created, if the **RabbitMQ** is not ready an exception is thrown.
+So, you may need a loop to try to start the connection several times until
+the **RabbitMQ** is ready, or you consider that the connection can not be established.
 
-- Channels are identified by a unique name and declared using a set of annotations.
+- The **Pika library** does not start to process the subscription messages until
+you call the method **start_consuming** on the channel connection.
 
-- Each message type is defined in a different class where the fields are public and these classes must be annotated 
-as **@RegisterForReflection**.
+- When you call the method **start_consuming**, it captures the **Python thread** and
+until the connection is closed or the connection fails.
 
-- The annotation **@Incoming** is used on the methods that process the messages received from a channel. The classes
-where this method is defined must be annotated as **@ApplicationScoped**.
+- When you call the method **start_consuming**, it captures the **Python thread** and
+until the connection is closed or the connection fails.
 
-- The annotation **@Outcoming** is used when defining a method that will return 
-the messages to be published on a channel.
+- When you try to close the connection you must call **stop_consuming** before to
+call the method s**close** in the connection.
 
-- The annotation **@Channel** is used when inject into a class an **Emitter**
-to publish messages on a channel.
+- You must use a different connection for **consume** and **publish** messages.
 
-- The definition of channels are defined on the **src/main/java/resources/application.properties**
-with the properties that start with **mp.messaging**.
+- You must to **declare** the queue before to **consume** its messages.
 
-In the next sections, you can read in more detail how to provide the services defined in the **asyncapi.yaml**.
 
+### Create the connection
+
+you must to define a preocss that try sevetal times becaus ethe RabbitMQ my be not 
+ready
+when the conneciton is created
+
+```python
+import os
+import pika
+import time
+import logging
+
+class RabbitMQConnection(object):
+    
+    def __init__(self,
+             host:str=os.getenv('RABBITMQ_HOST','mov-mq'),
+             port:int=int(os.getenv('RABBITMQ_PORT',"5672")),
+             username:str=os.getenv('RABBITMQ_USERNAME','mov'),
+             password:str=os.getenv('RABBITMQ_PASSWORD','password'),
+             max_retries:int=int(os.getenv('RABBITMQ_MAX_RETRIES',"100")),
+             retry_sleep_seconds:int=int(os.getenv('RABBITMQ_RETRY_SLEEP',"3")),
+             ):
+        """Initialize the connection to the RabbitMQ
+        
+        Parameters
+        ----------
+        host : str
+            The RabbitMQ server host name. By default uses the environment variable RABBITMQ_HOST
+            and if it is not defined uses 'mov-mq'.
+        port : int
+            The RabbitMQ server port. By default uses the environment variable RABBITMQ_PORT
+            and if it is not defined uses '5672'.
+        username : str
+            The user name of the credential to connect to the RabbitMQ serve. By default uses the environment
+            variable RABBITMQ_USERNAME and if it is not defined uses 'mov'.
+        password : str
+            The password of the credential to connect to the RabbitMQ serve. By default uses the environment
+            variable RABBITMQ_PASSWORD and if it is not defined uses 'password'.
+        max_retries : int
+            The number maximum of tries to create a connection with the RabbitMQ server. By default uses
+            the environment variable RABBITMQ_MAX_RETRIES and if it is not defined uses '100'.
+        retry_sleep_seconds : int
+            The seconds to wait between the tries for create a connection with the RabbitMQ server.
+            By default uses the environment variable RABBITMQ_RETRY_SLEEP and if it is not defined uses '3'.
+        """
+        
+        tries=0
+        while tries < max_retries:
+            
+            try:
+            
+                credentials = pika.PlainCredentials(username=username,password=password)
+                self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=host,port=port,credentials=credentials))
+                self.channel = self.connection.channel()
+                return
+            
+            except Exception:
+
+                logging.exception("Connection was closed, retrying...")
+                time.sleep(retry_sleep_seconds)
+                
+            tries+=1
+            
+        raise Exception("Cannot connect with the RabbitMQ")
+
+    def close(self):
+        """Close the connection.
+        """
+        
+        try:
+            
+            if self.connection.is_open == True:
+                self.channel.stop_consuming()
+                self.connection.close()
+
+        except Exception:
+
+            logging.exception("Cannot close the connection.")
+
+
+```
 
 ### publish
 
+you must encode the message to json string before to send
+the cahhnel has to be define in teh routing_key and teh exchange must be an empty string
+and properties must be json
+
+ body=json.dumps(msg)
+        properties=pika.BasicProperties(
+            content_type='application/json'
+        )
+        self.publish_connection.channel.basic_publish(exchange='',routing_key=queue,body=body,properties=properties)
+        logging.debug("Publish message to the queue %s",queue)
+        
+        
+
 ### subccribe
+
+you must to declare the queue before to listen
+
+you must define a callback method with the next parameters:
+
+the received message is a string you must to convert to json and validate
+
 
 
 ## Interaction with Master Of VALAWAI
