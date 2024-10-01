@@ -660,7 +660,7 @@ log message.
 
 ```json
 {
-  "level": "ERROR",
+  "level": "INFO",
   "message": "The component is active",
   "payload": "{\"pattern:\"p1\"}",
   "component_id": "66cde28c8a23fa5af0000c8b"

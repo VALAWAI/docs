@@ -135,7 +135,7 @@ class App:
         """Initialize the component
         """
         try:
-            # Create connection to RabbitMQ
+            # Create a connection to RabbitMQ
             # TO DO
             
             # Create the handlers for the events 
@@ -251,35 +251,25 @@ On the [component definition](/docs/toolbox/component#asyncapiyaml) documentatio
 To implement the services defined in the **asyncapi.yaml** file we are going to use 
 the [Pika libary](https://pika.readthedocs.io/en/stable/). This is not a full tutorial
 on how to use this library, we only show the minimum necessary to develop the services
-of a VALAWAI component. Below we refer to some important things about the **Pika library**
-that you need to keep in mind.
-
-- When a new connection is created, if the **RabbitMQ** is not ready an exception is thrown.
-So, you may need a loop to try to start the connection several times until
-the **RabbitMQ** is ready, or you consider that the connection can not be established.
-
-- The **Pika library** does not start to process the subscription messages until
-you call the method **start_consuming** on the channel connection.
-
-- When you call the method **start_consuming**, it captures the **Python thread** and
-until the connection is closed or the connection fails.
-
-- When you call the method **start_consuming**, it captures the **Python thread** and
-until the connection is closed or the connection fails.
-
-- When you try to close the connection you must call **stop_consuming** before to
-call the method s**close** in the connection.
-
-- You must use a different connection for **consume** and **publish** messages.
-
-- You must to **declare** the queue before to **consume** its messages.
+of a VALAWAI component.
 
 
 ### Create the connection
 
-you must to define a preocss that try sevetal times becaus ethe RabbitMQ my be not 
-ready
-when the conneciton is created
+On the [Pika documentation](https://pika.readthedocs.io/en/stable/modules/adapters/index.html),
+you can read different ways to create a connection with the RabbitMQ, we are going to show 
+you how to use the blocking one. One thing you must take care of is when a new connection is created,
+if the **RabbitMQ** is not ready an exception is thrown. So, you may need a loop to try to start
+the connection several times until the **RabbitMQ** is prepared, or you consider that the connection
+can not be established.
+
+When you close this connection, you must call **stop_consuming** before calling
+the method **close** in the connection. Otherwise, this last method will fail.
+
+On the other hand, how you are using the blocking connection is required to use a different connection
+for **consume** and **publish** messages.
+
+The following code is an example of a class that can manage this connection.
 
 ```python
 import os
@@ -306,19 +296,19 @@ class RabbitMQConnection(object):
             and if it is not defined uses 'mov-mq'.
         port : int
             The RabbitMQ server port. By default uses the environment variable RABBITMQ_PORT
-            and if it is not defined uses '5672'.
+            and if it is not defined the default value is '5672'.
         username : str
-            The user name of the credential to connect to the RabbitMQ serve. By default uses the environment
-            variable RABBITMQ_USERNAME and if it is not defined uses 'mov'.
+            The user name of the credential to connect to the RabbitMQ server. By default uses the environment
+            variable RABBITMQ_USERNAME and if it is not defined the default value is 'mov'.
         password : str
-            The password of the credential to connect to the RabbitMQ serve. By default uses the environment
-            variable RABBITMQ_PASSWORD and if it is not defined uses 'password'.
+            The password of the credential to connect to the RabbitMQ server. By default uses the environment
+            variable RABBITMQ_PASSWORD and if it is not defined the default value is 'password'.
         max_retries : int
             The number maximum of tries to create a connection with the RabbitMQ server. By default uses
-            the environment variable RABBITMQ_MAX_RETRIES and if it is not defined uses '100'.
+            the environment variable RABBITMQ_MAX_RETRIES and if it is not defined the default value is '100'.
         retry_sleep_seconds : int
-            The seconds to wait between the tries for create a connection with the RabbitMQ server.
-            By default uses the environment variable RABBITMQ_RETRY_SLEEP and if it is not defined uses '3'.
+            The seconds to wait between the tries to create a connection with the RabbitMQ server.
+            By default uses the environment variable RABBITMQ_RETRY_SLEEP and if it is not defined the default value is '3'.
         """
         
         tries=0
@@ -357,32 +347,155 @@ class RabbitMQConnection(object):
 
 ```
 
-### publish
+### Publish a message
 
-you must encode the message to json string before to send
-the cahhnel has to be define in teh routing_key and teh exchange must be an empty string
-and properties must be json
+The VALAWAI infrastructure exchanges messages that are encoded in JSON. You can do it using
+the **dump** method of the **json** library.
 
- body=json.dumps(msg)
-        properties=pika.BasicProperties(
-            content_type='application/json'
-        )
-        self.publish_connection.channel.basic_publish(exchange='',routing_key=queue,body=body,properties=properties)
-        logging.debug("Publish message to the queue %s",queue)
+When you have the encoded message you only have to call the method **basic_publish** from
+the channel of the connection where the **routing_key** must be the name of the queue to
+send the message and the **exchange** must be an empty string.
+
+The following code is an example of sending a [log message to the Master of VALAWAI](/tutorials/mov#add-a-log-message).
+
+```python
+msg={
+  "level": "INFO",
+  "message": "The component is active",
+  "payload": "{\"pattern:\"p1\"}",
+  "component_id": "66cde28c8a23fa5af0000c8b"
+}
+body=json.dumps(msg)
+properties=pika.BasicProperties(content_type='application/json')
+connection.channel.basic_publish(exchange='',routing_key='valawai/log/add',body=body,properties=properties)
+```
         
-        
 
-### subccribe
+### Listening for messages
 
-you must to declare the queue before to listen
+On the [Pika documentation](https://pika.readthedocs.io/en/stable/),
+you can read different ways to listen for messages from the RabbitMQ, we are going to show 
+you how to use the blocking one. This one does not start to process the subscription messages
+until you call the method **start_consuming** on the channel connection. After that,
+the **Python thread** is captured until the connection is closed or the connection fails.
 
-you must define a callback method with the next parameters:
+Before calling this method you must declare the queues and the methods that will consume
+the messages that you want to receive from RabbitMQ. The methods that will be called
+when a new message is received must have the parameters: ch, method, properties, and body.
+In this last one contains a string with the body of the message encoded in JSON. You can use
+the **loads** method of the **json** library, to obtain a dictionary with the values of
+the message.
 
-the received message is a string you must to convert to json and validate
+The following example shows how to define a class that will be responsible to manage
+the messages that will receive a VALAWAi component from the queue
+**valawai/cx/name/control/parameters**.
 
+```python
+import pika
+import json
+import logging
+
+class ChangeParametersHandler(object):
+
+    def __init__(self,channel:pika.channel.Channel):
+        channel.queue_declare(queue='valawai/cx/name/control/parameters',
+                              durable=True,
+                              exclusive=False,
+                              auto_delete=False)
+        channel.basic_consume(queue='valawai/cx/name/control/parameters',
+                              auto_ack=True,
+                              on_message_callback=self.handle_message)
+                                
+    def handle_message(self,ch, method, properties, body):
+        try:
+            
+            parameters=json.loads(body)
+
+            # Do something with the parameters
+
+        except Exception:
+            
+            logging.exception(f"Unexpected message {body}")
+```
+
+Remember, that for this class to be effective you must initialize it before you call
+**start_consuming**. In our case, you must modify in the CX_name/__main__.py](/tutorials/how_python_component#generate-the-project-skeleton)
+the methods **start** and **stop** in the **App** class, as you can see in the following code.
+
+
+```python 
+
+# ...
+                                  
+class App:
+
+    # ...
+	
+   def stop(self):
+        """Finalize the component.
+        """
+    
+        try:
+            # close the RabbitMQ connections
+            if self.connection != None:
+                
+                self.connection.close()
+                self.connection =  None          
+
+            logging.info("Finished CX name")
+            
+        except Exception:
+    
+            logging.exception("Could not stop the component")
+
+    def start(self):
+        """Initialize the component
+        """
+        try:
+            # Create a connection to RabbitMQ
+            self.connection = RabbitMQConnection()
+            
+            # Create the handlers for the events 
+            ChangeParametersHandler(self.connection.channel)
+
+            # Start to process the received events
+            logging.info("Started CX name")
+            self.connection.start_consuming()
+            
+        except KeyboardInterrupt:
+            
+            logging.info("Stop listening for events")
+            
+        except pika.exceptions.ConnectionClosedByBroker:
+            
+            logging.info("Closed connection")
+
+        except Exception:
+    
+            logging.exception("Could not start the component")
+```
 
 
 ## Interaction with Master Of VALAWAI
+
+The topology between components is managed by the [Master of VALAWAI](/tutotrials/mov),
+so as a component cna intercat sending mesages to the services that 
+it provides as you can see in the [tutorial](/tutotrials/mov)
+
+
+### Register component
+
+register a component
+
+
+### Unregister component
+
+When teh component is finished muts be unregiostered
+
+
+### Add log message
+
+as published
 
 
 ## Dockerize the component
