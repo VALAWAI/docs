@@ -1,4 +1,9 @@
-# docs
+# Changes done over the VALAWAI documentation
+
+
+## Version 0.8.1 (October 2, 2024)
+
+ - Fix broken links.
 
 
 ## Version 0.8.0 (October 2, 2024)

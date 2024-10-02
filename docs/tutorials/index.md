@@ -10,6 +10,3 @@ sidebar_position: 4
 
    - [With Python and Pika](/tutorials/how_python_component)
    - [With Quarkus](/tutorials/how_quarkus_component)
-
- * [Simple Value-awareness application](/tutorials/email_use_case) explain
- how to use the VALAWAI Toolbox to create a value-awareness email responder.
