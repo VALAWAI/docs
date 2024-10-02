@@ -519,7 +519,7 @@ import os.path
 import re
 import pika
 
-class TopologyHandler(object):
+class MOVService(object):
     
     def __init__(self, listener:pika.channel.Channel):
         """Initialize the handler foe the topology actions
@@ -611,9 +611,9 @@ class App:
     
         try:
             # Unregister the component
-            if self.topology != None and self.topology.component_id != None:
+            if self.mov != None and self.mov.component_id != None:
                 
-                self.topology.unregister_component(self.publisher.channel)
+                self.mov.unregister_component(self.publisher.channel)
             
             # close the RabbitMQ connections
             if self.listener != None:
@@ -644,8 +644,8 @@ class App:
             # ...
             
             # Register the component
-            self.topology = TopologyHandler(self.listener)
-            self.topology.register_component(self.publisher.channel)
+            self.mov = MOVService(self.listener)
+            self.mov.register_component(self.publisher.channel)
             
             # Start to process the received events
             logging.info("Started CX name")
@@ -697,7 +697,7 @@ class LogService(Object):
             The connection to the RabbitMQ to publish messages
 
          """
-         selg.channlke = channel
+         selg.channel = channel
          self.component_id = None
 
     
@@ -799,11 +799,139 @@ Thus, the channel name must match the pattern **valawai/c2/\w+/control/\w+** and
 the payload contains the fields: connection_id, source, target, message_payload,
 and timestamp.
 
+The following code is an example of how to [listen](/docs/tutorials/how_python_component#listening-for-messages)
+for this type of message.
+
 ```python
-lkshjñsdghjñladjñ
-something
+import pika
+import json
+
+class MessageAnalyzer(Object):
+    """The component to analyze the messages and change the topology if it is necessary.
+    """
+    
+    def __init__(self,listener:pika.channel.Channel):
+         """Initialize the analyzer. 
+        
+        Parameters
+        ----------
+        listener: pika.channel.Channel
+            The connection to receive messages form the  RabbitMQ
+
+         """
+         listener.queue_declare(queue='valawai/cx/name/control/message_analizer',
+                              durable=True,
+                              exclusive=False,
+                              auto_delete=False)
+         listener.basic_consume(queue='valawai/cx/name/control/message_analizer',
+                              auto_ack=True,
+                              on_message_callback=self.analize_message)
 
 
+    def analize_message(self, ch, method, properties, body):
+        """Called when a message has to be analyzed.
+        """
+        
+        msg=json.loads(body)
+
+        # Analyze the msg to decide what to do with the topology
+        
+        # get the connection identifier
+        msg['connection_id']
+        
+        # Access source component information
+        msg['source']['id']
+        msg['source']['name']
+        msg['source']['type']
+        
+        # Access target component information
+        msg['target']['id']
+        msg['target']['name']
+        msg['target']['type']
+        
+        # The message that are interchanged
+        msg['message_payload']
+
+        # The epoch time, in seconds, when the message is interchanged        
+        msg['timestamp']
+```
+
+Also, you can use the following class to [change the topology](/docs/tutorials/mov#modify-a-topology-connection)
+managed by the MOV.
+
+
+```python
+import pika
+import json
+
+class TopologyService(Object):
+    """The service to modify the topology managed by the MOV.
+    """
+    
+    def __init__(self,channel:pika.channel.Channel):
+         """Initialize the topology service. 
+        
+        Parameters
+        ----------
+        channel: pika.channel.Channel
+            The connection to the RabbitMQ to publish messages
+
+         """
+         selg.channel = channel
+         self.component_id = None
+
+    
+    def enable(self,connection_id:str):
+        """Enable a connection defined in the topology.
+        
+        Parameters
+        ----------
+        connection_id : str
+            Identifier of the connection to enable.
+        """
+        self.__change_topology('ENABLE',connection_id)
+
+    def disable(self,connection_id:str):
+        """Disable a connection defined in the topology.
+        
+        Parameters
+        ----------
+        connection_id : str
+            Identifier of the connection to disable.
+        """
+        self.__change_topology('DISABLE',connection_id)
+
+
+    def remove(self,connection_id:str):
+        """Remove a connection defined in the topology.
+        
+        Parameters
+        ----------
+        connection_id : str
+            Identifier of the connection to remove.
+        """
+        self.__change_topology('REMOVE',connection_id)
+        
+    def __change_topology(self,action:str,connection_id:str):
+        """Change the topology managed by the MOV (https://valawai.github.io/docs/tutorials/mov#modify-a-topology-connection)
+        
+        Parameters
+        ----------
+        action : str
+            The action to do over the topology connection
+        connection_id : str
+            Identifier of the connection to modify.
+        """
+
+        msg = {
+            "action":action,
+            "connection_id": connection_id
+        }
+        body=json.dumps(msg)
+        properties=pika.BasicProperties(
+            content_type='application/json'
+        )
+        self.channel.basic_publish(exchange='',routing_key='valawai/topology/change',body=body,properties=properties)
 ```
 
 

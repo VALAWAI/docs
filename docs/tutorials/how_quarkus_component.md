@@ -1080,7 +1080,7 @@ channels:
       message:
         $ref: '#/components/messages/temperature_event'
   valawai/c2/eco_friendly_awarness/control/hvac_listener:
-    description: REceive the actions done over an HVAC.
+    description: Receive the actions done over an HVAC.
     subscribe:
       message:
         $ref: '#/components/messages/hvac_event'
