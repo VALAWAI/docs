@@ -765,7 +765,9 @@ The [Master Of VALAWAI (MOV)](/docs/tutorials/mov) provides different services
 and one of them is a [centralized log system](/docs/tutorials/mov#add-a-log-message).
 This service stores the log messages and shows them in a
 [web user interface (WUI)](/docs/tutorials/mov#manage-logs).
-This service helps in the developing process because you can see what happens in different components in a unique view. Otherwise, you must access each docker component container and see the logs.
+This service helps in the developing process because you can see what happens in different
+components in a unique view. Otherwise, you must access each docker component container
+and see the logs.
 
 As we did before, the first thing to do is define a class for the message to add the log, as you can see in the next class.
 
