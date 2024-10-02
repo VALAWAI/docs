@@ -89,6 +89,11 @@ const config = {
 						label: 'Tutorials',
 					},
 					{
+						position: 'left',
+						to: '/demonstrations',
+						label: 'Demonstrations',
+					},
+					{
 						href: 'https://github.com/VALAWAI/docs',
 						label: 'GitHub',
 						position: 'right',
@@ -116,6 +121,10 @@ const config = {
 							{
 								label: 'Tutorials',
 								to: '/tutorials',
+							},
+							{
+								label: 'Demonstrations',
+								to: '/demonstrations',
 							},
 							{
 								label: 'Glossary',

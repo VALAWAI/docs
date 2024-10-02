@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# social robots
+# Social robots
 
 For the social robotics use case, several different scenarios will be studied. However,
 as an illustrative and comprehensive case, we will consider the value of **discretion**.
