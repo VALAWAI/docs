@@ -1,6 +1,11 @@
 # Changes done over the VALAWAI documentation
 
 
+## Version 0.9.0 (October X, 2024)
+
+ - Add information about the healtcheck on docker compose
+
+
 ## Version 0.8.1 (October 2, 2024)
 
  - Fix broken links.
