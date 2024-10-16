@@ -1,7 +1,7 @@
 # Changes done over the VALAWAI documentation
 
 
-## Version 0.9.0 (October 3, 2024)
+## Version 0.9.0 (October 16, 2024)
 
  - Add information about the healtcheck on:
  	- C1 LLM email replier
