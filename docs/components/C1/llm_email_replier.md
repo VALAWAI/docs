@@ -150,16 +150,27 @@ git clone https://github.com/VALAWAI/C1_llm_email_replier.git
 ./buildDockerImages.sh
 ```
 
-At the end you must have the docker image **valawai/c1_llm_email_replier:Z.Y.Z**
-where **X.Y.Z** will be the version of the component. If you want to have
-the image with another tag for example **latest** you must call the script
-with this tag as a parameter, for example:
+In the end, you must have the docker image **valawai/c1_llm_email_replier:Z.Y.Z**
+where **X.Y.Z** will be the version of the component. 
 
-```bash
-./buildDockerImages.sh latest
+This script has the next parameters.
+
+ * **-nc** or **--no-cache** Build a docker image without using the cache.
+ * **-t \<tag\>** or **--tag \<tag\>** Build a docker image with a the **\<tag\>** name.
+ * **-p \<platforms\>** or **--platform \<platforms\>** Specify the architectures to build the docker.
+ * **-dp** or **--default-platforms** Uses the default platforms (linux/arm64, linux/amd64).
+ * **-h** or **--help** Show a help message that explains these parameters.
+
+For example the next call can be used to generate the image with the tag **latest**.
+
+```
+./buildDockerImages.sh -t latest
 ```
 
-And you will obtain the image **valawai/c1_llm_email_replier:latest**.
+And you will obtain the container **valawai/c1_llm_email_replier:latest**.
+
+
+#### Docker environment variables
 
 The most useful environment variables on the docker image are:
 
@@ -191,6 +202,54 @@ The most useful environment variables on the docker image are:
  The default value is **1000000**.
  - **LOG_FILE_BACKUP_COUNT** defines the maximum number of rolling files to maintain.
  The default value is **5**.
+ - **LOG_DIR** defines the directory to store the maximum number of rolling files to maintain.
+ The default value is **logs**.
+ - **LOG_FILE_NAME** defines the file name at the **LOG_DIR** where the log messages will be stored.
+ The default value is **c1_llm_email_replier.txt**.
+ - **COMPONET_ID_FILE_NAME** defines the file name at the **LOG_DIR** where the component identifier,
+ obtained when the component is registered in the MOV, will be stored.
+ The default value is **component_id.json**.
+
+
+#### Docker health check
+
+When this component is registered, it stores the registered result in the file
+**/app/logs/component_id.json**. This path can be changed using the docker environment variables
+**LOG_DIR** and **COMPONET_ID_FILE_NAME**. Also, when the component is unregistered, this file 
+will removed.  Thus, you can check the size of this file to know if the component is ready.
+The following example, shows you how to use this in a **docker compose** using a health
+check for this component.
+
+```yaml
+services:
+  llm_email_replier:
+    image: valawai/c1_llm_email_replier:${C1_LLM_EMAIL_REPLIER_TAG:-latest}
+    container_name: c1_llm_email_replier
+    networks:
+      - llm_email_replier_net
+    depends_on:
+      mov:
+        condition: service_healthy
+        restart: true
+    environment:
+      RABBITMQ_HOST: ${MQ_HOST:-mq}
+      RABBITMQ_PORT: ${MQ_PORT:-5672}
+      RABBITMQ_USERNAME: ${MQ_USER:-mov}
+      RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
+      REPLY_MAX_NEW_TOKENS: ${REPLY_MAX_NEW_TOKENS:-256}
+      REPLY_TEMPERATURE: ${REPLY_TEMPERATURE:-0.7}
+      REPLY_TOP_K: ${REPLY_TOP_K:-50}
+      REPLY_TOP_P: ${REPLY_TOP_P:-0.95}
+      REPLY_SYSTEM_PROMPT: ${REPLY_SYSTEM_PROMPT:-"You are a polite chatbot who always try to provide solutions to the customers problems"}
+      LOG_CONSOLE_LEVEL: ${LOG_LEVEL:-INFO}
+    healthcheck:
+      test: ["CMD-SHELL", "test -s /app/logs/component_id.json"]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 1m
+      start_interval: 5s
+```
 
 
 ### Deploy 

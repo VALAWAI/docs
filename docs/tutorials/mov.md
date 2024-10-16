@@ -130,6 +130,8 @@ with this tag as a parameter, for example:
 
 And you will obtain the container **valawai/mov:latest**.
 
+#### Docker environment variables
+
 The most useful environment variables on the docker image are:
 
  - **RABBITMQ_HOST** is the host where the RabbitMQ is available.
@@ -154,9 +156,137 @@ The most useful environment variables on the docker image are:
   The default value is ___mongo:27017__.
  - **MOV_LOG_LEVEL** defines the level of the log messages to be stored.
   The default value is ___INFO__.
+ - **QUARKUS_HTTP_HOST** contains the server host that will expose the user interface and the REST API.
+ The default value is __0.0.0.0__.
+ - **QUARKUS_HTTP_PORT** defines the server port that will expose the user interface and the REST API.
+ The default value is __8080__.
+
 
 The MOV is developed using [Quarkus](https://quarkus.io/), so you can change any environment
 variable [defined on it](https://quarkus.io/guides/all-config).
+
+#### Docker health check
+
+This component exposes the following REST endpoints to check their health status.
+
+ - **/q/health/live** can be used to check if the component is running.
+ - **/q/health/ready** can be used to check if the component can process the messages
+  from the VALAWAI infrastructure.
+ - **/q/health/started** can be used to check if the component has started.
+ - **/q/health** can be used to obtain all the previous check procedures in the component.
+ 
+All of them will return a JSON which will have the **status** of the state (**UP** or **DOWN**)
+and the list of **checks** that have been evaluated. It looks like the following example was obtained
+from doing a **GET** over the **/q/health** endpoint.
+
+ 
+```jsx
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "SmallRye Reactive Messaging - liveness check",
+            "status": "UP",
+            "data": {
+                "query_components": "[OK]",
+                "query_connections": "[OK]",
+                "change_topology": "[OK]",
+                "create_connection": "[OK]",
+                "register_component": "[OK]",
+                "add_log": "[OK]",
+                "unregister_component": "[OK]",
+                "send_unregister_component": "[OK]",
+                "send_create_connection": "[OK]",
+                "send_change_topology": "[OK]",
+                "send_register_component": "[OK]",
+                "components_page": "[OK]",
+                "connections_page": "[OK]"
+            }
+        },
+        {
+            "name": "RabbitMQ service",
+            "status": "UP"
+        },
+        {
+            "name": "MongoDB connection health check",
+            "status": "UP",
+            "data": {
+                "<default>": "OK",
+                "<default-reactive>": "OK"
+            }
+        },
+        {
+            "name": "SmallRye Reactive Messaging - readiness check",
+            "status": "UP",
+            "data": {
+                "query_components": "[OK]",
+                "query_connections": "[OK]",
+                "change_topology": "[OK]",
+                "create_connection": "[OK]",
+                "register_component": "[OK]",
+                "add_log": "[OK]",
+                "unregister_component": "[OK]",
+                "send_unregister_component": "[OK]",
+                "send_create_connection": "[OK]",
+                "send_change_topology": "[OK]",
+                "send_register_component": "[OK]",
+                "components_page": "[OK]",
+                "connections_page": "[OK]"
+            }
+        },
+        {
+            "name": "SmallRye Reactive Messaging - startup check",
+            "status": "UP"
+        }
+    ]
+}
+ ```
+ 
+An alternative is to see the state of the component using the health user interface that
+is exposed at [/q/health-ui/](http://localhost:8080/q/health-ui/).
+ 
+These endpoints are useful for doing the **healthcheck** in a **docker-compose** as
+you can see in the following example.
+
+
+```yaml
+services:
+  mov:
+    image: valawai/mov:${MOV_TAG:-latest}
+    container_name: mov_ui
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+        restart: true
+      mq:
+        condition: service_healthy
+        restart: true
+    ports:
+      - ${MOV_UI_PORT:-8080}:8080
+    networks:
+      - mov
+    environment:
+      RABBITMQ_HOST: mq
+      RABBITMQ_PORT: ${MQ_PORT:-5672}
+      RABBITMQ_USERNAME: ${MQ_USER:-mov}
+      RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
+      QUARKUS_MONGODB_DATABASE: ${DB_NAME:-movDB}
+      QUARKUS_MONGODB_CREDENTIALS_USERNAME: ${DB_USER_NAME:-mov}
+      QUARKUS_MONGODB_CREDENTIALS_PASSWORD: ${DB_USER_PASSWORD:-password}
+      QUARKUS_MONGODB_HOSTS: mongo:${MONGO_PORT:-27017}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s http://localhost:8080/q/health | grep -m 1 -P \"^[\\s|\\{|\\\"]+status[\\s|\\:|\\\"]+.+\\\"\" |grep -q \"\\\"UP\\\"\"",
+        ]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 1m
+      start_interval: 5s
+```
 
 
 ### Dependencies

@@ -1,9 +1,13 @@
 # Changes done over the VALAWAI documentation
 
 
-## Version 0.9.0 (October X, 2024)
+## Version 0.9.0 (October 3, 2024)
 
- - Add information about the healtcheck on docker compose
+ - Add information about the healtcheck on:
+ 	- C1 LLM email replier
+ 	- C0 E-mail actuator
+ 	- C0 E-mail sensor
+ 	- Master Of VALAWAI
 
 
 ## Version 0.8.1 (October 2, 2024)

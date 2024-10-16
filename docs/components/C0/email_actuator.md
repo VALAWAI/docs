@@ -87,6 +87,8 @@ with this tag as a parameter, for example:
 
 And you will obtain the image **valawai/c0_email_actuator:latest**.
 
+#### Docker environment variables
+
 The most useful environment variables on the docker image are:
 
  - **RABBITMQ_HOST** is the host where the RabbitMQ is available.
@@ -107,7 +109,11 @@ The most useful environment variables on the docker image are:
  The default value is **no-reply@valawai.eu**.
  - **QUARKUS_MAILER_PASSWORD** is the credential to identify the user that can connect to the e-mail server.
  The default value is **password**.
- 
+ - **QUARKUS_HTTP_HOST** contains the server host that will expose the REST health endpoints.
+ The default value is __0.0.0.0__.
+ - **QUARKUS_HTTP_PORT** defines the server port that will expose the REST health endpoints.
+ The default value is __8080__.
+
 Other variables depend on the type of secure connection to the e-mail server. For example,
 you must define the next variables to  connect to GMail with **STARTTLS**: 
 
@@ -134,6 +140,110 @@ QUARKUS_MAILER_PASSWORD=YOURGENERATEDAPPLICATIONPASSWORD
 ```
 
 On the [Quarkus mail configuration](https://quarkus.io/guides/mailer-reference#configuration-reference) documentation you can read more about the variables to configure the connection to the e-mail server and also some examples to the [most common](https://quarkus.io/guides/mailer-reference#popular) e-mail servers.
+
+#### Docker health check
+
+This component exposes the following REST endpoints to check their health status.
+
+ - **/q/health/live** can be used to check if the component is running.
+ - **/q/health/ready** can be used to check if the component can process the messages
+  from the VALAWAI infrastructure.
+ - **/q/health/started** can be used to check if the component has started.
+ - **/q/health** can be used to obtain all the previous check procedures in the component.
+ 
+All of them will return a JSON which will have the **status** of the state (**UP** or **DOWN**)
+and the list of **checks** that have been evaluated. It looks like the following example was obtained
+from doing a **GET** over the **/q/health** endpoint.
+
+ 
+```jsx
+ {
+    "status": "UP",
+    "checks": [
+        {
+            "name": "SmallRye Reactive Messaging - liveness check",
+            "status": "UP",
+            "data": {
+                "registered": "[OK]",
+                "change_parameters": "[OK]",
+                "send_log": "[OK]",
+                "send_unregister_component": "[OK]",
+                "send_register_component": "[OK]",
+                "send_email": "[OK]"
+            }
+        },
+        {
+            "name": "Registered C0 email actuator",
+            "status": "UP"
+        },
+        {
+            "name": "SmallRye Reactive Messaging - readiness check",
+            "status": "UP",
+            "data": {
+                "registered": "[OK]",
+                "change_parameters": "[OK]",
+                "send_log": "[OK]",
+                "send_unregister_component": "[OK]",
+                "send_register_component": "[OK]",
+                "send_email": "[OK]"
+            }
+        },
+        {
+            "name": "SmallRye Reactive Messaging - startup check",
+            "status": "UP"
+        }
+    ]
+}
+ ```
+ 
+An alternative is to see the state of the component using the health user interface that
+is exposed at [/q/health-ui/](http://localhost:8080/q/health-ui/).
+ 
+These endpoints are useful for doing the **healthcheck** in a **docker-compose** as
+you can see in the following example.
+
+
+```yaml
+email_actuator:
+  image: valawai/c0_email_actuator:${C0_EMAIL_ACTUATOR_TAG:-latest}
+  container_name: c0_email_actuator
+  networks:
+    - email_actuator_net
+  depends_on:
+    mov:
+      condition: service_healthy
+      restart: true
+    mail:
+      condition: service_started
+      required: false
+  environment:
+    RABBITMQ_HOST: ${MQ_HOST:-mq}
+    RABBITMQ_PORT: ${MQ_PORT:-5672}
+    RABBITMQ_USERNAME: ${MQ_USER:-mov}
+    RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
+    QUARKUS_MAILER_HOST: ${MAIL_HOST:-mail}
+    QUARKUS_MAILER_PORT: ${MAIL_PORT:-25}
+    QUARKUS_MAILER_FROM: ${MAIL_FROM:-no-reply@valawai.eu}
+    QUARKUS_MAILER_USERNAME: ${MAIL_USERNAME:-user}
+    QUARKUS_MAILER_PASSWORD: ${MAIL_PASSWORD:-password}
+    QUARKUS_MAILER_START_TLS: ${MAIL_STARTTLS:-DISABLED}
+    QUARKUS_MAILER_TLS: ${MAIL_STARTTLS:-false}
+    QUARKUS_MAILER_AUTH_METHODS: ${MAIL_AUTH_METHODS:-DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN}
+  healthcheck:
+    test:
+      [
+        "CMD-SHELL",
+        "curl -s http://localhost:8080/q/health | grep -m 1 -P \"^[\\s|\\{|\\\"]+status[\\s|\\:|\\\"]+.+\\\"\" |grep -q \"\\\"UP\\\"\"",
+      ]
+    interval: 1m
+    timeout: 10s
+    retries: 5
+    start_period: 1m
+    start_interval: 5s
+```
+
+Finally, remember that the  docker environment variables **QUARKUS_HTTP_HOST** and **QUARKUS_HTTP_PORT**
+can be used to configure where the REST health endpoints will be exposed by the component.
 
 
 ### Deploy 
