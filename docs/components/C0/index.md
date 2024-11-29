@@ -15,4 +15,4 @@ The CO componets defined on the [RGNW toolbox](/docs/toolbox/) are:
  * [Topic detection model](/docs/components/C0/topic_detection_model) extract
  the corresponding topics from Twitter post.
  * [E-mail sensor](/docs/components/C0/email_sensor) obtain information of the received e-mails from an account.
-  * [E-mail actuator](/docs/components/C0/email_actuator) send e-mials outside the VALAWAI infrastructure.
+ * [E-mail actuator](/docs/components/C0/email_actuator) send e-mials outside the VALAWAI infrastructure.

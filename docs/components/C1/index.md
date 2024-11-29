@@ -13,3 +13,5 @@ The C1 componets defined on the [RGNW toolbox](/docs/toolbox/) are:
  how desirable is a Twitter post based on user prefereces.
  * [LLM e-mail replier](/docs/components/C1/llm_email_replier) can be used
  to reply a received e-mail.
+ * [NIT protocol manager](/docs/components/C1/nit_protocol_manager) check if a treatment
+ follows the NIT protocol.
