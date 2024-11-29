@@ -26,9 +26,10 @@ component named email sensor the artifact will be **c0-email-sensor**.
 
 3. Select the packages:
 
- - Messaging - RabbitMQ Connector
- - REST Jackson
- - Container Image Docker
+ - Messaging - RabbitMQ Connector (quarkus-messaging-rabbitmq)
+ - REST Jackson (quarkus-rest-jackson)
+ - Container Image Docker (quarkus-container-image-docker)
+ - SmallRye Health (quarkus-smallrye-health)
 
 4. Click the button **Generate your application**.
 
