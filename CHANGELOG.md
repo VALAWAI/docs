@@ -1,6 +1,11 @@
 # Changes done over the VALAWAI documentation
 
 
+## Version 0.10.0 (November 29, 2024)
+
+ - Add information about the C1 NIT protocol manager.
+ 
+ 
 ## Version 0.9.0 (October 16, 2024)
 
  - Add information about the healtcheck on:
