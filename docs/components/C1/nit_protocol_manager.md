@@ -112,7 +112,7 @@ in intervlas of 5 minutes.
 
 ## How to use this component
 
-This component checks that the treatements to apply to a patient follow the NIT protocol. This protocol
+This component checks that the treatments to apply to a patient follow the NIT protocol. This protocol
 allows or not do some actions over the patients depending of its NIt level.
 
 

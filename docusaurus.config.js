@@ -62,7 +62,6 @@ const config = {
 			// Replace with your project's social card
 			image: 'img/docusaurus-social-card.jpg',
 			navbar: {
-				title: 'Documentation',
 				logo: {
 					alt: 'VALAWAI Logo',
 					src: 'img/logo.png',
@@ -70,18 +69,23 @@ const config = {
 				items: [
 					{
 						position: 'left',
-						to: '/toolbox',
-						label: 'Toolbox',
+						to: '/introduction',
+						label: 'Introduction',
 					},
 					{
 						position: 'left',
-						to: '/components',
-						label: 'Components',
+						to: '/architecture',
+						label: 'Architecture',
 					},
 					{
 						position: 'left',
 						to: '/use_cases',
 						label: 'Use cases',
+					},
+					{
+						position: 'left',
+						to: '/components',
+						label: 'Components',
 					},
 					{
 						position: 'left',
@@ -104,19 +108,23 @@ const config = {
 				style: 'dark',
 				links: [
 					{
-						title: 'Index',
+						title: 'Contents',
 						items: [
 							{
-								label: 'Toolbox',
-								to: '/toolbox',
+								label: 'Introduction',
+								to: '/introduction',
 							},
 							{
-								label: 'Components',
-								to: '/components',
+								label: 'Architecture',
+								to: '/architecture',
 							},
 							{
 								label: 'Use cases',
 								to: '/use_cases',
+							},
+							{
+								label: 'Components',
+								to: '/components',
 							},
 							{
 								label: 'Tutorials',
@@ -125,10 +133,6 @@ const config = {
 							{
 								label: 'Demonstrations',
 								to: '/demonstrations',
-							},
-							{
-								label: 'Glossary',
-								to: '/glossary',
 							}
 						],
 					},
@@ -165,7 +169,7 @@ const config = {
 			prism: {
 				theme: prismThemes.github,
 				darkTheme: prismThemes.dracula,
-				additionalLanguages: ['bash', 'java','json','properties','xml-doc'],
+				additionalLanguages: ['bash', 'java', 'json', 'properties', 'xml-doc'],
 			},
 		}),
 };
