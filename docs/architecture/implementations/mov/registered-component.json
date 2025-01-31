@@ -1,0 +1,53 @@
+{
+   "id":"65c1f59ea4cb169f42f5edc4",
+   "name":"c0_voice_to_text",
+   "description":"Generate text from the ambient audio",
+   "version":"1.0.5",
+   "api_version":"2.3.0",
+   "type":"C0",
+   "since": 1709902001,
+   "channels":[
+      {
+         "id":"valawai/c0/voice_to_text/data/audio_to_process",
+         "description":"Provide the audio text to extract the text.",
+         "subscribe":{
+            "type":"OBJECT",
+            "properties":{
+               "sample_ratio":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               },
+               "encoded":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               },
+               "sample":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               }
+            }
+         }
+      },
+      {
+         "id":"valawai/c0/voice_to_text/data/text_extracted",
+         "description":"Notify about the extracted text from a received audio.",
+         "publish":{
+            "type":"OBJECT",
+            "properties":{
+               "text":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               },
+               "language":{
+                  "type":"BASIC",
+                  "format":"STRING"
+               },
+               "accuracy":{
+                  "type":"BASIC",
+                  "format":"NUMBER"
+               }
+            }
+         }
+      }
+   ]
+}

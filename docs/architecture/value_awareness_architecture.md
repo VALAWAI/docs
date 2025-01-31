@@ -1,179 +1,163 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 ---
 
-# VALAWAI's value awareness architecture
+# VALAWAI Architecture
 
-The VALAWAI architecture is divided into three layers, the C0, C1 and C2 layers.
+The VALAWAI value awareness architecture comprises three layers: C0, C1, and 
+C2.
 
-The C0 layer contains components are the components that are concerned with information extraction
-and task execution. They process the world and forward this information to the C1 components.
-Their tasks will depend on the application, but some examples are components for face recognition, 
-sentiment analysis, topic modelling, emotion recognition, etc. Many of these modules can already be
-found on the AI on Demand (AIoD) platform (the successor to the [AI4EU platform](https://aiondemand.readthedocs.io/en/latest/))
-and VALAWAI's focus will be on the integration of existing modules into the VALAWAI architecture,
-along with the development of C0 components when needed.
+The C0 layer consists of components responsible for information extraction 
+and task execution. They process data from the environment and transmit this 
+information to the C1 components.  Their specific tasks depend on the application, 
+but examples include components for face recognition, sentiment analysis, 
+topic modeling, and emotion recognition. Many of these modules are available 
+on the AI on Demand (AIoD) platform (the successor to 
+the [AI4EU platform](https://aiondemand.readthedocs.io/en/latest/)), and VALAWAI 
+focuses on integrating existing modules into the architecture, developing new C0 
+components only when necessary.
 
-The C1 layer contains components that are responsibles for integrating and analysing the information coming
-from C0 components and making decisions accordingly. Unlike C0 components, we believe C1 components
-that are ready to be reused will be minimal, as the functionality of these components heavily depends
-on each pilot scenario. 
+The C1 layer contains components that integrate and analyze information from the 
+C0 components and make decisions accordingly. Unlike C0 components, readily reusable 
+C1 components are expected to be less common, as their functionality is highly 
+dependent on the specific use case.
 
-The C2 is the reflective layer analysing the value alignment of behaviour. These components constitute
-the main novelty of VALAWAI, and it is here that the reasoning with values will manifest, requiring
-capabilities such as value acquisition, value representation and reasoning, value-alignment mechanisms
-and value-driven explainability. These components may influence this behaviour by:
+The C2 layer is the reflective layer, analyzing the value alignment of behavior.  
+These components are a key innovation of VALAWAI, and they are where value-based 
+reasoning takes place.  This requires capabilities such as value acquisition, value 
+representation and reasoning, value alignment mechanisms, and value-driven 
+explainability. These components can influence behavior in two ways:
 
- * directly modifying a system’s behaviour through:
-   * modifying the internal behaviour of C0 and C1 components
-   * modifying the topology between C0 and C1 components
- * indirectly modifying a system’s behaviour through providing feedback to C1 components that raises
-  value awareness, with the idea that being value aware impacts behaviour.
+*   **Directly modifying a system's behavior:**
+    *   Modifying the internal behavior of C0 and C1 components.
+    *   Modifying the connections (topology) between C0 and C1 components.
+*   **Indirectly modifying a system's behavior:** Providing value awareness feedback 
+to C1 components, with the understanding that increased value awareness influences 
+behavior.
 
-This subsection presents the VALAWAI architecture by modelling the components of each layer and
-the communication channels amongst them. However, since modelling the entire VALAWAI architecture
-suffers from a lack of readability and clarity due to the increased number of communication channels
-linking components, we present next each type of communication separately. 
+This section describes the VALAWAI architecture by modeling the components of each 
+layer and their communication channels.  To improve readability and clarity, given 
+the complexity of the communication channels, we present each type of communication 
+separately.
 
-First and foremost, we separate between data flow (represented through single-line arrows) and control
-flow (represented through double-line arrows). Data flow describes the flow of information between components,
-such as having a C0 component informing a C1 component of the detection of hate speech in a given text. Control
-flow is the communication that allows for control over other entities, such as having a C1 component updating
-the parameters of the adapter module that tunes the pretrained language model (PrLM) of the C0 component that
-is responsible for detecting hate speech. This results in influencing the behaviour of the C0 component. Control,
-however, is not only over other system components. Control may also happen over the topology itself. For example,
-a C2 component may decide that a C1 component should switch from relying on one C0 component that detects hate
-speech to another C0 component that incorporates users' feedback to adapt what is considered hate speech.
-This may be implemented by disconnecting C1 from the first C0 component and connecting it to the second.
-Control may also happen over the real-world. For example, a C0 component may act upon the real-world
-by suspending a human user from a community for a given period of time because of its use of hate speech.
-Of course, for one component to have control over a given entity (be it another system component,
-the system topology, or the real-world), it first requires a representation of that entity to understand
-its behaviour and how that behaviour may be modified. For example, for a C1 component to update the parameters
-of the adapter module of a C0 component, that C1 component should first have the knowledge about the parameters
-that define C0's behaviour.  This may be achieved, for example, by having C0 share its representation with C1.
-Similarly, for a C2 component to update the topology, the C2 component should be capable of reading and
-understanding the topology. For this reason, most control flow in this deliverable is represented through
-bidirectional arrows, even when control is in one direction only.  
+We distinguish between data flow (single-line arrows) and control flow (double-line 
+arrows). Data flow represents information exchange between components (e.g., a C0 
+component informing a C1 component about detected hate speech). Control flow enables 
+control over other entities (e.g., a C1 component updating the parameters of a C0 
+component's adapter module to refine hate speech detection). Control can be exerted 
+not only over system components but also over the system's topology. For example, 
+a C2 component might decide to switch a C1 component's connection from one C0 hate 
+speech detector to another that incorporates user feedback. Control can also extend 
+to the real world (e.g., a C0 component suspending a user from a community).
 
-In what follows, we present the VALAWAI architecture by separating between data flow and control flow,
-as well as separating between the different types of control flow.   
-The architecture presented (see Figures ref fig:arch-data fig:arch-world) illustrates that
-the C2 layer may have more than one C2 component, the C1 layer may have more than one C1 component, and
-the C0 layer may have more than one C0 component (be it sensors or actuators, as we explain shortly).
-We argue that, unlike the GNW, complex processing systems are not needed at the C0 layer, and we leave
-this task to the C1 layer. As such, C0 components may either be sensors or actuators. More complex behaviour,
-if deemed necessary, may be constructed by connecting C0 components through the data flow communication channels. 
+For a component to exert control, it needs a representation of the controlled entity. 
+For example, a C1 component needs knowledge of a C0 component's parameters to update 
+its adapter module. This might involve the C0 component sharing its representation 
+with C1. Similarly, a C2 component needs to understand the topology to modify it. 
+Therefore, most control flow is represented by bidirectional arrows, even if control 
+is unidirectional.
 
+We present the VALAWAI architecture by separating data flow and control flow, and 
+further differentiating the types of control flow. The architecture (see Figures below) 
+illustrates that each layer (C0, C1, C2) can have multiple components.  Unlike the GNW, 
+we posit that complex processing systems are not required at the C0 layer, delegating 
+this task to the C1 layer.  C0 components can thus be sensors or actuators. More complex 
+behavior can be constructed by connecting C0 components through data flow channels.
 
 ## Data Flow
 
-Each component may communicate with other components at the same layer as well as with components at other layers. In other words, C2 components may communicate amongst themselves; for example, to share their reflection over the behaviour, and possibly to try to reach agreements over the results of their value-driven reasoning. They may communicate with C1 components; for example, to provide feedback to a C1 component on value alignment, resulting in raising value awareness at C1. They may also communicate with C0 components; for example, to receive information from a C0 component about relevant values. C1 components may also communicate amongst themselves; for example, to collaborate on decision making. They may also communicate with C0 components; for example, to receive from a C0 component the extracted features describing the world or to send information to a C0 component about which actions to perform next. C0 components may communicate amongst themselves as well; for example, to allow them to agree amongst themselves which extracted features may prevail and will later need to be shared with C1.  
+Components can communicate with other components within the same layer and with components 
+in other layers.  For example, C2 components can communicate among themselves (sharing 
+reflections), with C1 components (providing value alignment feedback), and with C0 components 
+(receiving value-related information). C1 components can communicate among themselves 
+(collaborating on decisions) and with C0 components (receiving extracted features or 
+sending action instructions). C0 components can also communicate among themselves (agreeing
+ on which features to share with C1).
 
-In general, allowing components on the same layer to communicate amongst themselves opens the door to self-organisation and attention focusing, which is especially needed at the C1 and C2 layers. However, whether self-organisation and attention focusing is centralised or not is an implementation choice that we will analyse and make a decision on in future deliverables.  
+Inter-layer communication facilitates self-organization and attention focusing, especially 
+at the C1 and C2 layers.  Whether this is centralized or distributed is an implementation 
+detail to be addressed later.
 
 ![The VALAWAI architecture and the data flow](/img/toolbox/rgnw-arch-data.png)
 
+## Control Flow: Control over System Components
 
+C1 components, responsible for decision-making, can control C0 components, tuning their 
+behavior.  C2 components, reflecting on values and value alignment, can also adjust the 
+functionality of both C1 and C0 components to ensure value alignment.  We currently assume 
+that components within the same layer do not control each other, as self-organization and 
+attention focusing can be achieved through data flow.
 
-## Control Flow: Control over system components
-
-We argue that C1 components, which are concerned with decision making, may have control over C0 components, allowing them to tune their behaviour as needed. Furthermore, C2 components that reflect on values and value alignment may also tune the functionalities of both C1 and C0 components to ensure value alignment. For the time being, we believe components on the same level should not control each other's behaviour, because self-organisation and attention focusing at each layer (especially the C1 and C2 layers) can be achieved through the data flow at that layer. 
-
-In summary, components may only control those in the layers below them. This raises the question, how do C2 components evolve? That is, who has control over C2 components? Since C2 components are concerned with reasoning with human values, their behaviour is dictated by those values. Control over C2 components is achieved by controlling the values deemed relevant. We argue that this is purely a decision for humans to make. For the time being, we leave the selection/specification of the preferred value systems to be done manually, offline. In the future, we may investigate having users directly influence the relevant value system.  
+Control flows downwards: C2 controls C1 and C0, and C1 controls C0.  How are C2 components 
+controlled? Since C2 components reason about human values, their behavior is guided by those 
+values. Control over C2 components is thus achieved by controlling the relevant values. 
+We currently assume manual, offline selection/specification of preferred value systems, but 
+future work may explore direct user influence on the relevant value system.
 
 ![The VALAWAI architecture and the control flow over system components](/img/toolbox/rgnw-arch-control-comp.png)
 
+## Control Flow: Control over the Topology
 
-## Control Flow: Control over the topology
-
-For C2 components to have control over the behaviour of C1 and C0 components, an alternative approach is to control the topology between those components, allowing activating/inhibiting the data communication between them. 
-
-We argue that data flow from/to C2 components, however, should not be affected. This is because we believe communication with the components that reflect on values should be open to all.
+C2 components can also control the behavior of C1 and C0 components by controlling the connections 
+(topology) between them, activating or inhibiting data communication.  Data flow to/from C2 components, 
+however, should remain unaffected, as communication with value-reflecting components should be open.
 
 ![The VALAWAI architecture and the control flow over the topology](/img/toolbox/rgnw-arch-control-topology.png)
 
+## Control Flow: Control over the World
 
-## Control Flow: Control over the world
-
-Control over the world is manifested by having sensors at C0 observing the real world and registering their observations to be later shared with C1 (represented by the incoming control arrows), and having actuators at C0 performing actions in the real world (represented by the outgoing control arrow). 
-
-This is the only possible interaction with the real world, and it can only happen through C0 components: C2 and C1 components may only impact the world through C0.
+Control over the real world is exercised through C0 components: sensors observe the world and 
+transmit observations to C1, and actuators perform actions in the world. C2 and C1 components 
+can only impact the world through C0.
 
 ![The VALAWAI architecture and the control flow over the real world](/img/toolbox/rgnw-arch-control-world.png)
 
+## Component Architecture
 
-## Component
-
-
-The image below illustrates the generic architecture for a system component. There are different component
-types depending on their layer. The C$i$ tag specifies the component's type: C$i \in$ \{C0, C1, C2\}. 
-Each component has a set of parameters that define and describe its behaviour. These are the parameters
-presented at the top of the component in the previous image. Finally, there is the interaction
-with the environment, both within and outside the system. 
+The image below shows the generic architecture of a system component.  Component types depend 
+on their layer (Cᵢ ∈ \{C0, C1, C2\}). Each component has parameters that define its behavior.  
+Interaction with the environment occurs both within and outside the system.
 
 ![The global neural workspace model (GNW)](/img/toolbox/component.png)
 
-The interaction with the environment falls into two main categories: 1) a component may communicate
-with other system components, and 2) a component may have control over the behaviour of its environment
-and/or have its own behaviour subject to the control of other system components. 
+Environmental interaction falls into two categories: communication with other components (data flow) 
+and control over the behavior of the environment (control flow).
 
-The first interaction type, the data flow between components, is represented by the single arrows
-on the side of the component in the previous image. Communication is only possible with other
-system components: the C$j$ tag represents the type of components to/from which data flow is allowed.
+Data flow is represented by single arrows and is only possible with other system components (Cⱼ).
 
-The second interaction type, the control of system components over each other and their environment,
-is represented by double-lined arrows. The arrow incoming into a component's parameters at the top
-of the component represents the power of controlling the behaviour of this component, which is achieved
-by being able to modify the parameters that shape its behaviour. As illustrated in the previous image
-, only a system component may control the behaviour of another system component. Furthermore, this double
-arrow is bidirectional because any component that has control over another component should also be aware
-of that component and its behaviour. This can be understood as the controlling component having a representation
-of the other component's parameters. 
+Control flow is represented by double-lined arrows.  Incoming arrows to a component's parameters 
+represent control over its behavior (by modifying its parameters).  Only system components can 
+control other system components.  The bidirectional nature of the double arrow indicates that 
+the controlling component has a representation of the controlled component's parameters.
 
-A system component, however, does not exclusively control other system components. The outgoing double-lined
-arrow at the bottom of the component of the previous image illustrates that a component is capable
-of controlling three different entity types: 1) other system components, represented by the C$j$ tag;
-2) the topology of the system that links different components and contributes to the behaviour of that system,
-represented by the data flow arrow; and 3) the environment outside that system, represented by a cloud that stands
-for the real world. In all cases, a component controls other entities through some  **control parameters**.
-For example, to control a robotic arm's movement, a system component may set the distance, speed, and displacement
-parameters describing the arm's movement according to its requirements. To change a system's topology, parameters
-that add or delete data flow links may be introduced. Again, the double-lined arrow representing the control
-flow is also bidirectional here because controlling other entities requires being aware of those entities
-and the parameters that define their behaviour.
+Outgoing double-lined arrows represent a component's control over other entities: other system 
+components (Cⱼ), the system's topology (data flow arrow), and the external environment (cloud). 
+Control is exercised through control parameters.  The bidirectional arrow again signifies awareness 
+of the controlled entity and its parameters.
 
-## C0 component
+## C0 Component
 
-The C0 layer is the  **information extraction**  layer, and C0 components are the components in touch with
-the physical world. They extract information about that world through sensors, and they act upon that world 
-through actuators. A set of parameters defines the behaviour of C0 components.
+The C0 layer is the information extraction layer. C0 components interact with the physical world 
+through sensors and actuators.  Their behavior is defined by a set of parameters.
 
 ![The architecture of C0 components as sensor](/img/toolbox/componentC0_S.png)
 
-A C0 component may be of two types, a sensor (see previous image) or an actuator (see next image).
-More advanced components at C0 may also be imagined, such as having components that interpret sensory information
-or interpret actuation commands, for example, the detection of sentiment in a linguistic utterance or a command
-to execute a robot motion plan. 
+C0 components can be sensors or actuators. More advanced C0 components can interpret sensory 
+information or actuation commands (e.g., sentiment detection, robot motion planning).
 
 ![The architecture of C0 components as actuator](/img/toolbox/componentC0_A.png)
 
+## C1 Component
 
-## C1 component
-
-The C1 layer is the  **information integration**  layer, and C1 components are the decision making components
-whose reasoning is based on processing information coming from C0 components. They observe the information
-coming from level C0, they reason about this information and take decisions accordingly. A set of norms
-defines the behaviour of C1 components (see next image). 
+The C1 layer is the information integration layer. C1 components are decision-making components 
+that process information from C0 components.  Their behavior is governed by norms.
 
 ![The architecture of C1 components](/img/toolbox/componentC1.png)
 
-## C2 component
+## C2 Component
 
-C2 components are the components responsible for reflection. In VALAWAI, reflection is value driven. And hence,
-it is the set of  **values**  that constitute C2 components' parameters, that is, the behaviour of C2 components
-is driven by values (see next image). We must note however that the architecture is generic enough to be applied
-for reflection driven by factors other than values. 
+C2 components are responsible for reflection, which in VALAWAI is value-driven.  Their behavior 
+is determined by a set of values.  The architecture is generic and could be applied to reflection 
+driven by other factors.
 
 ![The architecture of C2 components](/img/toolbox/componentC2.png)
-

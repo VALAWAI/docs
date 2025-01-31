@@ -1,0 +1,38 @@
+---
+sidebar_position: 4
+---
+
+# Notify about a sent message through a topology connection
+
+There exists a distinct channel exclusively designed for the C2 components. This service
+serves to notify these components of the messages exchanged during any topology connection. 
+The channel name must adhere to the specified pattern: 
+**valawai/c2/\textbackslash w+/control/\w+**.
+For instance, if a service named **"sent_text"** is implemented on a C2 component named
+**"text analyzer"**, then the channel name should be 
+**"valawai/c2/text_analyzer/control/sent_text"**. This channel must define a payload
+that conforms to the following example:
+
+import CodeBlock from '@theme/CodeBlock';
+import notify_c2_connection_message_json from '!!raw-loader!./notify-c2-connection-message.json';
+
+<CodeBlock language="json" showLineNumbers>{notify_c2_connection_message_json}</CodeBlock>
+
+
+As illustrated in the preceding example, the anticipated fields for this payload are:
+
+ - **connection_id**: The identifier of the topology connection that facilitates message
+  exchange (Line 2).
+ - **source**: The source component responsible for initiating the message transmission
+    (Line 3). It will contain the identifier, name, and type of the source component.
+ - **target**: The target component designated to receive the message
+    (Line 8). It will also contain the identifier, name, and type of the source component.
+ - **message_payload**: The payload data transmitted through the connection (Line 13).
+ - **timestamp**: The epoch time, expressed in seconds, indicating the moment
+    of message transmission (Line 16).
+
+
+As outlined in Section [register component](/docs/architecture/implementations/mov/register_component),
+the Master Of VALAWAI (MOV) will detect channels of this type when a component is registered.
+Subsequently, the MOV will notify the component of messages from the topology connection 
+that match the payload specified in the specification.

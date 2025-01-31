@@ -1,0 +1,6 @@
+{
+  "type": "C0",
+  "name": "c0_voice_to_text",
+  "version": "1.0.0",
+  "asyncapi_yaml": "asyncapi: 2.6.0\ninfo:\n  title: Service To test\n  version: 1.5.0\n  description: This service is in charge of processing user signups\nchannels:\n  valawai/test_input:\n    subscribe:\n      message:\n        payload:\n          type: object\n          properties:\n            content:\n              type: string"
+}

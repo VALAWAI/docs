@@ -1,0 +1,32 @@
+---
+sidebar_position: 2
+---
+
+# Inform the registered component of this action
+
+As previously mentioned in Section [Register component](/docs/architecture/implementations/mov/register_component), 
+a component can be notified when it has been registered if the specification contains
+a channel that commences with **valawai**, followed by the component's type, name, 
+and terminates with **/control/registered**. This pattern matches the regular 
+expression **valawai/c[0|1|2]/\w+/control/registered**. The subscription message
+payload will be comparable to the subsequent JSON example.
+
+import CodeBlock from '@theme/CodeBlock';
+import registered_component_json from '!!raw-loader!./registered-component.json';
+
+<CodeBlock language="json" showLineNumbers>{registered_component_json}</CodeBlock>
+
+
+On this payload, line 2 presents the unique identifier that distinguishes the component in VALAWAI, 
+accompanied by the epoch time, in seconds, at which the component is registered (line 9).
+The name (line 3), version (line 5), and type (line 7) of the component provided in the registration 
+message (refer to section [Register component](/docs/architecture/implementations/mov/register_component)
+for further details) are also included. Furthermore, the extracted information from 
+the component's asynchronous API specification version is contained on line 6, and 
+the channels on line 9. For each channel, the name (line 11) and description (line 12) 
+are provided. If the channel is a subscription (line 13) or a publish (line 34), a description 
+of the anticipated payload of messages sent or received from the channel is also included.
+
+With regard to all this information, the component identifier (line 2) holds paramount importance,
+as the component will require it to execute various actions, such as unregistering itself,
+as demonstrated in section [unregister component](/docs/architecture/implementations/mov/unregister_component).

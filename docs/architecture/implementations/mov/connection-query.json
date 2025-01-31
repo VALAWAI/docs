@@ -1,0 +1,10 @@
+{
+  "id": "1elkjfg289",
+  "source_channel_name": "/.+voice.+/i",
+  "source_component_id": "/[65c1f59ea4cb169f42f5edc4|65c1f59ea4cb169f42f5edc5]/",
+  "target_channel_name": "c0_voice_to_text",
+  "target_component_id": "65c1f59ea4cb169f42f5edc6",
+  "order": "enabled",
+  "offset": 1,
+  "limit": 5
+}

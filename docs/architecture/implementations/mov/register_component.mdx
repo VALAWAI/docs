@@ -1,0 +1,59 @@
+---
+sidebar_position: 1
+---
+
+# Register Component
+
+When a component within the VALAWAI system needs to be accessible or visible to other
+VALAWAI components, it must communicate this by sending a message to the designated channel, 
+**valawai/component/register**. This message is crucial for ensuring that other components
+can recognize and interact with it. The payload of this message should adhere to a specific
+structure, exemplified as follows:
+
+
+import CodeBlock from '@theme/CodeBlock';
+import register_component_json from '!!raw-loader!./register-component.json';
+
+<CodeBlock language="json" showLineNumbers>{register_component_json}</CodeBlock>
+
+This payload consists of several key components:
+
+
+ - **type**: This specifies the category of the component. In this example (as seen in line 2),
+  the type is marked as "C0." The component type can also be designated as "C1" or "C2,"
+  depending on its functionality and role within the system.
+
+ - **name**: This refers to the specific identifier of the component
+    (illustrated in line 3). The name should be unique and descriptive, allowing other
+    components to easily recognize and reference it.
+
+ - **version**: This indicates the current version of the component
+    (noted in line 4). Proper versioning is essential for maintaining compatibility
+    and managing upgrades or changes to the component over time.
+
+ - **asyncapi_yaml**: This element (found in line 5) includes a detailed
+    specification of the services that the component offers, encoded as a string in YAML format.
+    This specification follows the AsyncAPI specification (explained in section
+    [Interaction Specification](/docs/architecture/implementations/component#interaction-specification)),
+    which provides a standardized way to describe the asynchronous communication
+    between components, including relevant channels and the structure of messages.
+    
+
+Upon receiving this specific message, the Master of VALAWAI (MOV) initiates a comprehensive 
+validation process to verify the payload content. Upon successful validation, the information 
+is securely stored within the database. Furthermore, the MOV automatically assesses
+any potential connections between newly registered components and existing components
+within the system, thereby facilitating the automatic updating of the VALAWAI component topology.
+
+If the specifications for a new component include a designated communication channel 
+for notification during the registration process, the MOV sends an acknowledgment message 
+upon successful registration within the system (for further details, please refer to
+Section [registered component](/docs/architecture/implementations/mov/registered_notification)).
+
+For components classified as type C2, the MOV provides additional functionality. If a C2
+component incorporates a notification channel for messages exchanged over topology connections,
+the MOV proactively searches for any existing registered connections that align with 
+the anticipated message notification requirements. For more information on this process, 
+please refer to Section [Notify C2 components](/docs/architecture/implementations/mov/notify_c2_components).
+This ensures that C2 components remain informed and can effectively communicate as integral 
+components of the overall system.

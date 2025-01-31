@@ -1,0 +1,32 @@
+---
+sidebar_position: 7
+---
+
+# Modify topology connection
+
+As outlined in the value awareness architecture, the data and control flow of messages are
+exchanged by the VALAWAi components, as described by a topology that will be managed by 
+the Master Of VALAWAI (MOV). In the previous section, we described the services to create connections
+(see section [create connection](/docs/architecture/implementations/mov/create_connection))
+and search for connections (see section [Connection query](/docs/architecture/implementations/mov/connection_query)).
+The remaining service is the capability of the `C2` components to enable, disable, 
+or remove these connections. For this purpose, the `C2` component must be
+sent to the queue **valawai/topology/change** a message with the following payload:
+
+ - **action**: Specify the modification to be performed on the connection. The possible
+    actions are: **ENABLE**, **DISABLE**, or **REMOVE**.
+ - **connection_id**: The identifier of the topology connection to change.
+
+The MOV enables a topology connection by subscribing to the source channel and publishing 
+the received messages on the target channel. Conversely, when disabling the connection, 
+it unsubscribes from the source channel. Finally, if the topology connection is also enabled
+before marking it as deleted in the database, the MOV will continue to publish messages
+on the target channel.
+
+The following JSON demonstrates an example of the message payload to modify a topology connection:
+
+import CodeBlock from '@theme/CodeBlock';
+import modify_connection_json from '!!raw-loader!./modify-connection.json';
+
+<CodeBlock language="json" showLineNumbers>{modify_connection_json}</CodeBlock>
+

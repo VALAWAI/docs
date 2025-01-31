@@ -1,0 +1,72 @@
+---
+sidebar_position: 8
+---
+
+# Query about topology connections
+
+The Master of VALAWAI (MOV) maintains the topology of the VALAWAI infrastructure. Consequently, it 
+possesses information about all the connections between the components. Therefore, if a component
+is aware of certain details about the topology in VALAWAI, it can send a message to the channel 
+**valawai/topology/query** with a query and subsequently receive a response from the MOV
+on the channel **valawai/topology/page**.
+
+The payload of the query will be structured as follows:
+
+import CodeBlock from '@theme/CodeBlock';
+import connection_query_json from '!!raw-loader!./connection-query.json';
+
+<CodeBlock language="json" showLineNumbers>{connection_query_json}</CodeBlock>
+
+The initial field of this payload (line 2) is an optional field that defines the identifier query.
+Subsequently, you specify the source channel name (line 3) or identifier (line 4) and the same
+for the target channel name (line 5) or identifier (line 6). In all these fields, if the value
+is defined between forward slashes (/), it is interpreted as a PCRE regular expression. If the 
+value is not defined or is **null**, this field is not utilized in the query.
+The subsequent field (line 7) defines the order of the components to be returned. It is constructed
+by concatenating the field names, separated by a comma, with the **"-"** prefix for descending
+order or the **"+"** prefix for ascending order. The valid field names are 
+**"createTimestamp"**, **"updateTimestamp"**, **"enabled"**, 
+**"source.componentId"**, **"source.channelName"**, **"target.componentId"** or
+**"target.channelName"**. By default, it is set to **"-updateTimestamp"**. Finally, 
+you specify the index of the first component to be returned (line 8) and the maximum number
+of components to be returned (line 9).
+
+The MOV will respond to the query to the channel **valawai/topology/page** with a payload
+containing the following fields:
+
+
+ - **query_id**: An optional field that defines the identifier of the query for which
+    this is the answer.
+ - **total**: The number of connections that satisfy the query.
+ - **connections**: An array of connections that satisfy the query. If any connections
+    matches the query, this field will be **null**. Each component will have the following
+    fields:
+
+     - **id**: The identifier of the connection.
+     - **create_timestamp**: The epoch time, in seconds, when the connection has
+        been created.
+     - **update_timestamp**: The epoch time, in seconds, when the connection has
+        been updated.
+     - **source**: The node that is the source of the connection. It will have 
+        the following fields:
+
+         - **component_id**: The identifier of the component that the topology
+            connection starts.
+         - **channle_name**: The name of the component's channel that will
+            publish the messages that enter into the connection.
+        
+     - **target**: The node that is the target of the connection. It will have 
+        the following fields:
+        
+         - **component_id**: The identifier of the component that the topology
+            connection ends.
+         - **channle_name**: The name of the component's channel that will subscribe
+            to the messages that pass through the connection.
+
+The next JSON is an example of the payload of a message that responds to a query.
+
+import connections_page_json from '!!raw-loader!./connections-page.json';
+
+<CodeBlock language="json" showLineNumbers>{connections_page_json}</CodeBlock>
+
+

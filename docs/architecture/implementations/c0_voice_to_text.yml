@@ -1,0 +1,326 @@
+asyncapi: '2.6.0'
+info:
+  title: VALAWAI C0 Voice to text
+  version: '0.1.0'
+  description: |
+    This component converts an audio file into text.
+  contact:
+    name: IIIA-CSIC
+    url: https://www.iiia.csic.es
+  license:
+    name: GPL v3
+    url: https://opensource.org/license/gpl-3-0
+
+channels:
+  valawai/c0/voice_to_text/data/audio_to_process:
+    subscribe:
+      summary: Provide the audio text to extract the text.
+      message:
+        $ref: '#/components/messages/audio_content'
+
+  valawai/c0/voice_to_text/data/text_extracted:
+    publish:
+      summary: Notify about the extracted text from a received audio.
+      message:
+        $ref: '#/components/messages/text_content'
+
+  valawai/c0/voice_to_text/control/set_paremeters:
+    subscribe:
+      summary: Modify the parameters of the component.
+      message:
+        $ref: '#/components/messages/parameters_content'
+
+  valawai/c0/voice_to_text/control/registered:
+    description: The message to notify when the component has been registered.
+    subscribe:
+      message:
+        $ref: '#/components/messages/registered_component'
+
+components:
+  messages:
+    audio_content:
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/audio_payload"
+
+    text_content:
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/text_payload"
+
+    parameters_content:
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/parameters_payload"
+
+    registered_component:
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/component_payload'
+
+  schemas:
+    audio_payload:
+      type: object
+      properties:
+        sample_ratio:
+          type: string
+          description: The frequency that this audio is sampled on kHz.
+          examples:
+            - 96
+        encoded:
+          type: string
+          description: Type of the audio encoding.
+          examples:
+            - 'audio/ogg'
+        sample:
+          type: string
+          description: The binary sample of the audio in Base64.
+    text_payload:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The speech is found on the audio.
+        language:
+          type: string
+          description: The detected language of the text.
+          examples:
+            - 'English'
+        accuracy:
+          type: number
+          min: 0
+          max: 100
+          description: The accuracy that the text i what can be listening on the audio.
+          examples:
+            - 98.7
+    parameters_payload:
+      type: object
+      properties:
+        default_language:
+          type: string
+          description: The language to use if it is not possible to infer the audio language.
+          examples:
+            - 'English'
+
+    component_payload:
+      type: object
+      properties:
+        id:
+          description: The identifier of the component.
+          type: string
+          pattern: '[0-9a-fA-F]{24}'
+          examples: 
+            - '65c1f59ea4cb169f42f5edc4'
+        name:
+          description: The name of the component.
+          type: string
+          examples: 
+            - 'c0_voice_to_text'
+        description:
+          description: The description of the component.
+          type: string
+          examples: 
+            - 'Generate text from the ambient audio'
+        version:
+          description: The component version.
+          type: string
+          pattern: '\d+\.\d+\.\d+'
+          examples: 
+            - '1.0.5'
+        api_version:
+          description: The version of the component API.
+          type: string
+          pattern: '\d+\.\d+\.\d+'
+          examples: 
+            - '2.3.0'
+        type:
+          description: The type level of the component in the VALAWAI.
+          oneOf:
+            - $ref: '#/components/schemas/component_type'
+        since:
+          description: The epoch time, in seconds, since the component is available in VALAWAI.
+          type: integer
+          minimum: 0
+          examples: 
+            - '1709902001'
+        channels:
+          description: The channels that the component have.
+          type: array
+          items:
+            - $ref: '#/components/schemas/channel_schema'
+
+    component_type:
+      type: string
+      enum:
+        - 'C0'
+        - 'C1'
+        - 'C2'
+
+    channel_schema:
+      type: object
+      description: A schema that define the messages that a channel can receive or send.
+      properties:
+        id:
+          description: The identifier of the channel.
+          type: string
+          examples: 
+            - 'valawai/c0_voice_to_text/audio'
+        description:
+          description: The description of the channel.
+          type: string
+          examples: 
+            - 'Provide the audio to convert to text'
+        subscribe:
+          description: The type of payload that the channel can receive.
+          oneOf:
+            - $ref: '#/components/schemas/payload_schema'
+        publish:
+          description: The type of payload that the channel can send.
+          oneOf:
+            - $ref: '#/components/schemas/payload_schema'
+
+    payload_schema:
+      type: object
+      discriminator: type
+      properties:
+        type:
+          type: string
+          enum:
+            - BASIC
+            - ENUM
+            - OBJECT
+            - ARRAY
+            - CONST
+            - REF
+            - ONE_OF
+            - ANY_OF
+            - ALL_OF
+      required:
+        - type
+
+    basic_payload_schema:
+      description: The basic payload schema.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'BASIC'
+            format:
+              type: string
+              description: The format of the basic type.
+              enum:
+                - 'INTEGER'
+                - 'NUMBER'
+                - 'BOOLEAN'
+                - 'STRING'
+
+    enum_payload_schema:
+      description: A payload that is defined of one value of a set.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ENUM'
+            values:
+              type: array
+              description: The possible enum values.
+              items:
+                - type: string
+
+    object_payload_schema:
+      description: A definition of a schema that describe an object.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'OBJECT'
+            id:
+              type: integer
+              description: The identifier used whne this schme is refer by other components.
+            properties:
+              description: The properties that define the object.
+              additionalProperties:
+                $ref: '#/components/schemas/payload_schema'
+            
+    array_payload_schema:
+      description: A payload that is represented by an array of values.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ARRAY'
+            items:
+              description: The type for the elements on the array.
+              type: array
+              items:
+                - $ref: '#/components/schemas/payload_schema'
+
+    constant_payload_schema:
+      description: A payload that is a consatnt value.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'CONST'
+            value:
+              type: string
+              description: The constant of the schema.
+
+    reference_payload_schema:
+      description: A payload that is a reference to another schema.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'REF'
+            value:
+              type: integer
+              description: The identifier of the schema that this a reference.
+
+    one_of_payload_schema:
+      description: A payload that is one of the possible schemas.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ONE_OF'
+            items:
+              description: The possible schemas.
+              type: array
+              items:
+                - $ref: '#/components/schemas/payload_schema'
+
+    any_of_payload_schema:
+      description: A payload that is any of the possible schemas.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ANY_OF'
+            items:
+              description: The possible schemas.
+              type: array
+              items:
+                - $ref: '#/components/schemas/payload_schema'
+
+    all_of_payload_schema:
+      description: A payload that is a set of schemas.
+      allOf:
+        - $ref: '#/components/schemas/payload_schema'
+        - type: object
+          properties:
+            type:
+              const: 'ALL_OF'
+            items:
+              description: The schemas that has to match.
+              type: array
+              items:
+                - $ref: '#/components/schemas/payload_schema'

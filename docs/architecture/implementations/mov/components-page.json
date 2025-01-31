@@ -1,0 +1,27 @@
+{
+  "query_id": "1elkjfg289",
+  "total": "5",
+  "components": [
+    {
+      "id": "65c1f59ea4cb169f42f5edc4",
+      "name": "c0_voice_to_text",
+      "description": "Generate text from the ambient audio",
+      "version": "1.0.5",
+      "api_version": "2.3.0",
+      "type": "C0",
+      "since": 1709902001,
+      "channels": [
+        {
+          "id": "valawai/c0_voice_to_text/audio",
+          "description": "Provide the audio to convert to text",
+          "subscribe": {
+            "type": "BASIC"
+          },
+          "publish": {
+            "type": "BASIC"
+          }
+        }
+      ]
+    }
+  ]
+}

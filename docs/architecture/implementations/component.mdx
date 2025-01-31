@@ -1,0 +1,135 @@
+---
+sidebar_position: 1
+---
+
+# Component Specification
+
+The VALAWAI toolbox consists of components that can be combined to create 
+value-aware applications. These components adhere to specific conventions and 
+file structures, as described below. The architectural teams involved in the 
+VALAWAI project have established these guidelines to ensure consistency, clarity, 
+and functionality in component development and integration.
+
+## Name Format
+
+Component names follow the format `C[0|1|2]_component_name`, where `[0|1|2]` 
+represents the component type (C0, C1, or C2), and `component_name` is a 
+descriptive name in lowercase Python case. For example, a C0 component named 
+"voice to text" would be named `C0_voice_to_text`.
+
+## Version Schema
+
+All components follow [Semantic Versioning](https://semver.org/), structured 
+as `major.minor.bug`.  The version number reflects the component's development 
+status. For example, the initial version is 1.0.0. After seven minor changes 
+and two bug fixes, the version becomes 1.7.2.
+
+Backward compatibility is guaranteed only for minor versions within the same 
+major version.  While backward compatibility across major versions is encouraged, 
+it's not mandatory.
+
+
+## License
+
+Components in the RGNW toolbox are primarily distributed under the 
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.  While this license 
+is recommended, other licenses are permitted.  The specific license used must 
+be clearly documented.
+
+## Repository
+
+The source code for all VALAWAI components is publicly available on GitHub under 
+the [VALAWAI organization](https://github.com/VALAWAI). This promotes transparency 
+and collaboration.
+
+## Deployment
+
+Components are deployed using Docker and Docker Compose. This ensures structured 
+and efficient deployment, clearly defining the component and its integration with 
+platforms like the [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov), 
+as well as any necessary databases or message queues (e.g., RabbitMQ).
+
+## Required Files
+
+Each component must include the following files:
+
+*   **README.md:** A comprehensive overview of the component, including a brief 
+description, key features and functionalities, build instructions, deployment 
+procedures, and any dependencies.
+
+*   **LICENSE:** The component's license information.
+
+*   **CHANGELOG.md:** A record of significant changes across all public versions, 
+detailing new features, bug fixes, enhancements, and any breaking changes, along 
+with upgrade instructions.
+
+*   **[asyncapi.yaml](#interaction-specification):** A description of the component's 
+services in standard AsyncAPI format, detailing endpoints, message structures, 
+and parameters.
+
+*   **docker-compose.yml:**  A Docker Compose file for deploying the component, 
+including necessary configurations, environment variables, and service dependencies.
+
+## Interaction Specification
+
+The component's services are described in the `asyncapi.yaml` file, using the 
+[AsyncAPI specification](https://www.asyncapi.com/en) version 2.6.0.  The key 
+sections are:
+
+*   **info:** General component information (title, version, description, contact, license).
+*   **channels:** Description of sent and received messages.
+*   **components:** Message and schema definitions.
+
+The `info` section defines `title` (e.g., "VALAWAI C0 Voice to text"), `version`, 
+`description`, `contact` (partner name and URL), and `license`.
+
+The `channels` section describes each service (one channel per service) using the 
+template `valawai/c[0|1|2]/component_name/[control/data]/operation_name`.  This 
+template uses lowercase letters, Python case, and satisfies the 
+[RFC 6570 URI template](https://tools.ietf.org/html/rfc6570). For example, a C0 
+"voice to text" component's service for processing audio might be named `
+valawai/C0/voice_to_text/data/audio_to_process`.  Channels are defined as `publish` 
+(sends messages), `subscribe` (receives messages), nor both.  A `summary` field
+ provides a one-sentence description when both are used.  Each message is referenced.
+
+The `components` section contains `messages` (with `contentType: application/json` 
+and a schema reference) and `schemas` (describing message content). Message and 
+schema names use lowercase Python case. Schema properties use lowercase Python 
+case and include `type` and `description`, with optional `examples`.
+
+Below is an example of an `asyncapi.yaml` description for a C0 component that extracts 
+text from an audio file:
+
+import CodeBlock from '@theme/CodeBlock';
+import C0_voice_to_text_asyncapi from '!!raw-loader!./c0_voice_to_text.yml';
+
+<CodeBlock language="yaml">{C0_voice_to_text_asyncapi}</CodeBlock>
+
+### Special Channels for MOV Integration
+
+When using the [Master of VALAWAI (MOV)](/docs/architecture/implementations/mov), 
+specific channel patterns enable integration:
+
+1.  **Registration Channel (`valawai/c[0|1|2]/component_name/control/registered`):** 
+If this channel is defined, the MOV [publishes a message](/docs/architecture/implementations/mov#notify-registered-component) 
+to it upon component registration. This message contains component information 
+(id, name, description, version, api\_version, type, since, channels).
+
+2.  **C2 Notification Channel (`valawai/c2/\w+/control/\w+`):**  This channel is *exclusively* 
+for C2 components. It notifies the C2 component about messages exchanged between other 
+components via a topology connection. The channel name matches the pattern `valawai/c2/component_name/control/service_name`. 
+The `subscribe` message payload schema includes:
+
+    *   `connection_id`: ID of the topology connection.
+    *   `source`: Information (id, name, type) of the source component.
+    *   `target`: Information (id, name, type) of the target component.
+    *   `message_payload`: The message payload that was exchanged.
+    *   `timestamp`: Epoch time of the message send.
+
+    The MOV uses this channel to [notify](/docs/architecture/implementations/mov#notify-about-a-sent-message-through-a-topology-connection) 
+    C2 components about messages sent through active topology connections that match the `message_payload` 
+    type.  Specifically, when a [connection is registered](/docs/architecture/implementations/mov#create-a-topology-connection), 
+    the MOV checks for registered C2 components with a matching C2 Notification Channel and 
+    `message_payload` type.  Conversely, when a C2 component with this channel type is registered, 
+    the MOV checks for existing connections with a matching `message_payload` and adds the C2 
+    component to those connections for notifications.

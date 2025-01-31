@@ -1,0 +1,72 @@
+---
+sidebar_position: 5
+---
+
+# Query about registered components
+
+The Master of VALAWAI (MOV) maintains the topology of the VALAWAI infrastructure. Consequently,
+it possesses information about all registered components. Therefore, if a component is aware
+of certain details about the other active components in VALAWAI, it can send a message to 
+the channel **valawai/component/query** with a query and subsequently receive a response
+from the MOV on the channel **valawai/component/page**.
+
+The payload of the query will be structured as follows:
+
+import CodeBlock from '@theme/CodeBlock';
+import component_query_json from '!!raw-loader!./component-query.json';
+
+<CodeBlock language="json" showLineNumbers>{component_query_json}</CodeBlock>
+
+
+The first field of this payload (line 2) is an optional field that defines the identifier query.
+Following that, you specify the pattern to match the name or description (line 3) and the type 
+(line 4) of the components to return. In both cases, if the value is defined between forward
+slashes (/), it is considered a PCRE regular expression. If it is not defined or **null**,
+this field is not used in the query.
+The next field (line 5) defines the order of the components to return. It is formed by the
+field names, separated by a comma, and each of them with the **"-"** prefix for descending
+order or **"+"** for ascending. The possible fields are **"type"**, **"description"**,
+**"name"** or **"since"**. By default, it is **"+since"**. Finally, you define
+the index of the first component to return (line 6) and the maximum number of components
+to return (line 7).
+
+The MOV will respond to the query to the channel **valawai/component/page** with a payload
+containing the following fields:
+
+
+ - **query_id**: An optional field that defines the identifier of the query for which
+    this is the answer.
+ - **total**: The number of components that satisfy the query.
+ - **components**: An array of components that satisfy the query. If any component
+    matches the query, this field will be **null**. Each component will have the following
+    fields:
+
+     - **id**: The identifier of the component.
+     - **name**: The name of the component.
+     - **description**: The description of the component.
+     - **version**: The version of the component.
+     - **api_version**: The version of the asyncapi that describes the services
+        of the component.
+     - **type**: The type of the component, which can be `C0`, `C1`, or `C2`.
+     - **since**: The epoch time, in seconds, since the component became available.
+     - **channels**: An array of channels that the component provides. If the component
+        does not provide any services, this field will be **null**. Each channel will have 
+        the following fields:
+
+         - **id**: The identifier of the channel that matches the queue name.
+         - **description**: The description of the channel.
+         - **subscribe**: The type of payload that the channel can receive. If this
+            is **null**, the channel does not receive any messages. The possible types are
+            string, integer, boolean, object, array, constant, reference to another object, 
+            or a type combination that must select one of, any of, or all of.
+         - **publish**: The type of payload that the channel can send. If this is 
+            **null**, the channel does not send any messages. The possible types are string,
+            integer, boolean, object, array, constant, reference to another object, or a type
+            combination that must select one of, any of, or all of.
+
+The next JSON is an example of the payload of a message that responds to a query.
+
+import components_page_json from '!!raw-loader!./components-page.json';
+
+<CodeBlock language="json" showLineNumbers>{components_page_json}</CodeBlock>
+

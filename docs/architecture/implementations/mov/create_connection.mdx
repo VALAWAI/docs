@@ -1,0 +1,51 @@
+---
+sidebar_position: 6
+---
+
+# Create topology connection
+
+Upon component registration (as described in section [register component](/docs/architecture/implementations/mov/register_component)),
+the Master of VALAWAI automatically establishes connections between the new component and 
+any other registered components. Although this service is rarely utilized, it is provided 
+to address any potential scenarios. For instance, if a connection is removed and subsequently 
+reestablished, this service ensures compatibility. Furthermore, when utilizing this service,
+it is imperative that the messages published by the source component of the connection align 
+with the messages anticipated by the target component.
+
+To create a topology connection, send a message to the queue **valawai/topology/create**
+with the following payload:
+
+
+ - **source**: The source node information is essential for establishing a topology
+    connection. It includes the following details:
+
+     - **component_id**: The identifier of the component that initiates the connection.
+     - **channel_name**: The name of the component's channel that publishes messages
+        entering the connection.
+
+ - **target**: The information of the node that serves as the connection's target.
+    It also includes the following details:
+
+     - **component_id**: The identifier of the component that receives messages
+        from the connection.
+     - **channel_name**: The name of the component's channel that subscribes 
+        to messages passing through the connection.
+
+ - **enabled**: A boolean value indicating whether the connection must be enabled.
+
+The following JSON demonstrates the message payload used to establish a topology connection.
+
+import CodeBlock from '@theme/CodeBlock';
+import create_connection_json from '!!raw-loader!./create-connection.json';
+
+<CodeBlock language="json" showLineNumbers>{create_connection_json}</CodeBlock>
+
+
+Upon the registration of the topology connection, the MOV will determine whether any registered 
+`C2` entities must be notified of the messages exchanged on the connection, as outlined in
+Section [Notify C2 components](/docs/architecture/implementations/mov/notify_c2_components).
+Consequently, the MOV will identify all `C2` components that have subscribed to a channel
+with the name **valawai/c2/\textbackslash w+/control/\w+**. Additionally, it will verify
+that the schema of the notification message aligns with the messages exchanged in the topology
+connection. Specifically, the field **message_payload** must correspond to the messages
+exchanged during the topology connection.

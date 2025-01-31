@@ -45,3 +45,15 @@ sidebar_position: 200
  Consciousness and comlexity.
  Science, 282:1846–1851.
  
+ * <a name="ROS2"></a>[Macenski, Foote, Gerkey, Lalancette, & Woodall, 2022]
+ Macenski, S., Foote, T., Gerkey, B., Lalancette, C., & Woodall, W. (2022). 
+ Robot operating system 2: Design, architecture, and uses in the wild. 
+ Science Robotics, 7(66), eabm6074.
+ Retrieved from https://www.science.org/doi/abs/10.1126/scirobotics.abm6074 
+ doi: 10.1126/scirobotics.abm6074
+ 
+ * <a name="ROS2-mohamed"></a>[Mohamed & Lemaignan, 2021]
+ Mohamed, Y., & Lemaignan, S. (2021).
+ Ros for human-robot interaction.
+ In 2021 ieee/rsj international conference on intelligent robots and systems (iros) (p. 3020-3027).
+ doi: 10.1109/IROS51168.2021.9636816

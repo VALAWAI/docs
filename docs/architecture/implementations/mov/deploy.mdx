@@ -1,0 +1,91 @@
+---
+sidebar_position: 11
+---
+
+# Deployment
+
+The Master of VALAWAI (MOV) is designed for deployment using Docker containers.
+Docker is a popular platform for software containerization, which allows applications
+to run in a self-contained environment with all their dependencies packaged together. 
+This approach simplifies deployment and ensures consistency across different 
+computing environments.
+
+To proceed with the MOV deployment process, you'll need Docker installed on your system. 
+Docker provides comprehensive installation instructions and platform-specific guides
+on their official website: [https://www.docker.com/](https://www.docker.com/).
+
+Upon completion of the Docker installation process, initiate a terminal session. The
+subsequent deployment procedures will be executed via the command-line interface of
+the terminal using the following commands:
+
+import CodeBlock from '@theme/CodeBlock';
+import component_query_json from '!!raw-loader!./component-query.json';
+
+<CodeBlock language="json" showLineNumbers>{component_query_json}</CodeBlock>
+
+The initial command retrieves the most recent stable release of the Master of VALAWAI
+(MOV) and stores it within the current working directory. The subsequent command
+changes the current working directory to the directory containing the downloaded MOV
+source code. The final command executes a script that initiates the MOV deployment, 
+including the conditional construction of the requisite Docker container. Upon
+successful completion of the deployment process, the MOV user interface may be 
+accessed via a web browser at the following URL: [http://localhost:8080](http://localhost:8080)
+(see Section [web user interface](/docs/architecture/implementations/mov/user_interface)
+for further details). This deployment script instantiates
+the following critical services: RabbitMQ, which serves as the message broker 
+facilitating inter-component communication with the MOV, and MongoDB, the persistent
+data store utilized by the MOV for managing information pertaining to components,
+connections, and log data.
+
+The Master of VALAWAI (MOV) deployment is configurable through environment variables 
+specified within a `.env` file, typically located in the same directory as
+the deployment script (`runMOV.sh`). These variables serve to override  
+the default configurations of the constituent services. The available environment
+variables are as follows:
+
+ - **RABBITMQ_TAG**(Default: ___management___): Specifies the tag
+    of the RabbitMQ Docker image.
+ - **MQ_PORT**(Default: ___5672___): Specifies the port on which
+    the RabbitMQ message broker listens for incoming connections.
+ - **MQ_UI_PORT**(Default: ___8081___): Specifies the port on which
+    the RabbitMQ management interface is accessible.
+ - **MQ_USER**(Default: ___mov___): Specifies the username used
+    for authentication with the RabbitMQ message broker.
+ - **MQ_PASSWORD**(Default: ___password___): Specifies the password
+    used for authentication with the RabbitMQ message broker. It is strongly 
+    recommended that this default password be modified for enhanced security.
+ - **MONGODB_TAG**(Default: ___latest___): Specifies the tag of
+    the MongoDB Docker image.
+ - **MONGO_PORT**(Default: ___27017___): Specifies the port on which
+    the MongoDB database server listens for incoming connections.
+ - **MONGO_ROOT_USER**(Default: ___root___): Specifies the username
+    for the MongoDB root user.
+ - **MONGO_ROOT_PASSWORD**(Default: ___password___): Specifies 
+    the password for the MongoDB root user. It is strongly recommended that this
+    default password be modified for enhanced security
+ - **MONGO_LOCAL_DATA**(Default: ___~/.mongo_data/movDB___): Specifies
+    the local directory on the host system where MongoDB data is persisted.
+ - **DB_NAME**(Default: ___movDB___): Specifies the name of the database
+    employed by the MOV within MongoDB.
+ - **DB_USER_NAME**(Default: ___mov___): Specifies the username used
+    by the MOV to access the MongoDB database.
+ - **DB_USER_PASSWORD**(Default: ___password___): Specifies the password
+    used by the MOV to access the MongoDB database. It is recommended that this
+    default password be modified for security considerations
+ - **MOV_TAG**(Default: ___latest___): Specifies the tag of the MOV
+    Docker image.
+ - **MOV_UI_PORT**(Default: ___8080___): Specifies the port on which
+    the MOV user interface is accessible.
+
+The MOV database is instantiated only upon the initial execution of the deployment
+script. Should subsequent modifications to database parameters be required, database 
+recreation is necessary. This is accomplished by removing the directory specified
+by the **MONGO_LOCAL_DATA** environment variable and subsequently restarting
+the MOV services via the deployment script (`runMOV.sh`).
+
+The execution of the MOV deployment and its associated services, RabbitMQ and
+MongoDB, can be terminated using the following script: `./stopMOV.sh`.
+
+This script is typically located in the same directory as the deployment script 
+(`runMOV.sh`). By running this script, you can halt the MOV deployment
+along with its dependent services.

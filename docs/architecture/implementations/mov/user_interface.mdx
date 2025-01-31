@@ -1,0 +1,203 @@
+---
+sidebar_position: 10
+---
+
+# Web user interface
+
+To begin using the Master of VALAWAI (MOV), initial deployment is required, as detailed 
+in Section [deploy](/docs/architecture/implementations/mov/deploy). This section provides
+a comprehensive guide to the setup and configuration process, ensuring a smooth initial
+setup. Once deployed,
+the user-friendly web interface becomes accessible at [http://localhost:8080](http://localhost:8080).
+This interface offers a streamlined experience for managing the MOV's core features.
+
+## Manage components
+
+If you click on the upper left a menu appears and you select **Components**, or you click
+over **Components** on the footer left menu, you will see all the registered components
+on the Master of VALAWAI (MOv) as you can see in the next image.
+
+![Screen shot of the components view](/img/tutorials/mov/components.png)
+
+The web interface offers the next key functionalities for managing components within
+the VALAWAI architecture:
+
+ - **Component Registration**: Components can self-register by sending
+    a registration message (see Section [register component](/docs/architecture/implementations/mov/register_component)).
+    Users can also manually register components via the web interface. This
+    is accomplished by clicking the ___Register a new component___ button and completing
+    the displayed form with the component's type, name, version, and AsyncAPI
+    specification. Upon submission, the component is registered within the MOV.
+
+ - **Component Discovery**: The MOV provides a robust mechanism for
+    querying information about registered components (see Section
+    [components query](/docs/architecture/implementations/mov/components_query)). 
+    This functionality is accessible to both components and users. The user interface
+    allows for searching based on the following criteria:
+
+     - ___Name___: search for components by their name (supporting
+        partial and exact matches).
+     - ___Description___: Search for components based on keywords
+        within their descriptions.
+     - ___Type___: Filter components by their type (C0, C1, or C2).
+
+
+    Search results can be ordered alphabetically or numerically by any of these
+    criteria (name, description, or type) to facilitate browsing and analysis.
+    When viewing the details of a specific component, in addition to 
+    the aforementioned fields, the interface displays the messages that the component
+    publishes and subscribes to. Furthermore, users can request information about
+    the connections in which the component is involved, specifying whether
+    it is the source or target of the connection.
+
+ - **Component Unregistration**: Typically, a component's last action
+    within the VALAWAI architecture is to unregister itself from the MOV (see Section
+    [unregister component](/docs/architecture/implementations/mov/unregister_component)). 
+    Users can also manually unregister components through the web interface. 
+    This is done by searching for the component and
+    clicking the ___Unregister___ action. A confirmation page then appears.
+    Upon confirmation, the MOV removes the component and any connections in which
+    it participates.
+
+
+## Manage topology
+
+If you click on the upper left a menu appears and you select **Topology**, or you click
+over **Topology** on the footer left menu, you will see all the registered topology
+connections on the Master of VALAWAI (MOv) as you can see in the next image. 
+
+![Screen shot of the topology connections view](/img/tutorials/mov/topology_connections.png)
+
+The web interface offers the next key functionalities for managing the VALAWAI topology:
+
+ - **Connection Creation**: While the MOV automatically establishes
+    connections between components upon registration, as detailed in Section 
+    [register component](/docs/architecture/implementations/mov/register_component), 
+    the system also supports manual connection creation by both components and users 
+    (see Section [create connection](/docs/architecture/implementations/mov/create_connection)).
+    To create a connection via the user interface, select the ___Create a new 
+    connection___ button. This action will display a form prompting for the following
+    information:
+
+     - ___Source Component and Channel___: Select the component that will
+        initiate the communication and the specific channel it will use.
+
+     - ___Target Component and Channel___: Select the component that will 
+        receive the communication and the corresponding channel it will use.
+
+     - ___Connection Status (Enabled/Disabled)___: Specify whether 
+        the connection should be active (enabled) or inactive (disabled) upon creation.
+        
+    Once the form is submitted with valid information, the connection is established 
+    within the MOV.
+
+ - **Connection Discovery**: The MOV allows both components and users
+    to query for existing connections within the VALAWAI architecture (see Section 
+    [connections query](/docs/architecture/implementations/mov/connection_query)). 
+    Users can leverage the interface's search functionality by entering partial or 
+    exact matches for either the source or target component's name. The search results 
+    are then presented, sorted by the following criteria:
+
+     - ___Source Component___: Alphabetical order of the source
+        component's name.
+     - ___Target Component___: Alphabetical order of the target
+        component's name.
+     - ___Connection Status___: Ordered by whether the connection is
+        enabled or disabled.
+
+    This sorting facilitates efficient browsing and identification of specific 
+    connections.
+
+ - **Connection Modification**: As explained in the [VALAWAI architecture](/docs/architecture/value_awareness_architecture) 
+    documentation, C2 components are responsible for managing connections
+    between other components (see Section [modify connection](/docs/architecture/implementations/mov/modify_connection)). The web
+    interface provides users with the ability to modify these connections as well. 
+    Through the interface, users can perform the following actions on existing 
+    connections registered within the MOV:
+
+     - ___Enable___: Activate a disabled connection, allowing communication
+        to flow between the connected components.
+     - ___Disable___: Deactivate an active connection, preventing
+        communication.
+     - ___Remove___: Permanently delete a connection from the MOV, 
+        severing the communication path between the components.
+
+    These modification capabilities provide granular control over
+    the VALAWAI topology.
+
+
+## Manage logs
+
+If you click on the upper left a menu appear and you select **Logs**, or you click
+over **Logs** on the footer left menu, you will see all the notified logs on
+the Master of VALAWAI (MOv) as you can see in the next image.
+
+![Screen shot of the logs view](/img/tutorials/mov/logs.png)
+
+These log messages transmitted to the MOV (see Section [add log message](/docs/architecture/implementations/mov/add_log)). For each log entry, the following information is displayed:
+
+ - ___Timestamp___: The precise time at which the log message was generated.
+ - ___Log Level___: The severity level of the message, categorized as
+    `DEBUG`, `INFO`, `WARN`, or `ERROR`.
+ - ___Message___: A human-readable description of the event or condition
+    being logged.
+ - ___Component___: The name of the component that generated the log message.
+
+If a log message includes an associated payload in JSON format, the user interface 
+presents this payload in a human-readable format, facilitating detailed inspection.
+
+In addition to log visualization, the user interface provides a robust search and 
+filtering mechanism for log messages. This functionality allows users to refine
+the displayed logs based on the following criteria:
+
+ - ___Message Content___: Filtering is performed using partial or
+    exact string matching on the message text.
+ - ___Component Name___: Filtering is performed using partial or exact
+    string matching on the component name.
+ - ___Log Level___:  Filtering is performed by selecting one or more
+    log levels (DEBUG, INFO, WARN, or ERROR).
+ - ___Component Type___: Filtering is performed by selecting one or more 
+    component types (C0, C1, or C2).
+
+The filtered results can be ordered by the following attributes:
+
+ - ___Timestamp___: Chronological order of log generation.
+ - ___Log Level___: Order of severity (e.g., `ERROR`, `WARN`, `INFO`, `DEBUG`).
+ - ___Message Content___: Alphabetical order of the message text.
+ - ___Component Type___: Order of component types (C0, C1, or C2).
+ - ___Component Name___: Alphabetical order of the component name.
+
+
+## RESTful API
+
+The Master Of VALAWAI (MOV) exposes a RESTful API, mirroring the functionality 
+available through the user interface. This API allows programmatic interaction 
+with the MOV, enabling external systems and applications to manage and monitor 
+the VALAWAI system.  Full documentation for these services can be found in 
+the [openapi.yaml](https://editor.swagger.io/?url=https://raw.githubusercontent.com/VALAWAI/MOV/main/openapi.yaml)
+file. The user interface itself is built upon these same API endpoints.
+
+The following services are currently provided:
+
+ - **GET /v1/components**: Retrieves a paginated list of registered components, 
+ including relevant information about each component.
+ - **GET /v1/components/\{component_id\}**: Retrieves detailed information about 
+ a specific registered component, identified by its `component_id`.
+ - **POST /v1/components**: Registers a new component with the system. 
+ - **DELETE /v1/components/\{component_id\}**: Unregisters a component from the system, 
+ identified by its `component_id`.
+ - **GET /v1/connections**: Retrieves a paginated list of registered topology 
+ connections, including information about each connection.
+ - **GET /v1/connections/\{connection_id\}**: Retrieves detailed information about 
+ a specific topology connection, identified by its `connection_id`.
+ - **POST /v1/connections**: Registers a new topology connection with the system. 
+ - **PUT /v1/connections/\{connection_id\}**: Modifies the status of a specific topology
+ connection, identified by its `connection_id`. This might be used to enable, 
+ disable or remove a connection, for example.
+ - **GET /v1/logs**: Retrieves a paginated list of log messages from the system. 
+ This endpoint likely supports filtering and sorting by log level, timestamp, etc.
+ 
+This RESTful API provides a comprehensive interface for interacting with the MOV. 
+The [OpenAPI specification](https://editor.swagger.io/?url=https://raw.githubusercontent.com/VALAWAI/MOV/main/openapi.yaml) 
+provides detailed information about the request and response formats for each 
+endpoint, facilitating client development.

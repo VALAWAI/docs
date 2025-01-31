@@ -1,0 +1,26 @@
+---
+sidebar_position: 9
+---
+
+# Add logging message
+
+The Master Of VALAWAI (MOV) utilizes RabbitMQ for communication with the components of the VALWAI value 
+awareness application. This enables the utilization of RabbitMQ's distributed architecture, allowing 
+components to be deployed on different hosts. This capability empowers different components to operate
+on separate machines while maintaining continuous and seamless communication.
+To facilitate development, the MOV facilitates the sending of log messages by components to it, 
+which can be visualized in a user interface (as demonstrated in section [MOV user interface](/docs/architecture/implementations/mov/user_interface).
+These messages must be sent to the channel **valawai/log/add** with a payload similar to 
+the following:
+
+import CodeBlock from '@theme/CodeBlock';
+import add_log_json from '!!raw-loader!./add-log.json';
+
+<CodeBlock language="json" showLineNumbers>{add_log_json}</CodeBlock>
+
+This payload defines the logging level at line 2. It can be **ERROR**, **WARN**,
+**INFO**, or **DEBUG**. After that, you can define the message of the log (line 3).
+Optionally, you can define an optional payload value (line 3). This payload must be a JSON 
+value encoded as a string. Finally, if you want, you can define the identifier of the component (line 5)
+that has generated the log message. This identifier is the one obtained when the component
+is registered, as you can see in the section [register component](/docs/architecture/implementations/mov/register_component).

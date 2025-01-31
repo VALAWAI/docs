@@ -1,0 +1,20 @@
+{
+  "query_id": "1elkjfg289",
+  "total": 5,
+  "connections": [
+    {
+      "id": "65c1f59ea4cb169f42f5edc4",
+      "create_timestamp": 1709902001,
+      "update_timestamp": 1709902001,
+      "source": {
+        "component_id": "65c1f59ea4cb169f42f5edc4",
+        "channel_name": "valawai/C0_voice_to_text/audio"
+      },
+      "target": {
+        "component_id": "65c1f59ea4cb169f42f5edc4",
+        "channel_name": "valawai/C0_voice_to_text/audio"
+      },
+      "enabled": true
+    }
+  ]
+}

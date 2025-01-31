@@ -4,77 +4,91 @@ sidebar_position: 2
 
 # Value Awareness
 
-To introduce value awareness into the GNW, we first need to understand what is awareness.
-The term ‘aware’ is ambiguous, but it commonly has to do with explicitly realising,
-perceiving or knowing something. For example, situation awareness (or situational awareness)
-[[Endsley, 2011]](/references#endsley_2011) refers to a mental state where all the relevant
-elements of a situation and the way they hang together are known and it becomes possible
-to predict (or at least form sensible expectations about) what will happen next or what action
-should be taken.
+To integrate value awareness into the GNW, we must first understand what awareness 
+entails. The term "aware" is inherently ambiguous, but it generally relates to 
+explicitly recognizing, perceiving, or knowing something.  For instance, situation 
+awareness [[Endsley, 2011]](/references#endsley_2011) describes a mental state where 
+all relevant elements of a situation and their interrelationships are understood, 
+enabling prediction (or at least the formation of reasonable expectations) about 
+future events or appropriate actions.
 
-In VALAWAI, we are specifically interested in value-aware AI, and we define it as follows:
+Within VALAWAI, we focus specifically on *value-aware* AI, which we define as:
 
-> “An AI system that is capable of capturing the relevant (human) value system,
-> understanding that value system, abiding by it, and explaining its own behaviour
-> and that of others in terms of that value system.”
+> "An AI system that is capable of capturing the relevant (human) value system, 
+> understanding that value system, abiding by it, and explaining its own behavior 
+> and that of others in terms of that value system."
 
-To achieve value awareness, we argue that an AI should first and foremost have “value acquisition”
-abilities for it to be able to capture the relevant value system reflecting the stakeholder’s
-value preferences, which is usually context-dependent. For example, the values of equality
-or fairness might have different meanings and different importance in various application domains.
+Achieving value awareness requires, we argue, four key technical capabilities:
 
-Second, to allow an AI to understand value systems, “value representation and reasoning” is
-required to allow the AI to formally reason about values, such as detecting value conflicts or
-analysing the impact of adopting certain values.
+1.  **Value Acquisition:** The AI must be able to capture the relevant value system, 
+reflecting the stakeholder's value preferences, which are often context-dependent. 
+For example, the values of equality or fairness can have different meanings and 
+importance across various application domains.  This acquisition process may involve 
+learning from data, explicit input from users, or a combination of both.
 
-Third, “value alignment” mechanisms will need to be developed to allow the AI to analyse
-whether certain behaviour abides by preferred values or not.
+2.  **Value Representation and Reasoning:**  The AI needs to represent values in 
+a formal and computationally tractable manner, enabling reasoning about them. This 
+includes the ability to detect value conflicts, analyze the impact of adopting 
+certain values, and perform other logical operations on value representations.  
+This capability is essential for understanding the complex interplay of values 
+within a given context.
 
-Finally, for full transparency and for helping the human stakeholders become more aware of
-the alignment of behaviour with respect to values, “explanation” mechanisms will need to be
-developed to allow the AI to explain how one behaviour is aligned (or not) with a given value
-system. This supports value-aligned decision making as well as the value-aligned design of AI
-systems. A summary of what value-aware AI could achieve is listed below:
+3.  **Value Alignment:** Mechanisms are required to assess whether a given behavior 
+aligns with the preferred values.  This involves comparing actions or decisions 
+against the represented values and determining the degree of congruence or conflict.  
+This alignment process may involve quantitative measures or qualitative assessments.
 
- 1. Monitor compliance with values by a human or AI system, and possibly provide feedback
- or support a certification process.
+4.  **Value-Based Explainability:** For transparency and to enhance human 
+understanding of AI behavior, the AI must be able to explain how its actions 
+(or the actions of others) relate to the underlying value system. This explainability 
+component clarifies the connection between behavior and values, supporting both 
+value-aligned decision-making and the value-aligned design of AI systems.
 
- 2. Deconstruct the values implicitly used by a human or AI system based on reported/observed
- behaviour, and possibly provide feedback for the human or AI system so they are aware of those values.
+These four capabilities enable value-aware AI to achieve a range of functionalities, 
+including:
 
- 3. Advise a course of action in a given situation to a human or AI system, compatible with a
- given value system.
- 
- 4. Autonomously perform actions compatible with a given value system.
+1.  **Value Compliance Monitoring:** Monitoring compliance with values by human or 
+AI systems, potentially providing feedback or supporting certification processes.
 
-Furthermore, the same way value-aware AI can be used to analyse and impact behaviour, it
-can also be used to analyse and impact motivators of behaviour, such as norms. We choose to
-focus on norms specifically since norms have traditionally and been used in multiagent systems
-as means to coordinate behaviour and ensure it is respecting aspired properties. As such,
-value-aware AI could also achieve the following:
+2.  **Implicit Value Deconstruction:** Inferring the values implicitly used by a human 
+or AI system based on observed behavior, and providing feedback to make them aware of 
+these values.
 
- 5. Analyse the alignment of norms with values, for example in order to provide feedback on
- norms or support a certification process for the norms.
+3.  **Value-Driven Action Advisement:** Advising a course of action to a human or AI 
+system that is compatible with a given value system.
 
- 6. Deconstruct the values implicitly adhered to by norms.
+4.  **Autonomous Value-Aligned Action:** Autonomously performing actions that are 
+compatible with a given value system.
 
- 7. Advise on the norms to adopt in a given situation, compatible with a given value system.
+Furthermore, value-aware AI can be applied not only to behaviors but also to the *motivators* 
+of behavior, such as norms.  This leads to additional capabilities:
 
- 8. Autonomously select the norms compatible with a given value system.
+5.  **Norm-Value Alignment Analysis:** Analyzing the alignment of norms with values, 
+providing feedback on norms, or supporting norm certification processes.
 
-Last, but not least, by making humans aware of their value systems, the impact of their value
-systems on behaviour, the alignment of their actions and norms with these value systems,
-as well as making them understand conflicting values, value-aware AI could also achieve the
-following:
- 
- 9. Help a human decide on how to evolve its value system.
- 
- 10. Help humans collectively decide on their preferred/agreed upon value system.
+6.  **Implicit Value Deconstruction from Norms:** Inferring the values implicitly adhered 
+to by norms.
 
-Notice that deciding on value systems is a strictly human decision. An AI cannot make decisions
-on a value system, but adopt the value system of its stakeholder(s).
+7.  **Value-Driven Norm Advisement:** Advising on norms to adopt in a given situation, 
+ensuring compatibility with a given value system.
 
-We close this section by making the statement that the above four technical capabilities—value
-acquisition, value representation and reasoning, value-alignment mechanisms, and value-based
-explainability— provide the basis for developing value-aware AI. In what follows, we illustrate
-how these capabilities may be introduced into the GNW
+8.  **Autonomous Value-Aligned Norm Selection:** Autonomously selecting norms that are 
+compatible with a given value system.
+
+Finally, value-aware AI can also play a crucial role in helping humans understand and 
+evolve their own value systems:
+
+9.  **Personal Value System Evolution Support:** Helping individuals decide how to evolve 
+their personal value systems.
+
+10. **Collective Value System Deliberation Support:** Facilitating collective decision-making 
+regarding shared or agreed-upon value systems.
+
+It is crucial to emphasize that deciding on value systems remains a strictly human prerogative.  
+AI cannot make decisions *about* value systems but can only adopt and operate according to 
+the value system(s) provided by its stakeholders.
+
+These four technical capabilities—value acquisition, value representation and reasoning, value 
+alignment, and value-based explainability—form the foundation for developing truly value-aware AI.  
+In the following sections, we will illustrate how these capabilities can be integrated into 
+the GNW architecture.

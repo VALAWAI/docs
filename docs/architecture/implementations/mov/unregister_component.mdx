@@ -1,0 +1,19 @@
+---
+sidebar_position: 3
+---
+
+# Unregister a component
+
+When a component desires to be hidden from other VALAWAI components, 
+it must transmit a message to the VALAWAI master to unregister itself. 
+For this purpose, the component must send a message to the queue 
+**valawai/component/unregister** with a payload comparable to the following:
+
+import CodeBlock from '@theme/CodeBlock';
+import unregister_component_json from '!!raw-loader!./unregister-component.json';
+
+<CodeBlock language="json" showLineNumbers>{unregister_component_json}</CodeBlock>
+
+In this payload, it is necessary to specify the identifier of the VALAWAI
+component (line 2) that has been received when the component has been registered
+, as explained in the section [register component](/docs/architecture/implementations/mov/register_component).

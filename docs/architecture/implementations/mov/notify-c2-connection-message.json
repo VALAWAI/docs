@@ -1,0 +1,17 @@
+{
+  "connection_id": "65c1f59ea4cb169f42f5edc4",
+  "source": {
+    "id": "65c1f59ea4cb169f42f5edc4",
+    "name": "c0_voice_to_text",
+    "type": "C0"
+  },
+  "target": {
+    "id": "65c1f59ea4cb169f42f5edc4",
+    "name": "c0_voice_to_text",
+    "type": "C0"
+  },
+  "message_payload": {
+  
+  },
+  "timestamp": 1709902001
+}
