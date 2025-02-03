@@ -145,6 +145,16 @@ import mov_docker_compose_yaml from '!!raw-loader!./mov_docker-compose.yaml';
 <CodeBlock language="yaml" showLineNumbers>{mov_docker_compose_yaml}</CodeBlock>
 
 This Docker Compose file defines the MOV service with dependencies on RabbitMQ and MongoDB. 
-The healthcheck section uses `curl` to check the `/q/health` endpoint.  Adjust the `interval`, 
-`timeout`, `retries`, and `start_period` as needed for your environment.  This example also 
-demonstrates how to specify dependencies between services using `depends_on`.
+The `healthcheck` section uses curl to check the `/q/health` endpoint.  Adjust the `interval`, 
+`timeout`, `retries`, and `start_period` parameters as needed for your specific environment.  
+These parameters control how frequently the health check is performed, how long it's allowed
+to take, how many times it's retried before considering the service unhealthy, and how long 
+the service is allowed to start before health checks begin, respectively.
+
+This example also demonstrates how to specify dependencies between services using `depends_on`.
+This ensures that RabbitMQ and MongoDB are running before MOV starts.
+
+For a more comprehensive example, including environment variables, volumes, and network configurations,
+refer to the [docker-compose.yaml](https://github.com/VALAWAI/MOV/blob/main/src/main/docker/docker-compose.yml)
+file in the [VALAWAI/MOV](https://github.com/VALAWAI/MOV) GitHub repository.  This more detailed 
+configuration provides a robust foundation for production deployments.
