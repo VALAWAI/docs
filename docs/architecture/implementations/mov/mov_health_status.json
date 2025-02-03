@@ -1,0 +1,59 @@
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "RabbitMQ service",
+            "status": "UP"
+        },
+        {
+            "name": "SmallRye Reactive Messaging - liveness check",
+            "status": "UP",
+            "data": {
+                "query_components": "[OK]",
+                "query_connections": "[OK]",
+                "change_topology": "[OK]",
+                "create_connection": "[OK]",
+                "register_component": "[OK]",
+                "add_log": "[OK]",
+                "unregister_component": "[OK]",
+                "send_unregister_component": "[OK]",
+                "send_create_connection": "[OK]",
+                "send_change_topology": "[OK]",
+                "send_register_component": "[OK]",
+                "components_page": "[OK]",
+                "connections_page": "[OK]"
+            }
+        },
+        {
+            "name": "SmallRye Reactive Messaging - readiness check",
+            "status": "UP",
+            "data": {
+                "query_components": "[OK]",
+                "query_connections": "[OK]",
+                "change_topology": "[OK]",
+                "create_connection": "[OK]",
+                "register_component": "[OK]",
+                "add_log": "[OK]",
+                "unregister_component": "[OK]",
+                "send_unregister_component": "[OK]",
+                "send_create_connection": "[OK]",
+                "send_change_topology": "[OK]",
+                "send_register_component": "[OK]",
+                "components_page": "[OK]",
+                "connections_page": "[OK]"
+            }
+        },
+        {
+            "name": "MongoDB connection health check",
+            "status": "UP",
+            "data": {
+                "<default>": "OK",
+                "<default-reactive>": "OK"
+            }
+        },
+        {
+            "name": "SmallRye Reactive Messaging - startup check",
+            "status": "UP"
+        }
+    ]
+}
