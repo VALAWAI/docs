@@ -1,0 +1,117 @@
+# Patient Treatment Planner Demonstration
+
+A key use case for the VALAWAI architecture, as described in [Medical Protocols](/docs/use_cases/medical_protocols/),
+involves incorporating value considerations into medical protocols. This 
+demonstration simplifies this use case, showcasing how a doctor can define 
+patients, specify their current health status, and design a set of actions 
+(a treatment plan) to achieve a desired outcome. After defining the treatment, 
+the doctor receives feedback, including:
+
+*   Whether the treatment adheres to the NIT protocol.
+*   How well the treatment aligns with various values associated with the chosen 
+actions.
+
+This demonstration utilizes the [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) 
+as the implementation of the [VALAWAI Architecture](/docs/architecture/value_awareness_architecture), 
+along with the following components:
+
+*   [C0 Patient Treatment UI](/docs/components/C0/patient_treatment_ui): Provides 
+the user interface for doctors to manage patients, define treatments, and visualize 
+feedback.
+*   [C1 NIT Protocol Manager](/docs/components/C1/nit_protocol_manager): Checks 
+if the actions of a treatment follow the NIT protocol.
+*   [C2 Treatment Autonomy Evaluator](/docs/components/C2/treatment_autonomy_valuator): 
+Calculates the autonomy value alignment of a treatment.
+*   [C2 Treatment Beneficence Evaluator](/docs/components/C2/treatment_beneficence_valuator): 
+Calculates the beneficence value alignment of a treatment.
+*   [C2 Treatment Justice Evaluator](/docs/components/C2/treatment_justice_valuator): 
+Calculates the justice value alignment of a treatment.
+*   [C2 Treatment Nonmaleficence Evaluator](/docs/components/C2/treatment_nonmaleficence_valuator): 
+Calculates the nonmaleficence value alignment of a treatment.
+
+## Prerequisites
+
+Before deploying this demonstration, ensure you have Docker installed on your system. 
+Installation instructions and platform-specific guides are available on the official 
+Docker website: [https://www.docker.com/](https://www.docker.com/).
+
+## Build the Docker Containers
+
+Instructions for building the Docker containers for each VALAWAI software component 
+are provided in their respective documentation. To simplify this process, you can 
+obtain all the necessary containers by executing the following script:
+
+import CodeBlock from '@theme/CodeBlock';
+import treatement_build_containers_sh from '!!raw-loader!./treatement_build_containers.sh';
+
+<CodeBlock language="bash" showLineNumbers>{treatement_build_containers_sh}</CodeBlock>
+
+
+## Create Docker Compose file
+
+After creating all the required containers, define a `docker-compose.yaml` 
+file with all the application components:
+
+import treatment_docker_compose_yaml from '!!raw-loader!./treatment_docker_compose.yaml';
+
+<CodeBlock language="yaml" showLineNumbers>{treatment_docker_compose_yaml}</CodeBlock>
+
+ - Line 3 defines the [Master of VALAWAI (MOV)](/docs/architecture/implementations/mov/deploy).
+ - Lines 40 and 50 define the required services for MOV (RabbitMQ and MongoDB, respectively).
+ - Line 60 configures the [C0 Patient Treatment UI](/docs/components/C0/patient_treatment_ui#deploy).
+ - Line 70 configures the required PostgreSQL database for the UI.
+ - Line 80 configures the [C1 NIT Protocol manager](/docs/components/C1/nit_protocol_manager#deploy).
+ - Lines 90-120 configure the C2 Treatment Value Evaluators ([autonomy](/docs/components/C2/treatment_autonomy_valuator#deploy), 
+ [beneficence](/docs/components/C2/treatment_beneficence_valuator#deploy), 
+ [justice](/docs/components/C2/treatment_justice_valuator#deploy), 
+ and [nonmaleficence](/docs/components/C2/treatment_nonmaleficence_valuator#deploy)).
+
+
+## Running the Demonstration
+
+The following steps demonstrate the [VALAWAI Architecture](/docs/architecture/value_awareness_architecture) 
+and the [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov).
+
+1.  **Start MOV:** Launch the MOV with: `COMPOSE_PROFILES=mov docker compose up -d`.  
+Access the MOV user interface at [http://localhost:8080](http://localhost:8080). Initially, 
+no components or connections will be visible.
+
+2.  **Start the Doctor UI:** Launch the doctor's user interface with: `COMPOSE_PROFILES=C0 docker compose up -d`. 
+Refresh the MOV UI ([http://localhost:8080](http://localhost:8080)) to see the newly 
+registered C0 component. No topology connections will be present yet.
+
+3.  **Using the Doctor UI:** Open the doctor's user interface in your browser at [http://localhost:8081](http://localhost:8081) 
+and perform the following steps:
+
+    3.1. **Add a Patient:** Go to "Patients" and add a new patient, providing 
+    the name and status.
+    3.2. **Add a Treatment:** Click the three dots next to the patient's name, 
+    select "Add treatment to patient," review the current status, click "Next," 
+    select the actions to apply, define the expected status after the treatment, 
+    and then add the treatment.  Note that the treatment will not have any feedback 
+    information at this point because the C1 and C2 components are not yet running.
+
+4.  **Start the NIT Protocol Manager (C1):** Launch the C1 component with: `COMPOSE_PROFILES=C1 docker compose up -d`. 
+Refresh the MOV UI ([http://localhost:8080](http://localhost:8080)) to see the registered 
+C1 component and the connection between C1 and C0 in the topology.
+
+5.  **Check NIT Protocol Adherence:** Once the C1 component is ready, return to the doctor's 
+user interface ([http://localhost:8081](http://localhost:8081)), go to the previously created 
+treatment, and click the reload icon. After a few seconds, you will see whether the treatment 
+actions follow the NIT protocol.
+
+6.  **Start the Value Evaluators (C2):** Launch the C2 components with: `COMPOSE_PROFILES=C2 docker compose up -d`. 
+Refresh the MOV UI ([http://localhost:8080](http://localhost:8080)) to see the four registered 
+C2 components and their connections to the C0 component.
+
+7.  **Check Value Alignment:** Once the C2 components are ready, return to the doctor's UI 
+([http://localhost:8081](http://localhost:8081)), go to the created treatment, and 
+click the reload icon. After a few seconds, you will see the value alignment feedback 
+for the treatment.
+
+**Convenience Commands:**
+
+*   **Start All Components:** `COMPOSE_PROFILES=all docker compose up -d`
+*   **Stop All Components:** `docker compose down` (Note: this command will stop 
+all services regardless of the profile used to start them).  If you only want to stop 
+the `mov` profile you can use `COMPOSE_PROFILES=mov docker compose down`
