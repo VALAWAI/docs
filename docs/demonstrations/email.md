@@ -1,6 +1,6 @@
 # E-mail 
 
-This is a basic demonstrator of how to use the [VALAWAI Toolbox](/docs/toolbox)
+This is a basic demonstrator of how to use the VALAWAI Architecture](/docs/architecture/value_awareness_architecture)
 to create a simple Value-awareness application. It uses some components
 to obtain e-mails from a server, generate a reply e-mail, send it and
 check that this reply is aligned with a value. These components are:
@@ -267,7 +267,7 @@ docker compose logs -f
 
 When the application is running you have access to the following user interfaces:
 
-* [Master Of VALAWAI](/docs/tutorials/mov#web-user-interface) at **[http://localhost:8080](http://localhost:8080)**
+* [Master Of VALAWAI](/docs/architecture/implementations/mov) at **[http://localhost:8080](http://localhost:8080)**
 * RabbitMQ manager at **[http://localhost:8081](http://localhost:8081)**
 * Mailtrap at **[http://localhost:8082](http://localhost:8082)**
 

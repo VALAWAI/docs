@@ -23,7 +23,7 @@ and reusability of components across different implementations and projects.
 The section also provides best practices and examples for component development, f
 acilitating the creation of robust and efficient components.
 
-*   **[Master of VALAWAI (Centralized Implementation)](/docs/architecture/implementations/master):** 
+*   **[Master of VALAWAI (Centralized Implementation)](/docs/architecture/implementations/mov):** 
 This section describes a centralized implementation of the VALAWAI architecture, named "Master of VALAWAI."  
 It focuses on using RabbitMQ as the central communication backbone between all components.  
 This approach offers several advantages, including robust message queuing, reliable delivery, 
@@ -33,7 +33,7 @@ It also discusses the benefits and limitations of this centralized approach, suc
 as its suitability for complex systems with many interacting components but potential single 
 points of failure.
 
-*   **[Robot Operating System (ROS 2) Implementation](/docs/architecture/implementations/ros2):** 
+*   **[Robot Operating System (ROS 2) Implementation](/docs/architecture/implementations/ros):** 
 This section describes an implementation of the VALAWAI architecture using the Robot Operating 
 System (ROS 2).  ROS 2 is a widely used framework for robotics development, providing tools and 
 libraries for communication, control, and simulation.  This implementation leverages the capabilities 

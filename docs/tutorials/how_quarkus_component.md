@@ -1,6 +1,6 @@
 # How to define a VALAWAI component with Quarkus
 
-In this tutorial, we explain how to define a [VALAWAI component](/toolbox/component)
+In this tutorial, we explain how to define a [VALAWAI component](/docs/architecture/implementations/component)
 that is developed using [Quarkus framework](https://quarkus.io/). The main steps will be:
 
 - Generate the Quakus project.
@@ -39,8 +39,8 @@ Finally, you must have the seed code for your component.
 ## Adapt to be a VALAWAI component
 
 After you have the seed for the Quarkus project is time to make some changes to match
-a [VALAWAI component](/docs/toolbox/component). The first thing is to modify
-the [README.md](/docs/toolbox/component#readmemd) to contain a short description of what the component
+a [VALAWAI component](/docs/architecture/implementations/component). The first thing is to modify
+the **README.md** to contain a short description of what the component
 has done, at least a summary section, with the key element of the component, and a section that explains
 how to build the docker image of the component and how to deploy it. For example, you can see
 the read-me of the [C0 email sensor](https://github.com/VALAWAI/C0_email_sensor/blob/main/README.md).
@@ -56,11 +56,11 @@ After that, you must add the files:
  you can see the changes in the [C0 email sensor](https://github.com/VALAWAI/C0_email_sensor/blob/main/CHANGELOG.md).
 
  - **asyncapi.yaml** that describes the services that provide the component following the conventions of 
- a [VALAWAI compoennt](/docs/toolbox/component#asyncapiyaml). For example, you can see you can see the services
+ a [VALAWAI compoennt](/docs/architecture/implementations/component#interaction-specification). For example, you can see you can see the services
  defined on the [C0 email sensor](https://github.com/VALAWAI/C0_email_sensor/blob/main/asyncapi.yaml).
  
  - **docker-compose.yml** that will be used to deploy the component following the conventions of 
- a [VALAWAI compoennt](/docs/toolbox/component#dockercomposeyml). For example, you can see you can see
+ a VALAWAI compoennt. For example, you can see you can see
  the deployment of the [C0 email sensor](https://github.com/VALAWAI/C0_email_sensor/blob/main/docker-compose.yml).
 
 
@@ -100,7 +100,7 @@ In the next sections, you can read in more detail how to provide the services de
 
 ### Subscribe to messages
 
-On the [asyncapi.yaml](/docs/toolbox/component#asyncapiyaml) of your component, you define the messages that
+On the [asyncapi.yaml](/docs/architecture/implementations/component#interaction-specification) of your component, you define the messages that
 your component must be subscribed to. Thus, the messages that it can receive and process. To implement them
 you must follow the next steps:
 
@@ -273,7 +273,7 @@ public class TemperatureManager {
  
 ### Publish messages
 
-On the [asyncapi.yaml](/docs/toolbox/component#asyncapiyaml) of your component, you define the messages that your component must publish. Thus, the messages that it can send.
+On the [asyncapi.yaml](/docs/architecture/implementations/component#interaction-specification) of your component, you define the messages that your component must publish. Thus, the messages that it can send.
 To implement them you must follow the next steps:
 
 1. Define a class for each type of payload of the message that the component can send. On these classes fields are public and these are annotated as **@RegisterForReflection**.
@@ -464,18 +464,18 @@ public class TemperatureManager {
 
 ## Interaction with Master Of VALAWAI
 
-The [Master Of VALAWAI (MOV)](/docs/toolbox/mov) is responsible for managing
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) is responsible for managing
 the topology of interactions between the components that cooperate on the VALAWAI
 architecture. The interaction of your component with the MOV is done by publishing
 messages to the MOV channels or subscribing to the channels that the MOV provide.
-You can read more about all the defined services in the [MOV tutorial](/docs/tutorials/mov),
+You can read more about all the defined services in the [MOV tutorial](/docs/architecture/implementations/mov),
 but in the next sections, we focus on the most common services that you may need to
 use when developing your component.
 
 
 ### Topology services
 
-One of the first things that any component must do is to be [registered](/docs/tutorials/mov#register-a-component)
+One of the first things that any component must do is to be [registered](/docs/architecture/implementations/mov/register_component)
 into the Master Of VALAWAI (MOV) to be added to the topology. In this process, the component
 provides its **asynapi.yaml** to the MOV, and it automatically creates the connections
 between this new component and any other component if they are compatible. Thus,
@@ -483,7 +483,7 @@ the MOV checks the publishing channels of the new component and checks if any ot
 component defines a subscription to the same content. Also, it does the vice-verse, thus,
 it checks the subscription of the new component exists any component that can publish
 a compatible message. On the other hand, when the component is not more active it must
-[unregister](/docs/tutorials/mov#unregister-a-component) and the MOV will disable any topology connection that this component will
+[unregister](/docs/architecture/implementations/mov/unregister_component) and the MOV will disable any topology connection that this component will
 be involved. 
 
 Now that we know what we have to do, it is time to describe how to do it in Qarkus.
@@ -517,7 +517,7 @@ The first thing to do is to add the  **asyncapi-yaml** in the Java resources bec
 ```
 
 Now we have **asyncapi-yaml** in the resources, we can define the message to
-[register the component](/docs/tutorials/mov#register-a-component). The next
+[register the component](/docs/architecture/implementations/mov/register_component). The next
 class is an example of registering the component C1 temperature controller.
 
 ```java
@@ -588,7 +588,7 @@ public class RegisterComponentPayload {
 }
 ```
 
-On the other hand, we need to define the message to [unregister a component](/docs/tutorials/mov#unregister-a-component). The next class is an example of this
+On the other hand, we need to define the message to [unregister a component](/docs/architecture/implementations/mov/unregister_component). The next class is an example of this
 type of message.
 
 
@@ -633,7 +633,7 @@ mp.messaging.outgoing.send_unregister_component.default-routing-key=valawai/comp
 
 Apart from the channels to register and unregister the component, line 7 defines
 the channel that will be used by the MOV to [notify the component when it has been
-registered](/docs/tutorials/mov#notify-registered-component). Remember that the name
+registered](/docs/architecture/implementations/mov/registered_notification). Remember that the name
 of this channel has to match the pattern **valawai/c[0|1|2]/\w+/control/registered**.
 
 Finaly, you only must define a service to capture the start-uo event in the Quarkus
@@ -762,10 +762,10 @@ public class ComponentLifeCycle {
 
 ### Logging service
 
-The [Master Of VALAWAI (MOV)](/docs/tutorials/mov) provides different services
-and one of them is a [centralized log system](/docs/tutorials/mov#add-a-log-message).
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) provides different services
+and one of them is a [centralized log system](/docs/architecture/implementations/mov/add_log).
 This service stores the log messages and shows them in a
-[web user interface (WUI)](/docs/tutorials/mov#manage-logs).
+[web user interface (WUI)](/docs/architecture/implementations/mov/user_interface#manage-logs).
 This service helps in the developing process because you can see what happens in different
 components in a unique view. Otherwise, you must access each docker component container
 and see the logs.
@@ -1043,13 +1043,13 @@ LogService log;
 
 ### Services for C2 components
 
-A [C2 component](/docs/toolbox/architecture/value_awareness_architecture#c2-component)
+A [C2 component](/docs/architecture/value_awareness_architecture#c2-component)
 is a special component that may need to listen to what the other components do to decide
 witch topology connections must be enabled or disabled.
-The [Master Of VALAWAI (MOV)](/docs/toolbox/mov) helps in this process because when
-a C2 component is [registered](/docs/tutorials/mov#notify-about-a-sent-message-through-a-topology-connection),
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) helps in this process because when
+a C2 component is [registered](/docs/architecture/implementations/mov/registered_notification),
 it checks if exist any subscribed channel that must be [notified when a message is sent
-through a topology connection](/docs/tutorials/mov#notify-about-a-sent-message-through-a-topology-connection).
+through a topology connection](/docs/architecture/implementations/mov/notify_c2_components).
 Thus, the channel name must match the pattern **valawai/c2/\w+/control/\w+** and
 the payload contains the fields: connection_id, source, target, message_payload,
 and timestamp.
@@ -1420,7 +1420,7 @@ public class EventListener {
 
 This component when wants to enable or disable a topology connection has to send
 to the queue **valawai/topology/change** a message with the action and the connection
-identifier as you can see on the [MOV tutorial](/docs/tutorials/mov#modify-a-topology-connection).
+identifier as you can see on the [MOV tutorial](/docs/architecture/implementations/mov/modify_connection).
 Thus, you need to define a class for the message something like you can see below.
 
 ```java
@@ -1613,6 +1613,5 @@ The minimum environment variables that must be defined when deploying the docker
  The default value is ___password___.
 
 All this information has to be used when you define the example of
-the [docker-compose.yml](/docs/toolbox/component#dockercomposeyml) 
-to deploy the component.
+the `docker-compose.yml` to deploy the component.
 

@@ -273,7 +273,7 @@ can be used to configure where the REST health endpoints will be exposed by the 
 
 After you have the **valawai/c1_nit_protocol_manager:Z.Y.Z** docker image you can deploy directly using Docker,
 but you must define at least the environment variables to connect the message queue where
-the [Master of valawai (MOV)](/tutorials/mov) is deployed and the parameters to the server where
+the [Master of valawai (MOV)](/docs/architecture/implementations/mov/deploy) is deployed and the parameters to the server where
 will be received the e-mails to read. An easier way to do it is by using the provided [docker compose](https://github.com/VALAWAI/C1_nit_protocol_manager/blob/main/docker-compose.yml)
 on the [repository](https://github.com/VALAWAI/C1_nit_protocol_manager) of this component.
  On this file is defined

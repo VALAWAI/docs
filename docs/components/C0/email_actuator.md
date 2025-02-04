@@ -49,7 +49,7 @@ The next JSON is an example of this data model.
 This component can be used to send e-mails. Thus, it can provide information to a user of
 the value awareness application through an e-mail. These e-mails are generated from the messages
 that this component receives on the channel **valawai/c0/email_actuator/data/e_mail**,
-and delivered to an e-mail server for its publication. In this case, the [Master of VALAWAI (MOV)](/toolbox/mov)
+and delivered to an e-mail server for its publication. In this case, the [Master of VALAWAI (MOV)](/docs/architecture/implementations/mov)
 will be responsible for redirecting the published messages by C1 components to this component and converted
 to e-mails to be delivered to the users. In the [readme](https://github.com/VALAWAI/C0_email_actuator/blob/main/README.md),
 you will find the version of the MOV that is necessary to use. Also, you must create the docker image of this component,
@@ -250,7 +250,7 @@ can be used to configure where the REST health endpoints will be exposed by the 
 
 After you have the **valawai/c0_email_actuator:Z.Y.Z** docker image you can deploy directly using Docker,
 but you must define at least the environment variables to connect the message queue where
-the [Master of valawai (MOV)](/tutorials/mov) is deployed and the parameters to the server 
+the [Master of valawai (MOV)](/docs/architecture/implementations/mov/deploy) is deployed and the parameters to the server 
 that will be used to send the emails. An easier way to do it is by using the provided [docker compose](https://github.com/VALAWAI/C0_email_actuator/blob/main/docker-compose.yml)
 on the [repository](https://github.com/VALAWAI/C0_email_actuator) of this component.
 On it are defined the profiles **mov** and **mail**. The first one is to launch

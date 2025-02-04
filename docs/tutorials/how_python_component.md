@@ -1,6 +1,6 @@
 # How to define a VALAWAI component in Python with Pika
 
-In this tutorial, we explain how to define a [VALAWAI component](/toolbox/component)
+In this tutorial, we explain how to define a [VALAWAI component](/docs/architecture/implementations/component)
 that is developed using [Python language](https://www.python.org/) with
 the [Pika libary](https://pika.readthedocs.io/en/stable/). The main steps will be:
 
@@ -13,7 +13,7 @@ the [Pika libary](https://pika.readthedocs.io/en/stable/). The main steps will b
 
 ## Generate the project skeleton
 
-The first thing is to define the necessary files that any [VALAWAI component](/docs/toolbox/component)
+The first thing is to define the necessary files that any [VALAWAI component](/docs/architecture/implementations/component)
 must-have. Thus, the files:
 
  - **LICENSE** that will contain the information of the license that you distribute your component.
@@ -26,11 +26,11 @@ must-have. Thus, the files:
  the [C1 LLM e-mail replier](https://github.com/VALAWAI/CX_name/blob/main/CHANGELOG.md).
 
  - **asyncapi.yaml** describes the services that provide the component following the conventions
- of a [VALAWAI compoennt](/docs/toolbox/component#asyncapiyaml). For example, you can see you can
+ of a [VALAWAI compoennt](/docs/architecture/implementations/component#interaction-specification). For example, you can see you can
  see the services defined on the [C1 LLM e-mail replier](https://github.com/VALAWAI/CX_name/blob/main/asyncapi.yaml).
  
  - **docker-compose.yml** that will be used to deploy the component following the conventions of 
- a [VALAWAI compoennt](/docs/toolbox/component#dockercomposeyml). For example, you can see you can see
+ a ___VALAWAI compoennt___. For example, you can see you can see
  the deployment of the [C1 LLM e-mail replier](https://github.com/VALAWAI/CX_name/blob/main/docker-compose.yml).
  
 Maybe at the beginning, you may not have all the necessary information to complete these files,
@@ -243,7 +243,7 @@ launched by **Docker**.
 ## Defining the services
 
 The services for the new VALAWAI component must be described in the **asyncapi.yaml** file.
-On the [component definition](/docs/toolbox/component#asyncapiyaml) documentation, you can read how these services must be defined.
+On the [component definition](/docs/architecture/implementations/component#interaction-specification) documentation, you can read how these services must be defined.
 
 
 ## Implementing the services
@@ -356,7 +356,7 @@ When you have the encoded message you only have to call the method **basic_publi
 the channel of the connection where the **routing_key** must be the name of the queue to
 send the message and the **exchange** must be an empty string.
 
-The following code is an example of sending a [log message to the Master of VALAWAI](/docs/tutorials/mov#add-a-log-message).
+The following code is an example of sending a [log message to the Master of VALAWAI](/docs/architecture/implementations/mov/add_log).
 
 ```python
 msg={
@@ -478,18 +478,18 @@ class App:
 
 ## Interaction with Master Of VALAWAI
 
-The [Master Of VALAWAI (MOV)](/docs/toolbox/mov) is responsible for managing
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) is responsible for managing
 the topology of interactions between the components that cooperate on the VALAWAI
 architecture. The interaction of your component with the MOV is done by publishing
 messages to the MOV channels or subscribing to the channels that the MOV provide.
-You can read more about all the defined services in the [MOV tutorial](/docs/tutorials/mov),
+You can read more about all the defined services in the [MOV tutorial](/docs/architecture/implementations/mov),
 but in the next sections, we focus on the most common services that you may need to
 use when developing your component.
 
 
 ### Topology services
 
-One of the first things that any component must do is to be [registered](/docs/tutorials/mov#register-a-component)
+One of the first things that any component must do is to be [registered](/docs/architecture/implementations/mov/register_component)
 into the Master Of VALAWAI (MOV) to be added to the topology. In this process, the component
 provides its **asynapi.yaml** to the MOV, and it automatically creates the connections
 between this new component and any other component if they are compatible. Thus,
@@ -497,7 +497,7 @@ the MOV checks the publishing channels of the new component and checks if any ot
 component defines a subscription to the same content. Also, it does the vice-verse, thus,
 it checks the subscription of the new component exists any component that can publish
 a compatible message. On the other hand, when the component is not more active it must
-[unregister](/docs/tutorials/mov#unregister-a-component) and the MOV will disable any
+[unregister](/docs/architecture/implementations/mov/unregister_component) and the MOV will disable any
 topology connection that this component will be involved.
 
 If you created the VALAWAI component following the proposed [skeleton](/docs/tutorials/how_python_component#generate-the-project-skeleton)
@@ -547,7 +547,7 @@ class MOVService(object):
         return content
         
     def register_component_msg(self):
-        """The message to register this component into the MOV (https://valawai.github.io/docs/tutorials/mov#register-a-component)
+        """The message to register this component into the MOV (https://valawai.github.io/docs/architecture/implementations/mov/register_component)
         """
         
         setup = self.__read_file('../setup.py')
@@ -563,7 +563,7 @@ class MOVService(object):
         return msg
 
     def register_component(self,publisher:pika.channel.Channel):
-        """Register this component into the MOV (https://valawai.github.io/docs/tutorials/mov#register-a-component)
+        """Register this component into the MOV (https://valawai.github.io//docs/architecture/implementations/mov/register_component)
         Parameters
         ----------
         publisher : pika.channel.Channel
@@ -582,7 +582,7 @@ class MOVService(object):
         logging.info(f"Register CX name with the identifier '{self.component_id}'")
     
     def unregister_component(self,publisher:pika.channel.Channel):
-        """Unregister this component from the MOV (https://valawai.github.io/docs/tutorials/mov/#unregister-a-component)
+        """Unregister this component from the MOV (https://valawai.github.io/docs/architecture/implementations/mov/unregister_component)
         Parameters
         ----------
         publisher : pika.channel.Channel
@@ -666,17 +666,17 @@ class App:
 
 ### Logging service
 
-The [Master Of VALAWAI (MOV)](/docs/tutorials/mov) provides different services
-and one of them is a [centralized log system](/docs/tutorials/mov#add-a-log-message).
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) provides different services
+and one of them is a [centralized log system](/docs/architecture/implementations/mov/add_log).
 This service stores the log messages and shows them in a
-[web user interface (WUI)](/docs/tutorials/mov#manage-logs).
+[web user interface (WUI)](/docs/architecture/implementations/mov/user_interface#manage-logs).
 This service helps in the developing process because you can see what happens in different
 components in a unique view. Otherwise, you must access each docker component container and
 see the logs.
 
-Adding a log message on the MOV only requires to send a [log message](/docs/tutorials/mov#add-a-log-message)
+Adding a log message on the MOV only requires to send a [log message](/docs/architecture/implementations/mov/add_log)
 to the queue **valawai/log/add**. In this message, you can add the level, the log message, a payload
-and the component identifier obtained when it has been [registered](/docs/tutorials/mov#add-a-log-message).
+and the component identifier obtained when it has been [registered](/docs/architecture/implementations/mov/registered_notification).
 The following code is a class for sending log messages to the MOV.
 
 ```python
@@ -754,7 +754,7 @@ class LogService(Object):
         logging.error(msg)
         
     def __log(self,level:str,msg:str,payload=None):
-        """Send a log message to the MOV (https://valawai.github.io/docs/tutorials/mov/#add-a-log-message)
+        """Send a log message to the MOV (https://valawai.github.io//docs/architecture/implementations/mov/add_log)
         
         Parameters
         ----------
@@ -788,13 +788,13 @@ class LogService(Object):
 
 ### Services for C2 components
 
-A [C2 component](/docs/toolbox/architecture/value_awareness_architecture#c2-component)
+A [C2 component](/docs/architecture/value_awareness_architecture#c2-component)
 is a special component that may need to listen to what the other components do to decide
 witch topology connections must be enabled or disabled.
-The [Master Of VALAWAI (MOV)](/docs/toolbox/mov) helps in this process because when
-a C2 component is [registered](/docs/tutorials/mov#notify-about-a-sent-message-through-a-topology-connection),
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) helps in this process because when
+a C2 component is [registered](/docs/architecture/implementations/mov/register_component),
 it checks if exist any subscribed channel that must be [notified when a message is sent
-through a topology connection](/docs/tutorials/mov#notify-about-a-sent-message-through-a-topology-connection).
+through a topology connection](/docs/architecture/implementations/mov/notify_c2_components).
 Thus, the channel name must match the pattern **valawai/c2/\w+/control/\w+** and
 the payload contains the fields: connection_id, source, target, message_payload,
 and timestamp.
@@ -856,7 +856,7 @@ class MessageAnalyzer(Object):
         msg['timestamp']
 ```
 
-Also, you can use the following class to [change the topology](/docs/tutorials/mov#modify-a-topology-connection)
+Also, you can use the following class to [change the topology](/docs/architecture/implementations/mov/modify_connection)
 managed by the MOV.
 
 
@@ -913,7 +913,7 @@ class TopologyService(Object):
         self.__change_topology('REMOVE',connection_id)
         
     def __change_topology(self,action:str,connection_id:str):
-        """Change the topology managed by the MOV (https://valawai.github.io/docs/tutorials/mov#modify-a-topology-connection)
+        """Change the topology managed by the MOV (https://valawai.github.io//docs/architecture/implementations/mov/modify_connection)
         
         Parameters
         ----------
@@ -1023,5 +1023,4 @@ The generated docker image can be configured using the following properties.
 
 
 All this information has to be used when you define the example of
-the [docker-compose.yml](/docs/toolbox/component#dockercomposeyml) 
-to deploy the component.
+the docker-compose.yml to deploy the component.

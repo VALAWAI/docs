@@ -111,7 +111,7 @@ When using the [Master of VALAWAI (MOV)](/docs/architecture/implementations/mov)
 specific channel patterns enable integration:
 
 1.  **Registration Channel (`valawai/c[0|1|2]/component_name/control/registered`):** 
-If this channel is defined, the MOV [publishes a message](/docs/architecture/implementations/mov#notify-registered-component) 
+If this channel is defined, the MOV [publishes a message](/docs/architecture/implementations/mov/registered_notification) 
 to it upon component registration. This message contains component information 
 (id, name, description, version, api\_version, type, since, channels).
 
@@ -126,9 +126,9 @@ The `subscribe` message payload schema includes:
     *   `message_payload`: The message payload that was exchanged.
     *   `timestamp`: Epoch time of the message send.
 
-    The MOV uses this channel to [notify](/docs/architecture/implementations/mov#notify-about-a-sent-message-through-a-topology-connection) 
+    The MOV uses this channel to [notify](/docs/architecture/implementations/mov/notify_c2_components) 
     C2 components about messages sent through active topology connections that match the `message_payload` 
-    type.  Specifically, when a [connection is registered](/docs/architecture/implementations/mov#create-a-topology-connection), 
+    type.  Specifically, when a [connection is registered](/docs/architecture/implementations/mov/create_connection), 
     the MOV checks for registered C2 components with a matching C2 Notification Channel and 
     `message_payload` type.  Conversely, when a C2 component with this channel type is registered, 
     the MOV checks for existing connections with a matching `message_payload` and adds the C2 

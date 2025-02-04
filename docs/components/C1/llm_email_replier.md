@@ -259,7 +259,7 @@ this component using the docker compose using the file [docker-compose.yml](http
 defined on the [repository](https://github.com/VALAWAI/C1_llm_email_replier).
 
 This configuration defines the profile **mov** to launch the component at the same time that a 
- [Master of valawai (MOV)](/tutorials/mov). You can use the next
+ [Master of valawai (MOV)](/docs/architecture/implementations/mov/deploy). You can use the next
 command to start both.
 
 ```

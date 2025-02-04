@@ -69,7 +69,7 @@ in intervlas of 5 minutes.
 
 As a sensor, this component provides information from the world to other components
 that form the value-aware application. In this case, it provides e-mails that will 
-be published into the channel **valawai/c0/email_sensor/data/e_mail**. The [Master of VALAWAI (MOV)](/toolbox/mov)
+be published into the channel **valawai/c0/email_sensor/data/e_mail**. The [Master of VALAWAI (MOV)](/docs/architecture/implementations/mov)
 will be responsible for redistributing this information to the other components depending
 on the current topology of the application. In the [readme](https://github.com/VALAWAI/C0_email_sensor/blob/main/README.md),
 you will find the version of the MOV that is necessary to use. Also, you must create the docker image of this component,
@@ -246,7 +246,7 @@ can be used to configure where the REST health endpoints will be exposed by the 
 
 After you have the **valawai/c0_email_sensor:Z.Y.Z** docker image you can deploy directly using Docker,
 but you must define at least the environment variables to connect the message queue where
-the [Master of valawai (MOV)](/tutorials/mov) is deployed and the parameters to the server where
+the [Master of valawai (MOV)](/docs/architecture/implementations/mov/deploy) is deployed and the parameters to the server where
 will be received the e-mails to read. An easier way to do it is by using the provided [docker compose](https://github.com/VALAWAI/C0_email_sensor/blob/main/docker-compose.yml)
 on the [repository](https://github.com/VALAWAI/C0_email_sensor) of this component.
 On it are defined the profiles **mov** and **mail**. The first one is to launch
