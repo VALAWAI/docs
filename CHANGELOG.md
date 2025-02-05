@@ -1,6 +1,12 @@
 # Changes done over the VALAWAI documentation
 
 
+## Version 0.11.0 (Febriuary 5, 2025)
+
+ - Improve documents
+ - Add new demonstration for patient treatment
+
+ 
 ## Version 0.10.0 (November 29, 2024)
 
  - Add information about the C1 NIT protocol manager.
