@@ -37,34 +37,69 @@ Docker website: [https://www.docker.com/](https://www.docker.com/).
 
 ## Build the Docker Containers
 
-Instructions for building the Docker containers for each VALAWAI software component 
-are provided in their respective documentation. To simplify this process, you can 
-obtain all the necessary containers by executing the following script:
+Instructions for building Docker containers for each VALAWAI software component 
+are detailed in their respective documentation.  To streamline this process, 
+a `buildContainers.sh` script is provided below.  This script automates the container 
+build process, downloading the latest code and building the Docker images as needed. 
 
 import CodeBlock from '@theme/CodeBlock';
-import treatement_build_containers_sh from '!!raw-loader!./treatement_build_containers.sh';
+import treatement_build_containers_sh from '!!raw-loader!./treatment_build_containers.sh';
 
-<CodeBlock language="bash" showLineNumbers>{treatement_build_containers_sh}</CodeBlock>
+<CodeBlock language="bash" title="buildContainers.sh" showLineNumbers>{treatement_build_containers_sh}</CodeBlock>
+
+How to use the script:
+
+1. **Save the script**: Copy the code above and save it as `buildContainers.sh` 
+in your VALAWAI project directory.
+
+2. **Make it executable**: Open a terminal and navigate to the directory where 
+you saved the script.  Then, make the script executable by running the following 
+command:
+
+```bash
+chmod +x buildContainers.sh
+```
+
+3. **Run the script**: Execute the script using the following command:
+
+```bash
+./buildContainers.sh
+```
+
+After that, the script will download the latest code of each component and build 
+its Docker image if necessary.
 
 
 ## Create Docker Compose file
 
-After creating all the required containers, define a `docker-compose.yaml` 
-file with all the application components:
+To deploy the demo components, a `docker-compose.yml` file will be used. This file 
+defines the services that Docker Compose will start to orchestrate the demonstration.  
+Create a file named docker-compose.yml in your project directory and copy the following 
+code into it.
 
 import treatment_docker_compose_yaml from '!!raw-loader!./treatment_docker_compose.yaml';
 
-<CodeBlock language="yaml" showLineNumbers>{treatment_docker_compose_yaml}</CodeBlock>
+<CodeBlock language="yaml" title="docker-compose.yml" showLineNumbers>{treatment_docker_compose_yaml}</CodeBlock>
 
- - Line 2 defines the [Master of VALAWAI (MOV)](/docs/architecture/implementations/mov/deploy).
- - Lines 34 and 55 define the required services for MOV (RabbitMQ and MongoDB, respectively).
- - Line 82 configures the [C0 Patient Treatment UI](/docs/components/C0/patient_treatment_ui#deploy).
- - Line 110 configures the required PostgreSQL database for the UI.
- - Line 132 configures the [C1 NIT Protocol manager](/docs/components/C1/nit_protocol_manager#deploy).
- - Lines 155, 179, 203 and 227 configure the C2 Treatment Value Evaluators ([autonomy](/docs/components/C2/treatment_autonomy_valuator#deploy), 
- [beneficence](/docs/components/C2/treatment_beneficence_valuator#deploy), 
- [justice](/docs/components/C2/treatment_justice_valuator#deploy), 
- and [nonmaleficence](/docs/components/C2/treatment_nonmaleficence_valuator#deploy)).
+On the code above, the `docker-compose.yml`, defines the following services:
+
+* **Line 2:** Defines the Master of VALAWAI (MOV) service. See the 
+[MOV Deployment documentation](/docs/architecture/implementations/mov/deploy) 
+for more details.
+* **Lines 34 and 55:** Define the services required by MOV: RabbitMQ and MongoDB, 
+respectively.
+* **Line 82:** Configures the C0 Patient Treatment UI. See the 
+[C0 Patient Treatment UI Deployment documentation](/docs/components/C0/patient_treatment_ui#deploy) 
+for more information.
+* **Line 110:** Configures the PostgreSQL database required by the C0 Patient Treatment UI.
+* **Line 132:** Configures the C1 NIT Protocol Manager. See the 
+[C1 NIT Protocol Manager Deployment documentation](/docs/components/C1/nit_protocol_manager#deploy) 
+for details.
+* **Lines 155, 179, 203, and 227:** Configure the C2 Treatment Value Evaluators:
+    * Autonomy Evaluator ([Deployment documentation](/docs/components/C2/treatment_autonomy_valuator#deploy))
+    * Beneficence Evaluator ([Deployment documentation](/docs/components/C2/treatment_beneficence_valuator#deploy))
+    * Justice Evaluator ([Deployment documentation](/docs/components/C2/treatment_justice_valuator#deploy))
+    * Nonmaleficence Evaluator ([Deployment documentation](/docs/components/C2/treatment_nonmaleficence_valuator#deploy))
 
 
 ## Running the Demonstration
@@ -113,6 +148,6 @@ and the [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov).
 **Convenience Commands:**
 
 *   **Start All Components:** `COMPOSE_PROFILES=all docker compose up -d`
-*   **Stop All Components:** `docker compose down` (Note: this command will stop 
+*   **Stop All Components:** `COMPOSE_PROFILES=all docker compose down` (Note: this command will stop 
 all services regardless of the profile used to start them).  If you only want to stop 
 the `mov` profile you can use `COMPOSE_PROFILES=mov docker compose down`

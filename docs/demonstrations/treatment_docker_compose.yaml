@@ -1,7 +1,7 @@
 services:
   mov:
     image: valawai/mov:${MOV_TAG:-latest}
-    container_name: mov
+    container_name: treatment_demo_mov
     profiles: [mov,all]
     depends_on:
       mongo:
@@ -12,7 +12,7 @@ services:
         restart: true
     ports:
       - ${MOV_UI_PORT:-8080}:8080
-    networks:  
+    networks:
       - treatment_demo_net
     environment:
       RABBITMQ_HOST: ${MQ_HOST:-mq}
@@ -23,8 +23,13 @@ services:
       QUARKUS_MONGODB_CREDENTIALS_USERNAME: ${MOV_DB_USER_NAME:-mov}
       QUARKUS_MONGODB_CREDENTIALS_PASSWORD: ${MOV_DB_USER_PASSWORD:-password}
       QUARKUS_MONGODB_HOSTS: ${DB_HOST:-mongo}:${MONGO_PORT:-27017}
+      MOV_UI_URL: http://localhost:${MOV_UI_PORT:-8080}
     healthcheck:
-      test: ["CMD-SHELL", "curl -s http://localhost:8080/q/health | grep -m 1 -P \"^[\\s|\\{|\\\"]+status[\\s|\\:|\\\"]+.+\\\"\" |grep -q \"\\\"UP\\\"\""]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s http://localhost:8080/q/health | grep -m 1 -P \"^[\\s|\\{|\\\"]+status[\\s|\\:|\\\"]+.+\\\"\" |grep -q \"\\\"UP\\\"\"",
+        ]
       interval: 1m
       timeout: 10s
       retries: 5
@@ -33,7 +38,7 @@ services:
 
   mq:
     image: rabbitmq:${RABBITMQ_TAG:-management}
-    container_name: mov_mq
+    container_name: treatment_demo_mq
     profiles: [mov,all]
     hostname: ${MQ_HOST:-mq}
     ports:
@@ -51,10 +56,10 @@ services:
       retries: 5
       start_period: 1m
       start_interval: 5s
-  
+
   mongo:
     image: mongo:${MONGODB_TAG:-latest}
-    container_name: mov_db
+    container_name: treatment_demo_mongo
     profiles: [mov,all]
     hostname: ${DB_HOST:-mongo}
     ports:
@@ -71,7 +76,11 @@ services:
     volumes:
       - ${MONGO_LOCAL_DATA:-~/.mongo_data/treatment_demo_db}:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "mongosh --quiet localhost/${DB_NAME:-movDB} --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'"]
+      test:
+        [
+          "CMD-SHELL",
+          "mongosh --quiet localhost/${DB_NAME:-movDB} --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'",
+        ]
       interval: 1m
       timeout: 10s
       retries: 5
@@ -81,36 +90,10 @@ services:
       - source: initialize-movDB.js
         target: /docker-entrypoint-initdb.d/init-mongo.js
 
-  patient_treatment_ui:
-    image: valawai/c0_patient_treatment_ui:${C0_PATIENT_TREATMENT_UI_TAG:-latest}
-    container_name: c0_patient_treatment_ui
-    profiles: [C0,all]
-    networks:  
-      - treatment_demo_net
-    ports:
-      - ${C0_PATIENT_TREATMENT_UI_PORT:-8081}:8080
-    depends_on:
-      mov:
-        condition: service_healthy
-        restart: true
-    environment:
-      RABBITMQ_HOST: ${MQ_HOST:-mq}
-      RABBITMQ_PORT: ${MQ_PORT:-5672}
-      RABBITMQ_USERNAME: ${MQ_USER:-mov}
-      RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
-      C0_PATIENT_TREATMENT_UI_URL: http://localhost:${C0_PATIENT_TREATMENT_UI_PORT:-8081}
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s http://localhost:8080/q/health | grep -m 1 -P \"^[\\s|\\{|\\\"]+status[\\s|\\:|\\\"]+.+\\\"\" |grep -q \"\\\"UP\\\"\""]
-      interval: 1m
-      timeout: 10s
-      retries: 5
-      start_period: 1m
-      start_interval: 5s
-
   pg:
     image: postgres:${POSTGRES_TAG:-17}
-    container_name: pg
-    profiles: [C0,all]
+    container_name: treatment_demo_C0_pg
+    profiles: [C0, all]
     ports:
       - ${PG_PORT:-5432}:5432
     networks:
@@ -120,32 +103,69 @@ services:
       POSTGRES_PASSWORD: ${PG_USER_PASSWORD:-password}
       POSTGRES_DB: ${PG_DB_NAME:-c0_patient_treatment_ui_db}
     volumes:
-      - ${PG_LOCAL_DATA:-~/.pg_data/treatment_demo_db}:/var/lib/postgresql/data 
+      - ${PG_LOCAL_DATA:-~/.pg_data/treatment_demo_db}:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 1m
       timeout: 10s
       retries: 5
       start_period: 1m
-      start_interval: 5s  
+      start_interval: 5s
+
+  patient_treatment_ui:
+    image: valawai/c0_patient_treatment_ui:${C0_PATIENT_TREATMENT_UI_TAG:-latest}
+    container_name: treatment_demo_c0_component
+    profiles: [C0, all]
+    networks:
+      - treatment_demo_net
+    ports:
+      - ${C0_PATIENT_TREATMENT_UI_PORT:-8082}:8080
+    depends_on:
+      pg:
+        condition: service_healthy
+        restart: true
+      mov:
+        condition: service_healthy
+        required: false
+    environment:
+      RABBITMQ_HOST: ${MQ_HOST:-mq}
+      RABBITMQ_PORT: ${MQ_PORT:-5672}
+      RABBITMQ_USERNAME: ${MQ_USER:-mov}
+      RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
+      C0_PATIENT_TREATMENT_UI_URL: http://localhost:${C0_PATIENT_TREATMENT_UI_PORT:-8082}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s http://localhost:8080/q/health | grep -m 1 -P \"^[\\s|\\{|\\\"]+status[\\s|\\:|\\\"]+.+\\\"\" |grep -q \"\\\"UP\\\"\"",
+        ]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 1m
+      start_interval: 5s
 
   nit_protocol_manager:
     image: valawai/c1_nit_protocol_manager:${C1_NIT_PROTOCOL_MANAGER_TAG:-latest}
-    container_name: c1_nit_protocol_manager
-    profiles: [C1,all]
-    networks:  
-      - treatment_demo_net
+    container_name: treatment_demo_c1_component
+    profiles: [C1, all]
     depends_on:
       mov:
         condition: service_healthy
-        restart: true
+        required: false
+    networks:
+      - treatment_demo_net
     environment:
       RABBITMQ_HOST: ${MQ_HOST:-mq}
       RABBITMQ_PORT: ${MQ_PORT:-5672}
       RABBITMQ_USERNAME: ${MQ_USER:-mov}
       RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
     healthcheck:
-      test: ["CMD-SHELL", "curl -s http://localhost:8080/q/health | grep -m 1 -P \"^[\\s|\\{|\\\"]+status[\\s|\\:|\\\"]+.+\\\"\" |grep -q \"\\\"UP\\\"\""]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s http://localhost:8080/q/health | grep -m 1 -P \"^[\\s|\\{|\\\"]+status[\\s|\\:|\\\"]+.+\\\"\" |grep -q \"\\\"UP\\\"\"",
+        ]
       interval: 1m
       timeout: 10s
       retries: 5
@@ -154,14 +174,14 @@ services:
 
   treatment_autonomy_valuator:
     image: valawai/c2_treatment_autonomy_valuator:${C2_TREATMENT_AUTONOMY_VALUATOR_TAG:-latest}
-    container_name: c2_treatment_autonomy_valuator
-    profiles: [C2,all]
-    networks:  
-      - treatment_demo_net
+    container_name: treatment_demo_c2_component_autonomy
+    profiles: [C2, all]
     depends_on:
       mov:
         condition: service_healthy
-        restart: true
+        required: false
+    networks:
+      - treatment_demo_net
     environment:
       RABBITMQ_HOST: ${MQ_HOST:-mq}
       RABBITMQ_PORT: ${MQ_PORT:-5672}
@@ -178,14 +198,14 @@ services:
 
   treatment_beneficence_valuator:
     image: valawai/c2_treatment_beneficence_valuator:${C2_TREATMENT_BENEFICENCE_VALUATOR_TAG:-latest}
-    container_name: c2_treatment_beneficence_valuator
-    profiles: [C2,all]
-    networks:  
-      - treatment_demo_net
+    container_name: treatment_demo_c2_component_beneficence
+    profiles: [C2, all]
     depends_on:
       mov:
         condition: service_healthy
-        restart: true
+        required: false
+    networks:
+      - treatment_demo_net
     environment:
       RABBITMQ_HOST: ${MQ_HOST:-mq}
       RABBITMQ_PORT: ${MQ_PORT:-5672}
@@ -202,14 +222,14 @@ services:
 
   treatment_justice_valuator:
     image: valawai/c2_treatment_justice_valuator:${C2_TREATMENT_JUSTICE_VALUATOR_TAG:-latest}
-    container_name: c2_treatment_justice_valuator
-    profiles: [C2,all]
-    networks:  
-      - treatment_demo_net
+    container_name: treatment_demo_c2_component_justice
+    profiles: [C2, all]
     depends_on:
       mov:
         condition: service_healthy
-        restart: true
+        required: false
+    networks:
+      - treatment_demo_net
     environment:
       RABBITMQ_HOST: ${MQ_HOST:-mq}
       RABBITMQ_PORT: ${MQ_PORT:-5672}
@@ -225,28 +245,28 @@ services:
       start_interval: 5s
 
   treatment_nonmaleficence_valuator:
-     image: valawai/c2_treatment_nonmaleficence_valuator:${C2_TREATMENT_NONMALEFICENCE_VALUATOR_TAG:-latest}
-     container_name: c2_treatment_nonmaleficence_valuator
-     profiles: [C2,all]
-     networks:  
-       - treatment_demo_net
-     depends_on:
-       mov:
-         condition: service_healthy
-         restart: true
-     environment:
-       RABBITMQ_HOST: ${MQ_HOST:-mq}
-       RABBITMQ_PORT: ${MQ_PORT:-5672}
-       RABBITMQ_USERNAME: ${MQ_USER:-mov}
-       RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
-       LOG_CONSOLE_LEVEL: ${LOG_LEVEL:-INFO}
-     healthcheck:
-       test: ["CMD-SHELL", "test -s /app/logs/component_id.json"]
-       interval: 1m
-       timeout: 10s
-       retries: 5
-       start_period: 1m
-       start_interval: 5s
+    image: valawai/c2_treatment_nonmaleficence_valuator:${C2_TREATMENT_NONMALEFICENCE_VALUATOR_TAG:-latest}
+    container_name: treatment_demo_c2_component_nonmaleficence
+    profiles: [C2, all]
+    depends_on:
+      mov:
+        condition: service_healthy
+        required: false
+    networks:
+      - treatment_demo_net
+    environment:
+      RABBITMQ_HOST: ${MQ_HOST:-mq}
+      RABBITMQ_PORT: ${MQ_PORT:-5672}
+      RABBITMQ_USERNAME: ${MQ_USER:-mov}
+      RABBITMQ_PASSWORD: ${MQ_PASSWORD:-password}
+      LOG_CONSOLE_LEVEL: ${LOG_LEVEL:-INFO}
+    healthcheck:
+      test: ["CMD-SHELL", "test -s /app/logs/component_id.json"]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 1m
+      start_interval: 5s
 
 networks:
   treatment_demo_net:
@@ -255,10 +275,10 @@ configs:
   initialize-movDB.js:
     content: |
       db.createUser({
-      	user: process.env.MOV_DB_USER_NAME,
-      	pwd: process.env.MOV_DB_USER_PASSWORD,
-      	roles: [{
-      		role: 'readWrite',
-      		db: process.env.MOV_DB_NAME
-      	}]
+          user: process.env.MOV_DB_USER_NAME,
+          pwd: process.env.MOV_DB_USER_PASSWORD,
+          roles: [{
+              role: 'readWrite',
+              db: process.env.MOV_DB_NAME
+          }]
       })

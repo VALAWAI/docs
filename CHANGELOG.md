@@ -1,7 +1,12 @@
 # Changes done over the VALAWAI documentation
 
 
-## Version 0.11.0 (Febriuary 5, 2025)
+## Version 0.11.1 (February 7, 2025)
+
+ - Fix treatment demonstrations script and docker compose.
+
+ 
+## Version 0.11.0 (February 5, 2025)
 
  - Improve documents
  - Add new demonstration for patient treatment
