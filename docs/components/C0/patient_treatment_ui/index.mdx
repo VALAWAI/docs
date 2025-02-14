@@ -1,0 +1,217 @@
+# Patient Treatment UI
+
+The Patient Treatment UI is a web-based C0 component developed specifically for 
+a VALAWAI project [demonstration](/docs/demonstrations/treatment) focused on showcasing 
+the potential of the architecture in a real-world patient care setting. This tool simulates 
+functionalities that would be highly beneficial to medical professionals, demonstrating 
+how such a system could streamline workflows, improve access to information, and ultimately 
+enhance patient care. It is crucial to understand that this component is not intended 
+for actual clinical use but rather serves as a proof-of-concept, illustrating the capabilities 
+and potential of the VALAWAI architecture.
+
+Recognizing the stringent privacy regulations surrounding personal and medical data, 
+this component is intentionally designed to simulate a doctor's interaction with 
+a real hospital system. This approach allows for a practical demonstration of 
+the system's functionalities without compromising sensitive patient information. 
+The Patient Treatment UI acts as a combined sensor and actuator within the simulated 
+environment. It "senses" user input (doctor interactions) and "actuates" actions within 
+the simulated VALAWAI system, reflecting how a real-world system might respond. It serves 
+as the primary interface through which medical professionals interact with the VALAWAI 
+system during the demonstration.
+
+This component aims to demonstrate the potential value of a user interface to empower 
+doctors in delivering improved patient care. By streamlining access to patient information, 
+facilitating the creation of personalized treatment plans, integrating automated protocol 
+verification, and providing clear visualization of treatment values, the Patient Treatment 
+UI simulates a system that could significantly enhance the efficiency and effectiveness 
+of medical practice. It highlights how the VALAWAI architecture can contribute to a more 
+informed, personalized, and value-driven approach to patient care.  Specifically, 
+the Patient Treatment UI empowers a doctor to perform the following key tasks within 
+the simulated environment:
+
+*   **Patient Management:**  Registering, viewing, updating, and removing patient records.
+*   **Treatment Planning:** Defining, assigning, and monitoring personalized treatment plans.
+*   **Feedback Integration:** Receiving feedback on protocol adherence and treatment 
+value alignment.
+
+The following sections provide a more detailed explanation of each of these core 
+functionalities.
+
+## Patient Management
+
+The Patient Management features of the UI simulate essential tasks related to patient 
+data handling.  This includes:
+
+*   **Comprehensive Patient Registration:** This feature allows doctors to register 
+new patients within the simulated system, capturing relevant demographic information (name, age, address, etc.) and pertinent medical history details (allergies, pre-existing conditions, etc.). This functionality enables the creation of a virtual patient database specifically for demonstration purposes, populating the simulated hospital environment with realistic (though not real) patient data.
+
+*   **Efficient Patient Information Management:** The UI provides doctors with the ability to view and update the current status of registered patients. This includes access to their medical conditions, lab results, medication history, and other relevant health data. This simulates the access and management of electronic health records (EHRs), demonstrating how a VALAWAI-integrated system could provide a centralized and readily accessible repository of patient information.
+
+*   **Virtual Patient Record Removal:** For demonstration management purposes, the UI includes the ability to remove patient records from the simulated system. This allows for the management of the virtual patient database and ensures that the demonstration remains focused on the relevant scenarios.
+
+*   **Advanced Patient Search and Filtering:** Doctors can efficiently search for specific patients within the simulated database using various criteria, such as name, ID, date of birth, or other relevant identifiers. The UI also allows for filtering the patient list based on specific criteria, enabling doctors to quickly locate the patients they need to interact with. This simulates the efficient search and retrieval capabilities of a real-world EHR system.
+
+### Patient data model
+
+### User interface
+
+## Treatment Planning
+
+The Treatment Planning features of the UI allow for the creation and management of personalized treatment protocols.
+
+*   **Personalized Treatment Plan Definition and Assignment:** A key feature of the UI is the ability to define and assign personalized treatment plans for patients. Doctors can specify the procedures, medications, therapies, and other interventions required for a patient's care. This simulates the creation and implementation of individualized treatment protocols, demonstrating how the VALAWAI system could facilitate personalized medicine.
+
+*   **Real-time Active Treatment Monitoring:** The UI provides doctors with access to monitor the active treatments currently assigned to their patients. This feature provides a view of the ongoing care being provided, allowing doctors to track progress, identify potential issues, and make adjustments to treatment plans as needed. This simulates a real-time monitoring system, allowing for proactive and responsive patient care.
+
+### Treatment data model
+
+### User interface
+
+## Feedback Integration
+
+The Feedback Integration features of the user interface empower doctors with 
+comprehensive information about the treatments they have defined for their 
+patients. This valuable feedback, provided by other components of the VALAWAI 
+system, offers insights into various aspects of the active treatments.  Critically, 
+this includes assessments of protocol adherence, such as compliance with the NIT 
+protocol, ensuring treatments align with established medical best practices.  
+Furthermore, the feedback incorporates an evaluation of the treatment's alignment 
+with specific values and ethical guidelines, such as beneficence (acting in 
+the patient's best interest), autonomy (respecting patient choices), non-maleficence 
+(avoiding harm), and justice (ensuring fairness). This multifaceted feedback mechanism 
+simulates the integration of automated decision support and value-awareness 
+capabilities within a VALAWAI application.  By providing doctors with this rich context, 
+the system demonstrates how such a system could assist in making more informed, 
+well-rounded, and ethically sound treatment decisions, ultimately contributing 
+to improved patient care and outcomes.
+
+### Feedback data model
+
+This component receives two types of feedback: action feedback 
+and value feedback.
+
+#### Action Feedback
+
+This feedback indicates whether a specific action within a treatment 
+plan adheres to medical protocols.  It includes the following fields:
+
+*   `treatment_id`: A unique identifier for the specific treatment 
+plan. This is crucial for correctly associating feedback with the relevant
+ treatment, especially when multiple plans are being considered or executed
+  concurrently.  This ensures data integrity and prevents misinterpretations.
+*   `action`: A descriptive name or label for the specific treatment action.
+*   `feedback`: An indicator of the action's compliance with medical protocols, 
+using a controlled vocabulary:
+    *   `ALLOW`: The action has been assessed and deemed compliant with 
+    all relevant protocols and guidelines.
+    *   `DENY`: The action violates one or more medical protocols and 
+    *must not* be performed. This serves as a critical safety mechanism.
+    *   `UNKNOWN`: The system lacks sufficient information to determine 
+    the action's compliance. This might be due to novel actions, missing data, 
+    or ambiguous protocols, requiring further investigation.
+
+```json
+{
+  "treatment_id": "treatment123",
+  "action": "CPR",
+  "feedback": "ALLOW"
+}
+```
+
+#### Value Feedback
+
+This feedback assesses how well a treatment plan aligns with specific 
+values. It includes the following fields:
+
+*   `treatment_id`: A unique identifier for the specific treatment plan (as described above).
+*   `value_name`: The name of the value being assessed 
+(e.g., "Beneficence," "Nonmaleficence," "Autonomy," "Justice").
+*   `alignment`: A numerical score from -1 (no alignment) to 1 (complete alignment),
+ with 0 indicating neutral alignment. This score helps doctors understand 
+ the ethical implications of different treatment options.
+
+```json
+{
+  "treatment_id": "treatment123",
+  "value_name": "Beneficence",
+  "alignment": 0.8
+}
+```
+
+
+### User interface
+
+This interface provides a comprehensive view of a patient's treatment plan for 
+the doctor, integrating defined actions, expected outcomes, and crucial feedback 
+from the VALAWAI system.  This allows for a holistic understanding of the proposed 
+treatment and its potential impact.
+
+![A treatment with its feedback](/img/components/c0/patient_treatment_ui_treatment_plus_feedback.png)
+
+The central section of the display focuses on NIT protocol compliance for each 
+treatment action. This is a critical component for ensuring patient safety and 
+adherence to best practices.  The status of each action is clearly indicated:
+
+*   **Allowed:** This signifies that the action has been thoroughly reviewed  
+by the protocol verification system and deemed compliant with all relevant 
+medical protocols and guidelines.  The action is therefore permitted to proceed 
+without any protocol-related concerns.
+
+*   **Denied:** This indicates that the action violates one or more medical 
+protocols and *must not* be performed under any circumstances. This feedback 
+serves as a vital safety mechanism, preventing potentially harmful actions 
+from being carried out and safeguarding the patient from unintended consequences.
+
+*   **Unknown:**  The protocol verification system currently lacks sufficient 
+information or data to definitively determine the action's compliance with 
+the NIT protocol. In such cases, further investigation, consultation with experts, 
+or clarification of the protocol might be required before the action can be 
+considered.  This "Unknown" status prompts the doctor to exercise caution 
+and seek additional information before proceeding.
+
+The bottom section visualizes the treatment's alignment with core ethical 
+principles: "Beneficence" (acting in the patient's best interest), 
+"Nonmaleficence" (avoiding harm), "Autonomy" (respecting patient's choices), 
+and "Justice" (fair and equitable treatment).  A horizontal bar chart clearly 
+displays the alignment for each principle, ranging from -1 (no alignment) 
+to 1 (complete alignment), with 0 representing neutral alignment.  Bars extending 
+to the left indicate negative alignment or a potential ethical conflict, 
+while bars extending to the right indicate positive alignment and adherence 
+to the principle. This visualization allows the doctor to quickly assess 
+the ethical implications of the treatment plan and ensure it aligns with 
+these fundamental values.  This ethical assessment is crucial for responsible 
+and patient-centered care.
+
+
+## Services
+
+### Publish treatment
+
+### Treatment action feedback
+
+### Treatment value feedback
+
+## How to use this component
+
+
+### Build Docker image
+
+
+#### Docker environment variables
+
+
+#### Docker health check
+
+
+### Deploy
+
+## Links
+
+ - source code
+ - async api
+ - This component is part of the [demonstrator patient treatment planer](/docs/demonstrations/treatment)
+ 
+ 
+ 
+
+
