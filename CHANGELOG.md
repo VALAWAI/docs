@@ -1,6 +1,12 @@
 # Changes done over the VALAWAI documentation
 
 
+## Version 0.12.0 (April 30, 2025)
+
+ - Upgrade Docosaurus
+ - Improve create component with python and pika.
+
+
 ## Version 0.11.1 (February 7, 2025)
 
  - Fix treatment demonstrations script and docker compose.
