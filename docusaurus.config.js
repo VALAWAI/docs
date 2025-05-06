@@ -56,6 +56,9 @@ const config = {
 			crossorigin: 'anonymous',
 		},
 	],
+	themes: [
+		'docusaurus-theme-github-codeblock'
+	],
 	themeConfig:
 		/** @type {import('@docusaurus/preset-classic').ThemeConfig} */
 		({
@@ -169,8 +172,14 @@ const config = {
 			prism: {
 				theme: prismThemes.github,
 				darkTheme: prismThemes.dracula,
-				additionalLanguages: ['bash', 'java', 'json', 'properties', 'xml-doc'],
+				additionalLanguages: ['bash', 'java', 'json', 'properties', 'xml-doc','toml'],
 			},
+			codeblock: {
+				showGithubLink: true,
+				githubLinkLabel: 'View on GitHub',
+				showRunmeLink: false,
+				runmeLinkLabel: 'Checkout via Runme'
+			}
 		}),
 };
 
