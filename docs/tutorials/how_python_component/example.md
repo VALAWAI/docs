@@ -15,6 +15,13 @@ All the code of this component is on in the [C1_echo_example_with_python_and_pik
 Before you can start, you need to have [Docker](https://www.docker.com/) installed on your computer.
 
 
+## `asyncapi.yaml` file
+
+The `asyncapi.yaml` file is the file that defines the interaction between the component and the RabbitMQ queue.
+
+### valawai/c1/echo/control/rgistered
+
+
 ## `__main___.py` file
 
 The main file of this component is `__main__.py`. It contains the code that will be executed when the component is started.
@@ -23,3 +30,8 @@ The main file of this component is `__main__.py`. It contains the code that will
 ## Message service
 
 This service is the component that manage the interaciton of the component with the RaabbitMQ queue using the Pika library.
+
+
+## MOV service
+
+This service is used to interact with the Master Of VALAWAI (MOV). 

@@ -1,12 +1,14 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 ---
+
 # Dockerize the component
 
 If you have followed the [skeleton](/docs/tutorials/how_python_component#generate-the-project-skeleton) described
 at the beginning of this tutorial, you only have to create a file named **Dokerfile** with the following content.
 Remember to change **CX_name** to the name of your component.  
 
+## Create docker image
 ```dokerfile
 # syntax=docker/dockerfile:experimental
 FROM python:3.9.19-bullseye
@@ -90,3 +92,10 @@ The generated docker image can be configured using the following properties.
 
 All this information has to be used when you define the example of
 the docker-compose.yml to deploy the component.
+
+
+## Integrate in a `docker-compose.yaml`
+
+eiqfjhñwqrohg wrhgpo
+
+ADd checjk ready healthcheck

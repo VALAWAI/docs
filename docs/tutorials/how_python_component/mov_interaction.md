@@ -4,198 +4,229 @@ sidebar_position: 3
 
 # Interaction with Master Of VALAWAI
 
-The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) is responsible for managing
-the topology of interactions between the components that cooperate on the VALAWAI
-architecture. The interaction of your component with the MOV is done by publishing
-messages to the MOV channels or subscribing to the channels that the MOV provide.
-You can read more about all the defined services in the [MOV tutorial](/docs/architecture/implementations/mov),
-but in the next sections, we focus on the most common services that you may need to
-use when developing your component.
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov/) plays a central 
+role in managing the communication pathways and overall topology of components within 
+the VALAWAI architecture. Your component interacts with the MOV by publishing messages 
+to specific MOV channels and by subscribing to channels that the MOV provides for control 
+and information dissemination.
+
+This section will guide you through the fundamental interactions with essential MOV services. 
+You can observe the practical application of these concepts in 
+the [MOV service](/tutorials/how_python_component/example#mov-service) subsection of
+the [Echo example](/tutorials/how_python_component/example) section.
 
 
 ## Register component
 
+Upon startup, a VALAWAI component must register (refer to 
+the [registration documentation](/docs/architecture/implementations/mov/register_component)) 
+itself with the Master Of VALAWAI (MOV). This crucial step ensures that your component becomes 
+discoverable by other components and is integrated into the active communication topology 
+of the VALAWAI ecosystem.
+
+Before initiating the [registration process](/docs/architecture/implementations/mov/registered_notification),
+your component needs to be prepared to listen for the MOV's confirmation message, which signifies
+successful registration. This notification is dispatched by the MOV to a specific channel 
+that you define within your `asyncapi.yaml` file. This channel's name must adhere to the predefined pattern:
+**valawai/c[0|1|2]/\w+/control/registered**. You can find a concrete example of this channel definition
+within the [Echo example](/docs/tutorials/how_python_component/example#valawaic1echocontrolrgistered).
+
+To formally [register your component](/docs/architecture/implementations/mov/register_component) 
+with the MOV, you must publish a JSON-formatted message to the designated **valawai/component/register** 
+channel. This message must encapsulate the following key information about your component: its type, 
+its unique name, its current version, and the complete content of your `asyncapi.yaml` file, provided 
+as a string. The subsequent Python code snippet illustrates the construction and publication of 
+this essential registration message:
+
+```python
+import os
+import pika
+import json
+
+file_path = 'asyncapi.yaml'  # Replace with the actual path to your asyncapi.yaml file
+try:
+    with open(file_path, 'r') as file:
+        async_api = file.read()
+except FileNotFoundError:
+    print(f"Error: asyncapi.yaml not found at {file_path}")
+    exit(1)
+
+msg = {
+    "type": "C1",  # Replace with the specific type of your component (e.g., C0, C1, C2)
+    "name": "c1_echo",  # Replace with the unique name of your component (matching your directory structure)
+    "version": "1.0.0",  # Replace with the current version of your component
+    "asyncapi_yaml": async_api
+}
+body = json.dumps(msg)
+properties = pika.BasicProperties(content_type='application/json')
+# Ensure you have a Pika channel object named 'publish_channel' available
+publish_channel.basic_publish(exchange='', routing_key='valawai/component/register', body=body, properties=properties)
+```
+
+Upon receiving this specific registration message, the Master of VALAWAI (MOV) initiates 
+a comprehensive validation process to rigorously verify the integrity and correctness of 
+the payload content. Following successful validation, the component's information is securely 
+persisted within the MOV's database. Furthermore, the MOV automatically analyzes potential 
+connections between this newly registered component and other existing components within 
+the VALAWAI ecosystem. This intelligent analysis enables the MOV to dynamically update 
+the overall VALAWAI component topology, facilitating seamless inter-component communication.
+
+Once your component has been successfully registered and processed by the MOV, it will receive 
+a confirmation message directly on the control channel that you defined earlier in your 
+`asyncapi.yaml` file (following the **valawai/c[0|1|2]/\w+/control/registered** pattern). 
+This confirmation signals that your component is now a recognized and active member of 
+the VALAWAI architecture.
+
+
 ## Unregister component
 
+When your component is shutting down, it is crucial to 
+[unregister](/docs/architecture/implementations/mov/unregister_component)
+itself from the Master Of VALAWAI (MOV). This action removes the component from the active 
+communication topology, ensuring a clean and accurate representation of the VALAWAI ecosystem.
 
-## Topology services
+To unregister, your component simply needs to publish a message containing its unique 
+identifier to the **valawai/component/unregister** channel. The following Python code 
+snippet demonstrates how to construct and publish this unregistration message:
 
-One of the first things that any component must do is to be [registered](/docs/architecture/implementations/mov/register_component)
-into the Master Of VALAWAI (MOV) to be added to the topology. In this process, the component
-provides its **asynapi.yaml** to the MOV, and it automatically creates the connections
-between this new component and any other component if they are compatible. Thus,
-the MOV checks the publishing channels of the new component and checks if any other
-component defines a subscription to the same content. Also, it does the vice-verse, thus,
-it checks the subscription of the new component exists any component that can publish
-a compatible message. On the other hand, when the component is not more active it must
-[unregister](/docs/architecture/implementations/mov/unregister_component) and the MOV will disable any
-topology connection that this component will be involved.
-
-If you created the VALAWAI component following the proposed [skeleton](/docs/tutorials/how_python_component#generate-the-project-skeleton)
-at the beginning of this tutorial, you can get the necessary data to register the component
-from the file **setup.py** that contains the component version, and on the file **asyncapi.yaml**
-you can get the description of the component services.
-
-As we have told you in the [create connection section](/docs/tutorials/how_python_component#create-the-connection)
-you need to use a different connection for consume and publish messages because we use
-the blocking option.
-
-With all the previous in mind the following code is an example of how the component can be
-registered or unregistered from the MOV.
-
-
-```python 
-import sys
-import os.path
-import re
+```python
 import pika
+import json
 
-class MOVService(object):
-    
-    def __init__(self, listener:pika.channel.Channel):
-        """Initialize the handler foe the topology actions
-        
-        Parameters
-        ----------
-        listener : pika.channel.Channel
-            The channel to receive messages from RabbitMQ
-        """
-        listener.queue_declare(queue='valawai/cx/name/control/registered',
-                              durable=True,
-                              exclusive=False,
-                              auto_delete=False)
-        listener.basic_consume(queue='valawai/cx/name/control/registered',
-                              auto_ack=True,
-                              on_message_callback=self.registered_component)
+# Ensure that the variable 'component_id' holds the unique identifier
+# assigned to your component during the registration process.
+component_id = "your_component_id_here"  # Replace with your actual component ID
 
-    def __read_file(self, path:str):
-        """Read a file and return its content.
-        """
-        class_file_path = os.path.abspath(os.path.dirname(__file__))
-        file_path = os.path.join(class_file_path, path)
-        with open(file_path, 'r') as file:
-            content = file.read()
-        return content
-        
-    def register_component_msg(self):
-        """The message to register this component into the MOV (https://valawai.github.io/docs/architecture/implementations/mov/register_component)
-        """
-        
-        setup = self.__read_file('../setup.py')
-        version = re.findall(r"version='(\d+\.\d+\.\d+)'", setup)[0]
-        async_api = self.__read_file('../asyncapi.yaml')
-             
-        msg = {
-            "type": "C1",
-            "name": "CX_name",
-            "version": version,
-            "asyncapi_yaml":async_api
-            }
-        return msg
-
-    def register_component(self,publisher:pika.channel.Channel):
-        """Register this component into the MOV (https://valawai.github.io//docs/architecture/implementations/mov/register_component)
-        Parameters
-        ----------
-        publisher : pika.channel.Channel
-            The channel to send messages to RabbitMQ
-        """
-        
-        msg = self.register_component_msg()
-        publisher.publish_to('valawai/component/register',msg)
-        
-    def registered_component(self, ch, method, properties, body):
-        """Called when the component has been registered.
-        """
-        logging.debug("Received registered component %s",body)
-        msg=json.loads(body)
-        self.component_id=msg['id']
-        logging.info(f"Register CX name with the identifier '{self.component_id}'")
-    
-    def unregister_component(self,publisher:pika.channel.Channel):
-        """Unregister this component from the MOV (https://valawai.github.io/docs/architecture/implementations/mov/unregister_component)
-        Parameters
-        ----------
-        publisher : pika.channel.Channel
-            The channel to send messages to RabbitMQ
-        """
-        if self.component_id != None:
-            
-            msg = {"component_id":self.component_id}
-            publisher.publish_to('valawai/component/unregister',msg)
-            logging.info(f"Unregisterd CX name with the identifier '{self.component_id}'")
-            self.component_id = None
+msg = {
+    "component_id": component_id
+}
+body = json.dumps(msg)
+properties = pika.BasicProperties(content_type='application/json')
+# Ensure you have a Pika channel object named 'publish_channel' available
+publish_channel.basic_publish(exchange='', routing_key='valawai/component/unregister', body=body, properties=properties)
 ```
 
-After that, you must modify the [CX_name/__main__.py](/docs/tutorials/how_python_component#generate-the-project-skeleton) to use this class on the methods **start** and **stop** in the **App** class.
+Once your component successfully publishes this unregistration message, the MOV will process it,
+and your component will be removed from the active VALAWAI topology. Following unregistration,
+your component will no longer receive new messages routed through the MOV from other registered
+components.
 
-```python 
-# ...
+## Topology management
 
-class App:
+The Master Of VALAWAI (MOV) is central to maintaining the dynamic topology of the VALAWAI architecture.
+ It automatically establishes connections between components upon their successful
+[registration](/docs/architecture/implementations/mov/register_component).  Therefore, explicitly sending
+messages to [create a connection](/docs/architecture/implementations/mov/create_connection) 
+between components is generally unnecessary.
 
-    # ...
-    
-    def stop(self):
-        """Finalize the component.
+However, **C2** components have a unique role in potentially influencing the topology based 
+on the observed interactions between other components. To facilitate this, the MOV offers a mechanism 
+for **C2** components to receive notifications about messages exchanged through topology connections. 
+When a **C2** component registers, the MOV examines its `asyncapi.yaml` for any subscribed channels 
+matching the pattern **valawai/c2/\w+/control/\w+**. If such subscriptions exist, the MOV will publish 
+messages to these channels whenever a message is sent via a topology connection. The payload 
+of these notification messages contains crucial information: `connection_id`, `source` component 
+details (id, name, type), `target` component details (id, name, type), the `message_payload `itself, 
+and the `timestamp` of the exchange.
+
+The following code provides an example of how a *C2* component can 
+[listen](/docs/tutorials/how_python_component/services#listening-for-messages) for messages containing 
+topology interaction information:
+
+```python
+import pika
+import json
+
+class MessageAnalyzer:
+    """Component to analyze messages and potentially adjust the topology."""
+
+    def __init__(self, listener: pika.channel.Channel):
+        """Initialize the analyzer.
+
+        Parameters:
+            listener: pika.channel.Channel
+                The Pika channel for receiving messages from RabbitMQ.
         """
-    
+        queue_name = 'valawai/cx/name/control/message_analyzer' # Adapt 'cx/name' to your C2 component's identifier
+        listener.queue_declare(queue=queue_name,
+                               durable=True,
+                               exclusive=False,
+                               auto_delete=False)
+        listener.basic_consume(queue=queue_name,
+                               auto_ack=True,
+                               on_message_callback=self.analyze_message)
+        print(f"Listening for topology messages on queue: {queue_name}")
+
+    def analyze_message(self, ch, method, properties, body):
+        """Callback function to analyze incoming topology messages."""
         try:
-            # Unregister the component
-            if self.mov != None and self.mov.component_id != None:
-                
-                self.mov.unregister_component(self.publisher.channel)
-            
-            # close the RabbitMQ connections
-            if self.listener != None:
-                
-                self.listener.close()
-                self.listener =  None          
+            msg = json.loads(body)
 
-            if self.publisher != None:
-                
-                self.publisher.close()
-                self.publisher =  None          
+            # Analyze the message content to decide on topology modifications
+            print(f"Analyzing topology message for connection ID: {msg.get('connection_id')}")
 
-            logging.info("Finished CX name")
-            
-        except Exception:
-    
-            logging.exception("Could not stop the component")
+            # Access connection identifier
+            connection_id = msg.get('connection_id')
 
-    def start(self):
-        """Initialize the component
-        """
-        try:
-            # Create connection to RabbitMQ
-            self.listener = RabbitMQConnection()
-            self.publisher = RabbitMQConnection()
-            
-            # Create the handlers for the component services 
-            # ...
-            
-            # Register the component
-            self.mov = MOVService(self.listener)
-            self.mov.register_component(self.publisher.channel)
-            
-            # Start to process the received events
-            logging.info("Started CX name")
-            self.listener.channel.start_consuming()
-            
-        except KeyboardInterrupt:
-            
-            logging.info("Stop listening for events")
-            
-        except pika.exceptions.ConnectionClosedByBroker:
-            
-            logging.info("Closed connection")
+            # Access source component information
+            source = msg.get('source')
+            if source:
+                print(f"  Source ID: {source.get('id')}, Name: {source.get('name')}, Type: {source.get('type')}")
 
-        except Exception:
-    
-            logging.exception("Could not start the component")
+            # Access target component information
+            target = msg.get('target')
+            if target:
+                print(f"  Target ID: {target.get('id')}, Name: {target.get('name')}, Type: {target.get('type')}")
+
+            # The actual message exchanged
+            message_payload = msg.get('message_payload')
+            print(f"  Payload: {message_payload}")
+
+            # The timestamp of the message exchange
+            timestamp = msg.get('timestamp')
+            print(f"  Timestamp: {timestamp}")
+
+            # Based on the analysis, you might decide to modify the topology
+            # For example:
+            # if some_condition(msg):
+            #     self.modify_topology(connection_id, "DISABLE")
+
+        except json.JSONDecodeError:
+            print(f"Error decoding JSON: {body.decode()}")
+        except Exception as e:
+            print(f"An error occurred during message analysis: {e}")
 ```
 
-## Logging service
+Based on the analysis of these intercepted messages, a *C2* component might decide to modify
+a connection. To do so, it needs to send a message to the **valawai/topology/change channel**, 
+specifying the `connection_id` and the desired `action` (e.g., `DISABLE`, `ENABLE`, or `REMOVE`). 
+The following Python code snippet illustrates how to construct and publish a message to disable
+a specific connection:
+
+```python
+import pika
+import json
+
+action = "DISABLE"  # Replace with "ENABLE" to activate or "REMOVE" to delete
+connection_id = "your_connection_id_here"  # Replace with the actual connection ID to modify
+
+msg = {
+    "action": action,
+    "connection_id": connection_id
+}
+body = json.dumps(msg)
+properties = pika.BasicProperties(content_type='application/json')
+# Ensure you have a Pika channel object named 'publish_channel' available
+publish_channel.basic_publish(exchange='', routing_key='valawai/topology/change', body=body, properties=properties)
+```
+
+The MOV also provides a channel for querying
+[topology connections](http://localhost:3000/docs/architecture/implementations/mov/connection_query),
+but this advanced feature is not covered in this introductory tutorial as it represents 
+a less common interaction pattern.
+
+
+## Add log message
 
 The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) provides different services
 and one of them is a [centralized log system](/docs/architecture/implementations/mov/add_log).
@@ -315,152 +346,4 @@ class LogService(Object):
             content_type='application/json'
         )
         self.channel.basic_publish(exchange='',routing_key='valawai/log/add',body=body,properties=properties)
-```
-
-## Services for C2 components
-
-A [C2 component](/docs/architecture/value_awareness_architecture#c2-component)
-is a special component that may need to listen to what the other components do to decide
-witch topology connections must be enabled or disabled.
-The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) helps in this process because when
-a C2 component is [registered](/docs/architecture/implementations/mov/register_component),
-it checks if exist any subscribed channel that must be [notified when a message is sent
-through a topology connection](/docs/architecture/implementations/mov/notify_c2_components).
-Thus, the channel name must match the pattern **valawai/c2/\w+/control/\w+** and
-the payload contains the fields: connection_id, source, target, message_payload,
-and timestamp.
-
-The following code is an example of how to [listen](/docs/tutorials/how_python_component#listening-for-messages)
-for this type of message.
-
-```python
-import pika
-import json
-
-class MessageAnalyzer(Object):
-    """The component to analyze the messages and change the topology if it is necessary.
-    """
-    
-    def __init__(self,listener:pika.channel.Channel):
-         """Initialize the analyzer. 
-        
-        Parameters
-        ----------
-        listener: pika.channel.Channel
-            The connection to receive messages form the  RabbitMQ
-
-         """
-         listener.queue_declare(queue='valawai/cx/name/control/message_analizer',
-                              durable=True,
-                              exclusive=False,
-                              auto_delete=False)
-         listener.basic_consume(queue='valawai/cx/name/control/message_analizer',
-                              auto_ack=True,
-                              on_message_callback=self.analize_message)
-
-
-    def analize_message(self, ch, method, properties, body):
-        """Called when a message has to be analyzed.
-        """
-        
-        msg=json.loads(body)
-
-        # Analyze the msg to decide what to do with the topology
-        
-        # get the connection identifier
-        msg['connection_id']
-        
-        # Access source component information
-        msg['source']['id']
-        msg['source']['name']
-        msg['source']['type']
-        
-        # Access target component information
-        msg['target']['id']
-        msg['target']['name']
-        msg['target']['type']
-        
-        # The message that are interchanged
-        msg['message_payload']
-
-        # The epoch time, in seconds, when the message is interchanged        
-        msg['timestamp']
-```
-
-Also, you can use the following class to [change the topology](/docs/architecture/implementations/mov/modify_connection)
-managed by the MOV.
-
-
-```python
-import pika
-import json
-
-class TopologyService(Object):
-    """The service to modify the topology managed by the MOV.
-    """
-    
-    def __init__(self,channel:pika.channel.Channel):
-         """Initialize the topology service. 
-        
-        Parameters
-        ----------
-        channel: pika.channel.Channel
-            The connection to the RabbitMQ to publish messages
-
-         """
-         selg.channel = channel
-         self.component_id = None
-
-    
-    def enable(self,connection_id:str):
-        """Enable a connection defined in the topology.
-        
-        Parameters
-        ----------
-        connection_id : str
-            Identifier of the connection to enable.
-        """
-        self.__change_topology('ENABLE',connection_id)
-
-    def disable(self,connection_id:str):
-        """Disable a connection defined in the topology.
-        
-        Parameters
-        ----------
-        connection_id : str
-            Identifier of the connection to disable.
-        """
-        self.__change_topology('DISABLE',connection_id)
-
-
-    def remove(self,connection_id:str):
-        """Remove a connection defined in the topology.
-        
-        Parameters
-        ----------
-        connection_id : str
-            Identifier of the connection to remove.
-        """
-        self.__change_topology('REMOVE',connection_id)
-        
-    def __change_topology(self,action:str,connection_id:str):
-        """Change the topology managed by the MOV (https://valawai.github.io//docs/architecture/implementations/mov/modify_connection)
-        
-        Parameters
-        ----------
-        action : str
-            The action to do over the topology connection
-        connection_id : str
-            Identifier of the connection to modify.
-        """
-
-        msg = {
-            "action":action,
-            "connection_id": connection_id
-        }
-        body=json.dumps(msg)
-        properties=pika.BasicProperties(
-            content_type='application/json'
-        )
-        self.channel.basic_publish(exchange='',routing_key='valawai/topology/change',body=body,properties=properties)
 ```
