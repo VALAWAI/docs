@@ -18,3 +18,8 @@ Before you can start, you need to have [Docker](https://www.docker.com/) install
 ## `__main___.py` file
 
 The main file of this component is `__main__.py`. It contains the code that will be executed when the component is started.
+
+
+## Message service
+
+This service is the component that manage the interaciton of the component with the RaabbitMQ queue using the Pika library.
