@@ -228,122 +228,33 @@ a less common interaction pattern.
 
 ## Add log message
 
-The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) provides different services
-and one of them is a [centralized log system](/docs/architecture/implementations/mov/add_log).
-This service stores the log messages and shows them in a
-[web user interface (WUI)](/docs/architecture/implementations/mov/user_interface#manage-logs).
-This service helps in the developing process because you can see what happens in different
-components in a unique view. Otherwise, you must access each docker component container and
-see the logs.
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov/) enables the deployment 
+of components across various hosts. To facilitate debugging and monitoring in this distributed 
+environment, the MOV provides a comprehensive logging system. Components can 
+[send log messages](/docs/architecture/implementations/mov/add_log) that are viewable in the 
+[web user interface (WUI)](/docs/architecture/implementations/mov/user_interface#manage-logs) of the MOV.
 
-Adding a log message on the MOV only requires to send a [log message](/docs/architecture/implementations/mov/add_log)
-to the queue **valawai/log/add**. In this message, you can add the level, the log message, a payload
-and the component identifier obtained when it has been [registered](/docs/architecture/implementations/mov/registered_notification).
-The following code is a class for sending log messages to the MOV.
+The Python code snippet below demonstrates how to construct and publish a log message:
 
 ```python
 import pika
 import json
-import logging
 
-class LogService(Object):
-    """The service to add log into the MOV.
-    """
-    
-    def __init__(self,channel:pika.channel.Channel):
-         """Initialize the log service. 
-        
-        Parameters
-        ----------
-        channel: pika.channel.Channel
-            The connection to the RabbitMQ to publish messages
+add_log_payload = {"level": level, "message": msg}
 
-         """
-         selg.channel = channel
-         self.component_id = None
+if payload is not None:
+    add_log_payload["payload"] = json.dumps(payload)
 
-    
-    def debug(self,msg:str,payload=None):
-        """Send a debug log message to the MOV
-        
-        Parameters
-        ----------
-        msg : str
-            The log message
-        payload: object
-            The payload associated to the log message.
-        """
-        self.__log('DEBUG',msg,payload)
-        logging.debug(msg)
+if component_id is not None:
+    add_log_payload["component_id"] = self.component_id
 
-    def info(self,msg:str,payload=None):
-        """Send an info log message to the MOV
-        
-        Parameters
-        ----------
-        msg : str
-            The log message
-        payload: object
-            The payload associated to the log message.
-        """
-        self.__log('INFO',msg,payload)
-        logging.info(msg)
-
-    def warn(self,msg:str,payload=None):
-        """Send a warning log message to the MOV
-        
-        Parameters
-        ----------
-        msg : str
-            The log message
-        payload: object
-            The payload associated to the log message.
-        """
-        self.__log('WARN',msg,payload)
-        logging.warn(msg)
-
-    def error(self,msg:str,payload=None):
-        """Send an error log message to the MOV
-        
-        Parameters
-        ----------
-        msg : str
-            The log message
-        payload: object
-            The payload associated to the log message.
-        """
-        self.__log('ERROR',msg,payload)
-        logging.error(msg)
-        
-    def __log(self,level:str,msg:str,payload=None):
-        """Send a log message to the MOV (https://valawai.github.io//docs/architecture/implementations/mov/add_log)
-        
-        Parameters
-        ----------
-        level : str
-            The log level
-        msg : str
-            The log message
-        payload: object
-            The payload is associated with the log message.
-        """
-
-        msg = {
-            "level":level,
-            "message": msg
-        }
-        
-        if payload != None:
-            
-            msg["payload"] = json.dumps(payload)
-            
-        if self.component_id != None:
-            
-            msg["component_id"] = self.component_id
-        
-        body=json.dumps(msg)
-        properties=pika.BasicProperties(
-            content_type='application/json'
-        )
-        self.channel.basic_publish(exchange='',routing_key='valawai/log/add',body=body,properties=properties)
+body = json.dumps(add_log_payload)
+properties = pika.BasicProperties(content_type='application/json')
+# Ensure you have a Pika channel object named 'publish_channel' available
+publish_channel.basic_publish(exchange='', routing_key='valawai/log/add', body=body, properties=properties)
 ```
+
+In this message structure, `payload` and `component_id` are optional parameters. However, including 
+the component_id allows you to easily filter log messages specific to that component within the 
+[MOV web user interface (WUI)](/docs/architecture/implementations/mov/user_interface#manage-logs), 
+which can be invaluable for targeted troubleshooting.
