@@ -172,7 +172,7 @@ const config = {
 			prism: {
 				theme: prismThemes.github,
 				darkTheme: prismThemes.dracula,
-				additionalLanguages: ['bash', 'java', 'json', 'properties', 'xml-doc','toml'],
+				additionalLanguages: ['bash', 'java', 'json', 'properties', 'xml-doc','toml', 'docker'],
 			},
 			codeblock: {
 				showGithubLink: true,
