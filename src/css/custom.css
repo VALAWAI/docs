@@ -29,6 +29,7 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-.wrapcode code {
-  white-space: pre-wrap;
+.codeBlockContent_biex {
+  max-height: 769px;
+  overflow: scroll;
 }

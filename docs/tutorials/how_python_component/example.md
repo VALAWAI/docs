@@ -2,20 +2,71 @@
 sidebar_position: 5
 ---
 
-# C1 Echo example
+# Echo example
 
-To help in the process we will working in the definition of a component 
-that will echo the received messages. This component is a C1 component, 
-that is listening for messages in the RabbitMQ queue and echo them.
-All the code of this component is on in the [C1_echo_example_with_python_and_pika](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika) repository. 
+In this section, we will walk through the step-by-step creation of a C1 component named "echo." 
+This component will receive messages and echo them back, as detailed in the preceding sections.
+
+All the code for this example is publicly accessible in 
+the [repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika) within 
+the VALAWAI GitHub organization.
+ 
+
+## Step 0. Prerequisites
 
 
-## Prerequisites
 
-Before you can start, you need to have [Docker](https://www.docker.com/) installed on your computer.
+## Step 1. Set up the Project Structure
+
+To begin, we need to establish the fundamental file and directory organization for our "echo" 
+component. Following the [recommended component skeleton structure](/docs/tutorials/how_python_component/skeleton#base-structure),
+create the following files and directories in your project's root directory, which we'll assume
+is named `C1_echo_example_with_python_and_pika/`:
+
+```
+C1_echo_example_with_python_and_pika/
+├── README.md
+├── LICENSE
+├── CHANGELOG.md
+├── asyncapi.yaml
+├── docker-compose.yml
+├── pyproject.toml
+├── src/
+│    └── c1_echo_example_with_python_and_pika/
+│        ├── __init__.py
+│        └── __main__.py
+└── tests/
+```
+
+The content to be added to these files will be explained in the subsequent steps.
 
 
-## `asyncapi.yaml` file
+## Step 2 (Optional). Set up the development environment
+
+You can use docker to create the environemnt for develop the component. This is optional, and provide all the ncessary
+sofware and tools to develop the component.
+
+To set up this environment you must to create the next files and directories to your project.
+
+```
+C1_echo_example_with_python_and_pika/
+├── startDevelopmentEnvironment.sh
+├── stopDevelopmentEnvironment.sh
+└── docker/
+    └── dev/
+        ├── Dokerfile
+        └── doker-compose.yaml
+```
+
+
+The content to be added to these files will be explained in the subsequent steps.
+
+
+
+but If you want to use the development environment, you can follow the instructions in the [development environment](/docs/tutorials/how_python_component/development_environment) section.
+
+
+## Defining `asyncapi.yaml`
 
 The `asyncapi.yaml` file is the file that defines the interaction between the component and the RabbitMQ queue.
 
@@ -37,7 +88,7 @@ This service is the component that manage the interaciton of the component with 
 This service is used to interact with the Master Of VALAWAI (MOV). 
 
 
-## Defining `Dokerfile` File
+## Defining `Dokerfile`
 
 
 
@@ -56,5 +107,5 @@ This service is used to interact with the Master Of VALAWAI (MOV).
 Explain health check.
 
 
-## Defining `docker-compose.yaml` File
+## Defining `docker-compose.yaml`
 

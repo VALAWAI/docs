@@ -32,7 +32,7 @@ CMD ["python", "src/c1_echo"]
 It's important to note that this basic Dockerfile omits configurations for environment variables 
 (e.g., RabbitMQ connection details) and health check mechanisms. A more comprehensive example 
 incorporating these features can be found in 
-the [Echo example](/docs/tutorials/how_python_component/example#defining-dokerfile-file).
+the [Echo example](/docs/tutorials/how_python_component/example#defining-dokerfile).
 
 The directives within this `Dockerfile` are as follows:
 
@@ -70,4 +70,4 @@ docker compose up -d
 This represents the most basic definition of a `docker-compose.yaml` file for deploying a single component. 
 However, it lacks configurations for specifying the RabbitMQ connection or defining different profiles 
 to also launch the MOV, as demonstrated in the more detailed 
-[Echo example](/docs/tutorials/how_python_component/example#defining-docker-composeyaml-file).
+[Echo example](/docs/tutorials/how_python_component/example#defining-docker-composeyaml).
