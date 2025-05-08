@@ -1,12 +1,14 @@
-# Step 2 (Optional). Set up the development environment
+# Step 2 (Optional): Isolated Development Environment with Docker
 
-For a consistent and isolated development experience, you can utilize Docker to create 
-a dedicated environment for building and testing your component. This step is optional 
-but provides all the necessary software and tools, minimizing potential conflicts with 
-your local system setup.
+For a consistent and isolated development experience, you have the option 
+to utilize Docker. This approach creates a self-contained environment with all 
+the necessary software and tools for building and testing your component. By using Docker, 
+you can minimize potential conflicts with your local system setup and ensure 
+a reproducible development process.
 
-To set up this development environment, you will need to create the following files and 
-directories within your project's root:
+To set up the isolated development environment, you will need to create 
+a specific directory structure and the following files within your project's 
+root directory (`C1_echo_example_with_python_and_pika/`):
 
 ```
 C1_echo_example_with_python_and_pika/
@@ -18,66 +20,99 @@ C1_echo_example_with_python_and_pika/
         └── docker-compose.yaml
 ```
 
-The next subsectins explain the content and purpose of each of this files.
+
+Each of these files contains configuration specific to 
+the `c1_echo_example_with_python_and_pika` component. If you are adapting this setup for 
+a different component, remember to replace all instances of `c1_echo_example_with_python_and_pika`
+with the appropriate type and name of your component. The following subsections detail 
+the purpose and content of each of these files.
 
 
 ## The `startDevelopmentEnvironment.sh` file
 
-The `startDevelopmentEnvironment.sh` script will start the development environment, which includes 
-the necessary tools and services for building and testing your component.
-The next code is the expected content for this file:
+This script initiates the Docker-based development environment, launching the necessary 
+tools and services for building and testing your component. The expected content 
+for this file can be show below:
 
 ```bash reference {107} showLineNumbers
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/startDevelopmentEnvironment.sh
 ```
 
-If you want to use this in a different component you must change the `c1_echo_example_with_python_and_pika` 
-with the type and name of your component.
-
 
 ## The `stopDevelopmentEnvironment.sh` file
 
-The `stopDevelopmentEnvironment.sh` script will stop the development environment, which includes 
-the started services. The next code is the expected content for this file:
+This script gracefully shuts down the running Docker-based development environment 
+and its associated services. The expected content for this file can be show below:
 
 ```bash reference {107} showLineNumbers
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/stopDevelopmentEnvironment.sh
 ```
 
-If you want to use this in a different component you must change the `c1_echo_example_with_python_and_pika` 
-with the type and name of your component.
+## The `docker/dev/Dockerfile` file
 
-This script will stop the development environment,	
-   which includes the started tools and services for building and testing your component.
+This file serves as a blueprint for creating the Docker image for your development 
+environment. It typically includes instructions for setting up Python, installing 
+dependencies, and defining a default command. The expected content for this file 
+can be show below:
 
-## `docker/dev/Dockerfile`
-
-This file defines the Docker image for the development environment.
+```bash reference {107} showLineNumbers
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/Dockerfile
+```
  
-## `docker/dev/docker-compose.yaml`
+## The `docker/dev/docker-compose.yaml` file
 
-This file defines the required services for the development environment.
- 
+This file orchestrates the deployment of multiple Docker containers, defining 
+the required services (such as RabbitMQ and the Master Of VALAWAI) and any helpful 
+development tools. The expected content for this file can be show below:
 
-## Start the environment
-
-To start the development environment, run the following command:
-
-```bash
-./startDevelopmentEnvironment.sh
+```bash reference {107} showLineNumbers
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/docker-compose.yaml
 ```
 
-After that, you have a bash shell where you can interact with
-the Python development environmentand use the next commands:
+## Starting and Stopping the Environment
 
-* `run:` Starts the component.
-* `testAll:` Runs all unit tests for the codebase.
-* `test test/test_something.py:` Runs the unit tests defined in
- the file `test_something.py`.
-	* `test test/test_something.py::TestClassName::test_do_something:` Runs 
-	a specific unit test named `test_do_something` defined within the class `TestClassName` 
-	in the file `test_something.py`.
-* `coverage:` Runs all unit tests and generates a coverage report.
-* `fmt:` Runs a static code analyzer to check for formatting and style issues.
+To start the development environment, execute the `startDevelopmentEnvironment.sh` script. 
+This will open a bash shell within the Docker container, providing access to all 
+the necessary development tools.
 
-Also you can use the `stopDevelopmentEnvironment.sh` script to stop the environment.
+To stop the environment, you can either type `exit` in the development bash shell or 
+run the `stopDevelopmentEnvironment.sh` script from your project's root directory.
+
+### Available Commands:
+
+The development environment provides the following commands for common development tasks:
+
+- `run`: Starts the component.
+- `testAll`: Executes all unit tests within the codebase.
+- `test <path_to_test_file>`: Executes the unit tests defined in the specified test 
+file (e.g., `test test/test_something.py`).
+- `test <path_to_test_file>::<ClassName>::<test_method>`: Executes a specific unit test method within 
+a class in a test file (e.g., `test test/test_something.py::TestClassName::test_do_something`).
+- `coverage`: Runs all unit tests and generates a code coverage report.
+- `fmt`: Executes a static code analyzer to check and potentially fix code formatting
+ and style issues.
+
+
+### Development Tools and Services:
+
+The development environment includes the following tools and services to aid in your
+development process:
+
+ - **RabbitMQ**: A message broker facilitating communication between different components.
+  Access the management UI at [http://localhost:8081](http://localhost:8081) using 
+  the credentials `mov:password`. (Caution: Avoid these default credentials in production 
+  environments).
+ - **MongoDB**: A NoSQL database utilized by the MOV component. The database name is movDB, 
+ and you can access it using the credentials `mov:password`. (Caution: Avoid these default 
+ credentials in production environments). 
+ - **Mongo Express**: A web-based administration interface for interacting with the MongoDB 
+ database. It is available at [http://localhost:8082](http://localhost:8082).
+ - **Master Of VALAWAI (MOV)**: The central web interface for interacting with the MOV 
+ component, accessible at [http://localhost:8083](http://localhost:8083).
+
+### Important Security Note:
+
+The default credentials (`mov:password`) used for RabbitMQ, MongoDB, and MOV within this 
+development environment are not secure and should never be used in production deployments. 
+Ensure you change these credentials to strong, unique values for any production environment.
+
