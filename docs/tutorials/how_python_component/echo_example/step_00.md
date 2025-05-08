@@ -1,4 +1,4 @@
-# Step 0. Prerequisites
+# Step 0: Prerequisites
 
 Before you can begin, ensure that you have the following prerequisites installed on your system:
 

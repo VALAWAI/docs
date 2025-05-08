@@ -107,5 +107,5 @@ This service is used to interact with the Master Of VALAWAI (MOV).
 Explain health check.
 
 
-## Defining `docker-compose.yaml`
+## Defining `docker-compose.yml`
 

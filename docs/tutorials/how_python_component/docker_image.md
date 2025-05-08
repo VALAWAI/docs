@@ -6,7 +6,7 @@ sidebar_position: 4
 
 As stipulated in the [component specification](/docs/architecture/implementations/component#deployment),
 containerization via Docker is the recommended methodology for component deployment, often managed 
-through a `docker-compose.yaml` configuration file. This section demonstrates how to create a Docker image 
+through a `docker-compose.yml` configuration file. This section demonstrates how to create a Docker image 
 and subsequently deploy it using Docker Compose.
 
 The creation of a Docker image necessitates the definition of a `Dockerfile`, which encapsulates 
@@ -50,7 +50,7 @@ docker build -t c1_echo:latest .
 ```
 
 To deploy the generated image, it is necessary to define its execution environment using 
-a `docker-compose.yaml` configuration file. This file allows for the deployment of the component's Docker 
+a `docker-compose.yml` configuration file. This file allows for the deployment of the component's Docker 
 image alongside its dependencies, such as databases, RabbitMQ, or the Master Of VALAWAI. The following 
 code provides a minimal example for deploying a component named C1_echo without external dependencies.
 
@@ -61,13 +61,13 @@ services:
     container_name: c1_echo
 ```
 
-After defining the `docker-compose.yaml` file, the component can be deployed using the following command:
+After defining the `docker-compose.yml` file, the component can be deployed using the following command:
 
 ```bash
 docker compose up -d
 ```
 
-This represents the most basic definition of a `docker-compose.yaml` file for deploying a single component. 
+This represents the most basic definition of a `docker-compose.yml` file for deploying a single component. 
 However, it lacks configurations for specifying the RabbitMQ connection or defining different profiles 
 to also launch the MOV, as demonstrated in the more detailed 
 [Echo example](/docs/tutorials/how_python_component/example#defining-docker-composeyaml).

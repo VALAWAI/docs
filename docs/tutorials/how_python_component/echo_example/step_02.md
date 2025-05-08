@@ -17,7 +17,7 @@ C1_echo_example_with_python_and_pika/
 └── docker/
     └── dev/
         ├── Dokerfile
-        └── docker-compose.yaml
+        └── docker-compose.yml
 ```
 
 
@@ -55,18 +55,18 @@ environment. It typically includes instructions for setting up Python, installin
 dependencies, and defining a default command. The expected content for this file 
 can be show below:
 
-```bash reference {107} showLineNumbers
+```docker reference {107} showLineNumbers
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/Dockerfile
 ```
  
-## The `docker/dev/docker-compose.yaml` file
+## The `docker/dev/docker-compose.yml` file
 
 This file orchestrates the deployment of multiple Docker containers, defining 
 the required services (such as RabbitMQ and the Master Of VALAWAI) and any helpful 
 development tools. The expected content for this file can be show below:
 
-```bash reference {107} showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/docker-compose.yaml
+```yaml reference {107} showLineNumbers
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/docker-compose.yml
 ```
 
 ## Starting and Stopping the Environment

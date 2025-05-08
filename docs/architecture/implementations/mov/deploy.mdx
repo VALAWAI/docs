@@ -140,9 +140,9 @@ user interface at [/q/health-ui/](http://localhost:8080/q/health-ui/).
 
 These endpoints are useful for Docker Compose health checks, as shown in the following example:
 
-import mov_docker_compose_yaml from '!!raw-loader!./mov_docker-compose.yaml';
+import mov_docker_compose_yml from '!!raw-loader!./mov_docker-compose.yml';
 
-<CodeBlock language="yaml" showLineNumbers>{mov_docker_compose_yaml}</CodeBlock>
+<CodeBlock language="yaml" showLineNumbers>{mov_docker_compose_yml}</CodeBlock>
 
 This Docker Compose file defines the MOV service with dependencies on RabbitMQ and MongoDB. 
 The `healthcheck` section uses curl to check the `/q/health` endpoint.  Adjust the `interval`, 
@@ -155,6 +155,6 @@ This example also demonstrates how to specify dependencies between services usin
 This ensures that RabbitMQ and MongoDB are running before MOV starts.
 
 For a more comprehensive example, including environment variables, volumes, and network configurations,
-refer to the [docker-compose.yaml](https://github.com/VALAWAI/MOV/blob/main/src/main/docker/docker-compose.yml)
+refer to the [docker-compose.yml](https://github.com/VALAWAI/MOV/blob/main/src/main/docker/docker-compose.yml)
 file in the [VALAWAI/MOV](https://github.com/VALAWAI/MOV) GitHub repository.  This more detailed 
 configuration provides a robust foundation for production deployments.
