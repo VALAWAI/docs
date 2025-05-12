@@ -165,7 +165,15 @@ registered with the MOV.
 
 ## Adapt `asyncapi.yaml` to implement the lifecycle
 
-Add the following code to the `asyncapi.yaml` file to implement the lifecycle of the component.
+The lifecycle of a component, particularly its registration within the Master Of VALAWAI (MOV), 
+directly influences its service definitions. As detailed in the 
+[MOV documentation](docs/architecture/implementations/mov/register_component) registering a component 
+necessitates updating the `asyncapi.yaml` to capture the information file to capture relevant information. 
+To listen for component registration events, you must define a listener on a channel adhering 
+to the pattern `valawai/c[0|1|2]/\w+/control/registered`. Consequently, for the eco example component, 
+the  channel should be named `valawai/c1/echo_example_with_python_and_pika/control/registered`. The following code 
+demonstrates the necessary modifications to your `asyncapi.yaml` to enable listening for these registration 
+messages.
 
 ```yaml showLineNumbers
 channels:
@@ -407,19 +415,88 @@ components:
                 - $ref: '#/components/schemas/payload_schema'
 ```
 
-on the line we define to receive when is registered.
+On line 2, this channel is defined, and its content schema is specified on line 10. 
+This message's payload structure is detailed starting on line 16. The payload includes 
+the following key fields:
 
+ - `id`: The unique identifier of the component.
+ - `name`: The human-readable name of the component.
+ - `description`: A textual description of the component's purpose.
+ - `version`: The semantic version of the component itself.
+ - `api_version`: The semantic version of the component's API, as defined in its registered asyncapi.yaml.
+ - `type`: The classification or category of the component.
+ - `since`: The Unix epoch timestamp (in seconds) indicating when the component was registered.
+ - `channels`: A list or map detailing the channels defined in the component's asyncapi.yaml.
+
+When defining a new component, you can generally reuse this specification. Simply update the 
+channel name  to match the type and name of your new component.
 
  
 ## Adapt `__main__.py` ti implement the lifecycle
- 
-WE need to modify the methos `start()` to implement the lifecycle of the component. And we obtain the
-next code.
 
-```python
-function(){
-}
+This section details how the `start` and `stop` methods in your `__main__.py` implement the component's 
+lifecycle.
+
+```python showLineNumbers
+def start(self):
+    """Initialize the component"""
+
+    try:
+        # Create connection to RabbitMQ
+        self.message_service = MessageService()
+        self.mov = MOV(self.message_service)
+
+        # Create the handlers for the events
+        version = self.mov.load_default_project_version()
+        asyncapi_yaml = self.mov.load_default_asyncapi_yaml()
+        name = self.mov.extract_default_component_name(asyncapi_yaml)
+        self.mov.listen_for_registered_component(name)
+
+        # Register the component
+        self.mov.register_component()
+
+        # Start to process the received events
+        logging.info("Started C1 Echo")
+        self.message_service.start_consuming()
+
+    except (OSError, ValueError):
+
+        logging.exception("Could not start the component")
 ```
 
-On the line 1 qe do somethonf. on the line 2 otehr.
+The `start` method initializes the component and implements the first three lifecycle steps:
 
+ - **Register Message Handlers**: On line 13, the `listen_for_registered_component` method is called 
+ to set up a handler that will be triggered when a component registration message is received.
+ - **Register with MOV**: Line 16 utilizes the `MOVService` to register the current component with 
+ the Master Of VALAWAI. This registration uses the component's version (obtained from `pyproject.toml`) 
+ and its name and API definition (extracted from the `asyncapi.yaml`).
+ - **Start Listening for Messages**: Finally, on line 20, `self.message_service.start_consuming()`
+ initiates the process of listening for and processing incoming messages on the defined channels.
+
+
+```python showLineNumbers
+ def stop(self):
+     """Finalize the component."""
+
+     try:
+
+         self.mov.unregister_component()
+         self.message_service.close()
+         logging.info("Finished C1 Echo")
+
+     except (OSError, ValueError):
+
+         logging.exception("Could not stop the component")
+
+```
+
+The `stop` method handles the final lifecycle steps:
+
+ - **Unregister**: Line 6 uses the `MOVService` to unregister the component from the Master Of VALAWAI.
+ - **Stop**: The subsequent line (line 7) closes the connection to the RabbitMQ message broker, 
+ effectively stopping the component's ability to send and receive messages.
+ 
+You can find the complete code for `__main__.py` in the 
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/__main__.py) 
+of the echo example.
