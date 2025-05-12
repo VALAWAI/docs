@@ -167,7 +167,7 @@ registered with the MOV.
 
 The lifecycle of a component, particularly its registration within the Master Of VALAWAI (MOV), 
 directly influences its service definitions. As detailed in the 
-[MOV documentation](docs/architecture/implementations/mov/register_component) registering a component 
+[MOV documentation](/docs/architecture/implementations/mov/register_component) registering a component 
 necessitates updating the `asyncapi.yaml` to capture the information file to capture relevant information. 
 To listen for component registration events, you must define a listener on a channel adhering 
 to the pattern `valawai/c[0|1|2]/\w+/control/registered`. Consequently, for the eco example component, 
