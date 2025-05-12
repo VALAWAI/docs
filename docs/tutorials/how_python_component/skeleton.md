@@ -211,7 +211,7 @@ typically encompassing the following essential steps:
  about this in the [Component services](/docs/tutorials/how_python_component/services) section.
  
 ou can find a comprehensive example in the
-[Echo example](/docs/tutorials/how_python_component/example#__main___py-file) section.
+[Echo example](/docs/tutorials/how_python_component/echo_example/step_01#fill-in-the-__main__py-file) section.
 
 
 ### Graceful Component Shutdown

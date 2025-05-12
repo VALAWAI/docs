@@ -13,8 +13,8 @@ This section will guide you through the practical implementation of connecting t
 and implementing the mechanisms for both listening to (consuming) and publishing messages, 
 all leveraging the capabilities of the [Pika libary](https://pika.readthedocs.io/en/stable/).
 You can see the integration of all the concepts explained here in
-the [Message service](/tutorials/how_python_component/example#message-service) subsection of 
-the [Echo example](/tutorials/how_python_component/example) section.
+the [Message service](/tutorials/how_python_component/echo_example/step_03#understanding-the-messageservice)
+subsection of the [Echo example](/tutorials/how_python_component/echo_example) section.
 
 
 ## Create a connection

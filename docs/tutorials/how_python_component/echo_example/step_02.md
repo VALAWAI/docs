@@ -34,7 +34,7 @@ This script initiates the Docker-based development environment, launching the ne
 tools and services for building and testing your component. The expected content 
 for this file can be show below:
 
-```bash reference {107} showLineNumbers
+```bash reference
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/startDevelopmentEnvironment.sh
 ```
 
@@ -44,7 +44,7 @@ https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/sta
 This script gracefully shuts down the running Docker-based development environment 
 and its associated services. The expected content for this file can be show below:
 
-```bash reference {107} showLineNumbers
+```bash reference
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/stopDevelopmentEnvironment.sh
 ```
 
@@ -55,7 +55,7 @@ environment. It typically includes instructions for setting up Python, installin
 dependencies, and defining a default command. The expected content for this file 
 can be show below:
 
-```docker reference {107} showLineNumbers
+```docker reference
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/Dockerfile
 ```
  
@@ -65,7 +65,7 @@ This file orchestrates the deployment of multiple Docker containers, defining
 the required services (such as RabbitMQ and the Master Of VALAWAI) and any helpful 
 development tools. The expected content for this file can be show below:
 
-```yaml reference {107} showLineNumbers
+```yaml reference
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/docker-compose.yml
 ```
 

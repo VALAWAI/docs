@@ -12,8 +12,8 @@ and information dissemination.
 
 This section will guide you through the fundamental interactions with essential MOV services. 
 You can observe the practical application of these concepts in 
-the [MOV service](/tutorials/how_python_component/example#mov-service) subsection of
-the [Echo example](/tutorials/how_python_component/example) section.
+the [MOV service](/tutorials/how_python_component/echo_example/step_03#understanding-the-movservice)
+subsection of the [Echo example](/tutorials/how_python_component/echo_example) section.
 
 
 ## Register component
@@ -29,7 +29,7 @@ your component needs to be prepared to listen for the MOV's confirmation message
 successful registration. This notification is dispatched by the MOV to a specific channel 
 that you define within your `asyncapi.yaml` file. This channel's name must adhere to the predefined pattern:
 **valawai/c[0|1|2]/\w+/control/registered**. You can find a concrete example of this channel definition
-within the [Echo example](/docs/tutorials/how_python_component/example#valawaic1echocontrolrgistered).
+within the [Echo example](/docs/tutorials/how_python_component/echo_example/step_03#adapt-asyncapiyaml-to-implement-the-lifecycle).
 
 To formally [register your component](/docs/architecture/implementations/mov/register_component) 
 with the MOV, you must publish a JSON-formatted message to the designated **valawai/component/register** 

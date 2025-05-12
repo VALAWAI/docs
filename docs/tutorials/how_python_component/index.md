@@ -17,7 +17,7 @@ The tutorial is structured as follows:
  and the [Master Of VALAWAI](/docs/architecture/implementations/mov/)
  * [Dockerize the component](/docs/tutorials/how_python_component/docker_image). Learn the best 
  practices for creating a Docker image, enabling easy deployment and sharing of your component.
- * [C1 echo example](/docs/tutorials/how_python_component/example). A practical, step-by-step 
+ * [C1 echo example](/docs/tutorials/how_python_component/echo_example). A practical, step-by-step 
  demonstration of developing a "C1 echo" component that listens for and echoes messages.
  
 This tutorial aims to equip the reader with the necessary knowledge and practical skills 
