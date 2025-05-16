@@ -114,13 +114,21 @@ we create a dedicated handler in the `echo_handler.py` file.
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/echo_handler.py
 ```
 
-On line regitert the listener
+Upon instantiation, the handler registers itself to listen for incoming messages on the 
+`valawai/c1/echo_example_with_python_and_pika/data/received_message` channel. This registration triggers the `handle_message`
+ callback method whenever a new message is received (refer to line 46).
 
-parse json
+The handle_message method orchestrates the following crucial steps:
 
-validate
-
-send eco msg
+ - **Message Body Parsing**: The raw body of the incoming message is parsed to extract a JSON object 
+ (as seen on line 55).
+ - **Payload Conversion and Validation**: The parsed JSON is then converted into an instance of 
+ the `EchoPayload` model. This step includes a validation process to ensure the message conforms 
+ to the expected structure and data types (illustrated on line 59).
+ - **Echo Message Creation**: Based on the validated `EchoPayload`, the echo message content is constructed
+ (lines 62-64).
+ - **Message Publication**: Finally, the newly created echo message is published to the designated channel 
+ `valawai/c1/echo_example_with_python_and_pika/data/publish_message` (demonstrated on line 65).
 
 
 ### Filing in the `test_echo_payload.py` file
