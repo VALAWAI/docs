@@ -1,6 +1,6 @@
 # Step 5: Component Deployment via Docker
 
-As previously detailed in the [section](docs/tutorials/how_python_component/docker_image)
+As previously detailed in the [section](/docs/tutorials/how_python_component/docker_image)
 concerning the dockerization of components, we now address its practical application within 
 the context of the echo example.
 
@@ -107,7 +107,7 @@ healthy as long as the component remains registered.
 ## Improve the `docker-compose.yml` file
 
 The previous `docker-compose.yml` configuration, as detailed in the
-[Dockerize component](docs/tutorials/how_python_component/docker_image) section, was limited 
+[Dockerize component](/docs/tutorials/how_python_component/docker_image) section, was limited 
 to defining a single component. We have now enhanced this configuration by introducing profiles. 
 These profiles enable the simultaneous launch of the
 [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov/deploy) alongside the component. 
