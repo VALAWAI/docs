@@ -122,7 +122,7 @@ with the Master of VALAWAI (MOV) within your application.
 
 For implementation details, please refer to:
 
-```python reference
+```python reference showLineNumbers
 https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/mov_service.py
 ```
 
@@ -155,12 +155,17 @@ The `MOVService` offers the following core functionalities:
    - **Add Error Log Message** (`error`): Sends an error-level log message to the MOV.
 
 
-#### Component Registration Status:
+#### Component Registration Status and Identifier Persistence:
 
-Upon successful registration, the `MOVService` will have its `component_id` field 
-populated with the unique identifier assigned by the MOV. If this `component_id` 
-field remains `None`, it indicates that the component has not yet been successfully 
-registered with the MOV.
+Upon successful registration with the MOV, the `MOVService`'s `component_id` field will be populated 
+with the unique identifier assigned by the MOV. Conversely, if the `component_id` field remains `None`, 
+it signifies that the component has not yet been successfully registered.
+
+Furthermore, this service persists the component's identifier as a JSON object within a file located 
+in the logs directory. The path to this directory is determined by the `LOG_DIR` environment variable, 
+defaulting to `logs`. Similarly, the filename is governed by the `COMPONET_ID_FILE_NAME` environment variable, 
+with a default value of `component_id.json` (lines 108-123). This file is automatically removed when 
+the component is unregistered from the MOV  (lines 129-141).
 
 
 ## Adapt `asyncapi.yaml` to implement the lifecycle
