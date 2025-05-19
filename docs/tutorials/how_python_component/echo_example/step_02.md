@@ -35,7 +35,7 @@ tools and services for building and testing your component. The expected content
 for this file can be show below:
 
 ```bash reference
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/startDevelopmentEnvironment.sh
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/startDevelopmentEnvironment.sh
 ```
 
 
@@ -45,7 +45,7 @@ This script gracefully shuts down the running Docker-based development environme
 and its associated services. The expected content for this file can be show below:
 
 ```bash reference
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/stopDevelopmentEnvironment.sh
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/stopDevelopmentEnvironment.sh
 ```
 
 ## The `docker/dev/Dockerfile` file
@@ -56,7 +56,7 @@ dependencies, and defining a default command. The expected content for this file
 can be show below:
 
 ```docker reference
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/Dockerfile
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/docker/dev/Dockerfile
 ```
  
 ## The `docker/dev/docker-compose.yml` file
@@ -66,7 +66,7 @@ the required services (such as RabbitMQ and the Master Of VALAWAI) and any helpf
 development tools. The expected content for this file can be show below:
 
 ```yaml reference
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/dev/docker-compose.yml
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/docker/dev/docker-compose.yml
 ```
 
 ## Starting and Stopping the Environment

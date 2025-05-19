@@ -27,10 +27,10 @@ This script furnishes a streamlined method for building the Docker image of the 
 Its content is accessible at the following location:
 
 ```bash reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/buildDockerImages.sh
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/buildDockerImages.sh
 ```
 
-This script autonomously retrieves the component's version (refer to line 8) and 
+This script autonomously retrieves the component's version (refer to line 8) and
 the Docker image name (refer to line 10) from the `pyproject.toml` file. Furthermore, 
 it accepts the following command-line arguments to afford greater control over 
 the build process:
@@ -63,7 +63,7 @@ of environment properties and introduce a health check. Consequently, the conten
 of this file evolves to the following:
 
 ```docker reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker/main/Dockerfile
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/docker/main/Dockerfile
 ```
 
 This file incorporates the subsequent specifications for environment variables (lines 3 to 20):
@@ -114,7 +114,7 @@ These profiles enable the simultaneous launch of the
 Consequently, for the echo example, we now have the following `docker-compose.yaml` file:
 
 ```yaml reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker-compose.yml
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/docker-compose.yml
 ```
 
 The component's definition spans lines 2 to 24. Within this section, lines 12 to 17 specify 

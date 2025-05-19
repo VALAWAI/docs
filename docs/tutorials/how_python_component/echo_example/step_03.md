@@ -50,17 +50,17 @@ responses from the MOV via RabbitMQ. You can read more about it at the
 [Understanding the `MOVService`](#understanding-the-movservice) section.
 - `__init__.py`: This file, located within the tests directory, is crucial for enabling 
 the execution of tests as a package. You can obtain the standard content for this file from the echo 
-[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/tests/__init__.py).
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/tests/__init__.py).
 - `test_message_service.py`: This module contains unit tests specifically designed to verify 
 the functionality of the `MessageService` class. These tests ensure that the connection 
 to RabbitMQ is established correctly, messages are published as expected, and message 
 consumption mechanisms function properly. The source code for these tests can be found in the echo 
-[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/tests/test_message_service.py).
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/tests/test_message_service.py).
 - `test_mov_service.py`: This module houses the unit tests for the `MOVService`. These tests will focus 
 on validating the interactions between your component and the Master of VALAWAI, 
 ensuring that commands are sent correctly and responses are handled appropriately. 
 The implementation details for these tests are available in the echo 
-[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/tests/test_mov_service.py).
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/tests/test_mov_service.py).
 
 
 ### Understanding the `MessageService`
@@ -70,7 +70,7 @@ The `MessageService` provides a streamlined interface for interacting with Rabbi
 You can see the implementation below:
 
 ```python reference
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/message_service.py
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/src/c1_echo_example_with_python_and_pika/message_service.py
 ```
 
 It offers the following key functionalities:
@@ -123,7 +123,7 @@ with the Master of VALAWAI (MOV) within your application.
 For implementation details, please refer to:
 
 ```python reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/mov_service.py
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/src/c1_echo_example_with_python_and_pika/mov_service.py
 ```
 
 The `MOVService` offers the following core functionalities:
@@ -503,5 +503,5 @@ The `stop` method handles the final lifecycle steps:
  effectively stopping the component's ability to send and receive messages.
  
 You can find the complete code for `__main__.py` in the 
-[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/__main__.py) 
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/src/c1_echo_example_with_python_and_pika/__main__.py) 
 of the echo example.

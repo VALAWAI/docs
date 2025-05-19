@@ -59,7 +59,7 @@ refers to the `echo_payload` schema (line 21), which simply contains a content f
 For a more comprehensive understanding of defining component interactions, you can refer to the 
 [component specification](/docs/architecture/implementations/component#interaction-specification). 
 Additionally, the complete `asyncapi.yaml` file can be found in the 
-[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/asyncapi.yaml).
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/asyncapi.yaml).
 
 
 ## Implement the echo services
@@ -97,7 +97,7 @@ we utilize the `pydantic` library to define our data model. You can see the impl
 the `echo_payload.py` file here:
 
 ```python reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/echo_payload.py
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/src/c1_echo_example_with_python_and_pika/echo_payload.py
 ```
 
 Specifically, line 25 of this file defines the `content` field with the constraint that its length must 
@@ -111,7 +111,7 @@ we create a dedicated handler in the `echo_handler.py` file.
 
 
 ```python reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/echo_handler.py
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/src/c1_echo_example_with_python_and_pika/echo_handler.py
 ```
 
 Upon instantiation, the handler registers itself to listen for incoming messages on the 
@@ -137,7 +137,7 @@ This file contains unit tests to ensure the `EchoPayload` model defined in `echo
 particularly regarding the validation constraints. You can find the test implementation here:
 
 ```python reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/tests/test_echo_payload.py
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/tests/test_echo_payload.py
 ```
 
 
@@ -147,7 +147,7 @@ This file focuses on testing the logic within the `echo_handler.py` that manages
 Here's the content of the test file:
 
 ```python reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/tests/test_echo_handler.py
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/tests/test_echo_handler.py
 ```
 
 Within this file, several key aspects are tested:
@@ -205,4 +205,4 @@ and publishing their echoes. By creating an instance of this handler, you are ef
 registering it with the `message_service`to listen for the channel defined in your `asyncapi.yaml`.
 
 You can find the complete implementation of the __main__.py file in the
-[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/__main__.py).
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/src/c1_echo_example_with_python_and_pika/__main__.py).

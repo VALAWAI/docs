@@ -46,7 +46,7 @@ and any other relevant information for users and developers. It's written in Mar
 format. You can use the next code as an example:
 
 ```md reference
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/README.md
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/README.md
 ```
 
 ## Fill in the `LICENSE` file
@@ -67,7 +67,7 @@ format (like Keep a Changelog) makes it easy for users to track the evolution of
 component. You can use the next code as an example:
 
 ```md reference
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/CHANGELOG.md
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/CHANGELOG.md
 ```
 
 ## The `asyncapi.yaml` file
@@ -107,7 +107,7 @@ the GPL V3 you must change the lines 8 and 9.
 
 On the next steps we are going to modify it until we have the final version of the `asyncapi.yaml`
 file that will match the defined can on the 
-[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/asyncapi.yaml)
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/asyncapi.yaml)
 of the echo example.
 
 ## The `docker-compose.yml` file
@@ -129,7 +129,7 @@ services:
 A more comprehensive `docker-compose.yml` file for the echo example, suitable for deployment, 
 will be detailed in [Step 5](/docs/tutorials/how_python_component/echo_example/step_05)
 and can also be found in the 
-[repository.](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/docker-compose.yml). 
+[repository.](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/docker-compose.yml). 
 
 
 ## Fill in the `pyproject.toml`file
@@ -142,7 +142,7 @@ As detailed in a [previous section](https://www.google.com/search?q=/docs/tutori
 the following code block presents the content of this file for the echo example:
 
 ```toml reference showLineNumbers
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/pyproject.toml
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/pyproject.toml
 ```
 
 When adapting this template for your own component, ensure you modify the following lines 
@@ -166,7 +166,7 @@ As we have explained [before](/docs/tutorials/how_python_component/skeleton#defi
 the content of this file will be something like:
 
 ```python reference
-https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/__init__.py
+https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/src/c1_echo_example_with_python_and_pika/__init__.py
 ```
 
 ## Fill in the `__main__.py` file
@@ -288,5 +288,5 @@ if __name__ == "__main__":
 
 On the next steps we are going to modify it until we have the final version of the `__main__.py`
 file that will match the defined can on the 
-[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/develop/src/c1_echo_example_with_python_and_pika/__main__.py)
+[repository](https://github.com/VALAWAI/C1_echo_example_with_python_and_pika/blob/main/src/c1_echo_example_with_python_and_pika/__main__.py)
 of the echo example.
