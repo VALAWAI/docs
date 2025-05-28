@@ -1,6 +1,11 @@
 # Changes done over the VALAWAI documentation
 
 
+## Version 0.13.0 (May 20, 2025)
+
+ - Improve e-mail actuator documentation.
+
+
 ## Version 0.12.0 (May 19, 2025)
 
  - Upgrade Docosaurus
