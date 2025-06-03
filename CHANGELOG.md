@@ -1,7 +1,7 @@
 # Changes done over the VALAWAI documentation
 
 
-## Version 0.13.0 (May 20, 2025)
+## Version 0.13.0 (June 3, 2025)
 
  - Improve e-mail actuator documentation.
 
