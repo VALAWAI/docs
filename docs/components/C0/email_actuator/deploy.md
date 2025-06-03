@@ -48,7 +48,7 @@ The recommended method for creating the C0 E-mail actuator Docker image involves
 
 ### Docker image environment variables
 
-his section details the primary environment variables available for configuring 
+This section details the primary environment variables available for configuring 
 the Docker image, grouped by their specific functions. For a complete list of all 
 possible configuration options supported by Quarkus, please refer to the official
 [Quarkus configuration documentation](https://quarkus.io/guides/all-config).
@@ -214,7 +214,7 @@ a detailed list of individual `checks`. An example response from `/q/health` wou
             }
         },
         {
-            "name": "Registered C0 email actuator",
+            "name": "Registered C0 E-mail actuator",
             "status": "UP"
         },
         {
@@ -264,98 +264,149 @@ email_actuator:
 
 ## Deploy 
 
-After you have the **valawai/c0_email_actuator:Z.Y.Z** docker image you can deploy directly using Docker,
-but you must define at least the environment variables to connect the message queue where
-the [Master of valawai (MOV)](/docs/architecture/implementations/mov/deploy) is deployed and the parameters to the server 
-that will be used to send the emails. An easier way to do it is by using the provided [docker compose](https://github.com/VALAWAI/C0_email_actuator/blob/main/docker-compose.yml)
-on the [repository](https://github.com/VALAWAI/C0_email_actuator) of this component.
-On it are defined the profiles **mov** and **mail**. The first one is to launch
-the [Master Of Valawai (MOV)](https://github.com/VALAWAI/MOV) and the second one is to start
-an [e-mail catcher](https://github.com/dbck/docker-mailtrap). You can use the next
-command to start this component with the MOV and the mail server.
+
+This guide explains how to deploy the C0 E-mail actuator using Docker Compose. Before you begin, ensure 
+you have the [`valawai/c0_email_actuator:latest`](/docs/components/C0/email_actuator/deploy#building-the-docker-image) 
+Docker image and the Master Of VALAWAI (MOV) image built (refer to the 
+[MOV deployment documentation](/docs/architecture/implementations/mov/deploy#building-the-docker-image) for details).
+
+
+### Full Deployment (MOV, RabbitMQ, and Mail Catcher)
+
+To deploy the C0 E-mail actuator along with the MOV, RabbitMQ, and a mail catcher, use the all Docker Compose profile:
 
 ```bash
-COMPOSE_PROFILES=mov,mail docker compose up -d
+COMPOSE_PROFILES=all docker compose up -d
 ```
 
-After that, if you open a browser and go to [http://localhost:8080](http://localhost:8080)
-you can view the MOV user interface. Also, you can access the RabbitMQ user interface
-at [http://localhost:8081](http://localhost:8081) with the credentials **mov:password**.
-Finally, you can access the mail catcher user interface at [http://localhost:8082](http://localhost:8082).
+Once these services are up, you can access:
 
-The docker compose defines some variables that can be modified by creating a file named
-[**.env**](https://docs.docker.com/compose/environment-variables/env-file/) where 
-you write the name of the variable plus equals plus the value.  As you can see in
-the next example.
+ - The MOV at [http://localhost:8081](http://localhost:8081)
+ - The RabbitMQ user interface at [http://localhost:8082](http://localhost:8082) (credentials: `mov:password`)
+ - The mail catcher user interface at [http://localhost:8083](http://localhost:8083)
+
+To stop all containers started with the all profile, execute:
+
+```bash
+COMPOSE_PROFILES=all docker compose down
+```
+
+This command will stop the MOV, RabbitMQ, and mail catcher containers.
+
+
+### Understanding Docker Compose Profiles
+
+The `docker-compose.yml` file includes different profiles, allowing you to start specific parts of the system:
+
+ - `component`: Starts only the C0 E-mail actuator.
+ - `mail`: Starts only the mail catcher.
+ - `mov`: Starts only the MOV component.
+ - `all`: Starts all components (MOV, RabbitMQ, mail catcher, and C0 E-mail actuator).
+
+
+### Deploying Only the C0 E-mail actuator
+
+If you only want to start the C0 E-mail actuator component, you can use the `component` profile:
+
+```bash
+COMPOSE_PROFILES=component docker compose up -d
+```
+
+When deploying only the component, you'll need to provide necessary connection details via a 
+[.env](https://docs.docker.com/compose/environment-variables/env-file/) file. Create a file named `.env`
+in the same directory as your `docker-compose.yml` with content similar to this:
 
 ```properties
-MQ_HOST=rabbitmq.valawai.eu
-MQ_USERNAME=c0_email_actuator
-MQ_PASSWORD=lkjagb_ro82t¿134
+MQ_HOST=host.docker.internal
+MQ_USERNAME=mov
+MQ_PASSWORD=password
+C0_EMAIL_ACTUATOR_PORT=9080
+MAIL_WEB=9083
 ```
 
-The defined variables are:
+### Docker compose environment variables
 
- - **C0_EMAIL_ACTUATOR_TAG** is the tag of the C0 email actuator docker image to use.
- The default value is **latest**.
- - **MQ_HOST** is the hostname of the message queue broker that is available.
- The default value is **mq**.
- - **MQ_PORT** is the port of the message queue broker is available.
- The default value is **5672**.
- - **MQ_UI_PORT** is the port of the message queue broker user interface is available.
- The default value is **8081**.
- - **MQ_USER** is the name of the user that can access the message queue broker.
- The default value is **mov**.
- - **MQ_PASSWORD** is the password used to authenticate the user who can access the message queue broker.
- The default value is **password**.
- - **MAIL_HOST** is the host to the e-mail server. The default value is **mail**.
- - **MAIL_PORT** defines the port of the e-mail server. The default value is **25**.
- - **MAIL_FROM** is the e-mail address that will appear in the form of the sent e-mails.
- The default value is **no-reply@valawai.eu**.
- - **MAIL_USERNAME** contains the user's name that can access the e-mail server.
- The default value is **user**.
- - **MAIL_PASSWORD** defines the credential to authenticate the user that can access the e-mail server.
- The default value is **password**.
- - **MAIL_STARTTLS** is used to define the connection of the e-mail server
- using a STARTTLS connection. The possible values are: DISABLED, OPTIONAL or REQUIRED.
- The default value is **DISABLED**.
- - **QUARKUS_MAILER_TLS** is used to define the connection of the e-mail server
- using a TTLS/SSL connection. The default value is **false**.
- - **QUARKUS_MAILER_AUTH_METHODS** is used to define the type of authentication methods
- that can be used in the e-mail server. The default value is **DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN**.
- - **MAIL_CATCHER_TAG** is the tag of the [email server](https://hub.docker.com/r/schickling/mailcatcher/) docker image to use.
- The default value is **latest**.
- - **RABBITMQ_TAG** is the tag of the RabbitMQ docker image to use.
- The default value is **management**.
- - **MONGODB_TAG** is the tag of the MongoDB docker image to use.
- The default value is **latest**.
- - **MONGO_PORT** is the port where MongoDB is available.
- The default value is **27017**.
- - **MONGO_ROOT_USER** is the name of the root user for the MongoDB.
- The default value is **root**.
- - **MONGO_ROOT_PASSWORD** is the password of the root user for the MongoDB.
- The default value is **password**.
- - **MONGO_LOCAL_DATA** is the local directory where the MongoDB will be stored.
- The default value is **~/mongo_data/movDB**.
- - **DB_NAME** is the name of the database used by the MOV.
- The default value is **movDB**.
- - **DB_USER_NAME** is the name of the user used by the MOV to access the database.
- The default value is **mov**.
- - **DB_USER_PASSWORD** is the password of the user used by the MOV to access the database.
- The default value is **password**.
- - **MOV_TAG** is the tag of the MOV docker image to use.
- The default value is **latest**.
- - **MOV_UI_PORT** is the port where the MOV user interface is available.
- The default value is **8080**.
+The `docker-compose.yml` file utilizes several configuration properties that can be customized 
+to modify its behavior. The recommended way to define these variables is by creating a
+[`.env`](https://docs.docker.com/compose/environment-variables/env-file/) file in the same 
+directory as your `docker-compose.yml`. 
 
-The database is only created the first time where script is called. So, if you modify
-any of the database parameters you must create again the database. For this, you must
-remove the directory defined by the parameter **MONGO_LOCAL_DATA** and start again
-the **docker compose**.
+The following sections detail the available environment variables and their default values.
 
-You can stop all the started containers with the command:
 
-```bash
-COMPOSE_PROFILES=mov,mail docker compose down
-``` 
+#### Docker image versions
 
+These variables control the specific versions (tags) of the Docker images used in this deployment:
+
+ - `C0_EMAIL_ACTUATOR_TAG`: The Docker image tag for the C0 E-mail actuator.
+ The default value is `latest`.
+ - `MOV_TAG`: The Docker image tag for the Master Of VALAWAI (MOV).
+ The default value is `latest`.
+ - `RABBITMQ_TAG`: The Docker image tag for the RabbitMQ broker.
+ The default value is `management`.
+ - `MONGODB_TAG`: The Docker image tag for the MongoDB database.
+ The default value is `latest`.
+ - `MAIL_CATCHER_TAG`: The Docker image tag for the Mail Catcher service.
+ The default value is `latest`.
+
+#### Master Of VALAWAI (MOV) Configuration
+
+These environment variables are used to configure the
+[Master Of VALAWAI (MOV)](https://valawai.github.io/docs/architecture/implementations/mov/deploy)
+that the C0 E-mail Actuator and other components must interact with.
+
+ - `MOV_MQ_HOST`: Specifies the hostname or IP address where the RabbitMQ broker is accessible 
+ to the MOV. The default value is `mq`, which is the name of the started RabbitMQ container 
+ within the docker-compose network.
+ - `MOV_MQ_PORT`:  Defines the port number used for connecting to the RabbitMQ broker. The default 
+ value is `5672`.
+ - `MOV_MQ_USER`: The username used for authentication with the RabbitMQ broker.
+ The default value is `mov`.
+ - `MOV_MQ_PASSWORD`: The password used to authenticate the specified `RABBITMQ_USERNAME`
+ with the RabbitMQ broker. The default value is `password`.
+ - `MOV_DB_HOST`: Specifies the hostname or IP address where the MongoDB database is accessible 
+ to the MOV. The default value is  `mongo`, which is the name of the started MongoDB container 
+ within the docker-compose network.
+ - `MOV_DB_PORT`: Defines the port number used for connecting to the MonGODB database.
+ The default value is `27017`.
+ - `MOV_DB_USER_NAME`: The username used for authentication with the MonGODB database.
+ The default value is `mov`.
+ - `MOV_DB_USER_PASSWORD`: The password used to authenticate the specified `MONGODB_USERNAME`
+ with the MonGODB database. The default value is `password`.
+ - `MOV_UI_PORT`: Defines the port on which the MOV user interface is available. The default 
+ value is  `8081`.
+ - `MOV_MQ_UI_PORT`:  Defines the port on which the RabbitMQ management user interface is 
+ available. The default value is `8082`.
+
+#### E-mail configuration
+
+On a [previous section](#mail-connection) , we explained how to configure the mail server 
+that the component must use to send e-mails. The following variables configure the connection 
+to the included Mail Catcher service, which is designed for development and testing purposes. 
+If you intend to use an external, production-ready mail server, you will need to modify these 
+variables or add more variables in the environment section of the C0 E-mail Actuator service 
+within your `docker-compose.yml`. For more details on advanced mailer configuration, consult 
+the [Quarkus Mailer documentation](https://quarkus.io/guides/mailer-reference#configuration-reference).
+
+ - `MAIL_HOST`: Defines the host where the email server (Mail Catcher) is expecting to receive 
+ emails to send. The default value is `mail`,  which is the name of the Mail Catcher container 
+ within the docker-compose network.
+ - `MAIL_PORT`: Defines the port where the email server (Mail Catcher) is expecting to receive 
+ emails to send. The default value is `1025`.
+ - `MAIL_FROM`: Defines the email address used in the "From" field of the emails sent. The default 
+ value is `no-reply@valawai.eu`.
+ - `MAIL_USERNAME`: Defines the username to connect to the email server. The default value is `user`.
+ - `MAIL_PASSWORD`: Defines the password of the user that is allowed to send emails to the server. 
+ The default value is `password`.
+ - `MAIL_STARTTLS`: Defines if the mail connection should use **STARTTLS**. The default value 
+ is `DISABLED`.
+ - `MAIL_TLS`: Defines if the mail connection should use **SSL/TLS**. The default value is `false`.
+ - `MAIL_AUTH_METHODS`: Defines the type of login methods to use for authentication. The default 
+ value is  `DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN`.
+
+#### C0 E-mail Actuator Component Variable
+
+This variable configures the C0 E-mail Actuator component itself:
+
+ - `C0_EMAIL_ACTUATOR_PORT`: Defines the port on which the C0 E-mail Actuator provides its API. 
+ The default value is 8080.
