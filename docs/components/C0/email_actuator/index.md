@@ -13,7 +13,7 @@ Here are the essential characteristics and specifications for the E-mail Actuato
  - **Repository**: [https://github.com/VALAWAI/C0_email_actuator](https://github.com/VALAWAI/C0_email_actuator)
  - **Versions**:
    * **Stable version**: [1.2.0](https://github.com/VALAWAI/C0_email_actuator/tree/1.2.0)
-   * **API**:  [1.0.0](https://raw.githubusercontent.com/VALAWAI/C0_email_actuator/ASYNCAPI_1.0.0/asyncapi.yml)
+   * **API**:  [1.0.0](https://raw.githubusercontent.com/VALAWAI/C0_email_actuator/refs/tags/ASYNCAPI_1.0.0/asyncapi.yaml)
    * **Required MOV API**: [1.2.0 ](https://raw.githubusercontent.com/valawai/MOV/ASYNCAPI_1.2.0/asyncapi.yml)
  - **Developed By**: [IIIA-CSIC](https://www.iiia.csic.es)
  - **License**: [GPL 3](https://github.com/VALAWAI/C0_email_actuator/blob/main/LICENSE)
