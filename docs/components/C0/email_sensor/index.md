@@ -12,7 +12,7 @@ Here are the key characteristics and specifications for the C0 E-mail Sensor:
  - **Name**: E-mail sensor
  - **Repository**: [https://github.com/VALAWAI/C0_email_sensor](https://github.com/VALAWAI/C0_email_sensor)
  - **Versions**:
-   * **Stable version**: [1.2.0](https://github.com/VALAWAI/C0_email_sensor/tree/1.2.0)
+   * **Stable version**: [1.3.0](https://github.com/VALAWAI/C0_email_sensor/tree/1.3.0)
    * **API**:  [1.0.0](https://raw.githubusercontent.com/VALAWAI/C0_email_sensor/refs/tags/ASYNCAPI_1.0.0/asyncapi.yaml)
    * **Required MOV API**: [1.2.0 ](https://raw.githubusercontent.com/valawai/MOV/ASYNCAPI_1.2.0/asyncapi.yml)
  - **Developed By**: [IIIA-CSIC](https://www.iiia.csic.es)

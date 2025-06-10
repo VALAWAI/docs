@@ -5,11 +5,25 @@ sidebar_position: 1
 
 # How to use
 
-This component can be used to send e-mails. Thus, it can provide information to a user of
-the value awareness application through an e-mail. These e-mails are generated from the messages
-that this component receives on the channel **valawai/c0/email_actuator/data/e_mail**,
-and delivered to an e-mail server for its publication. In this case, the [Master of VALAWAI (MOV)](/docs/architecture/implementations/mov)
-will be responsible for redirecting the published messages by C1 components to this component and converted
-to e-mails to be delivered to the users. In the [readme](https://github.com/VALAWAI/C0_email_actuator/blob/main/README.md),
-you will find the version of the MOV that is necessary to use. Also, you must create the docker image of this component,
-and you can deploy it individually or using a docker-compose. The following sections explain how to do these.
+To get started with the Email Actuator (C0), you'll need an email account 
+that the actuator can use to send messages. Make sure you have all the necessary 
+connection details: the email server host, port, username, and password.
+
+The Email Actuator is flexible; it supports SMTP servers, and you can establish 
+either a plain or secure connection (SSL/TLS). For a comprehensive guide 
+on configuring these settings, refer to the 
+[Docker Image Environment Variables](/docs/components/C0/email_actuator/deploy#mail-connection)
+section.
+
+Once active, the Email Actuator receives instructions to send emails via the channel 
+`valawai/co/email_actuator/data/e_mail`. This channel is specifically designed to notify 
+the component about emails to be sent. These instructions typically include details 
+like recipients (To, CC, BCC), subject, and content. The Master of VALAWAI (MOV) is 
+responsible for routing these commands based on your active topology. You can find 
+more details on this process in the 
+[Send Email](/docs/components/C0/email_actuator/services#send-e-mail) section.
+
+While the component is running, it processes requests to send emails and generates 
+log messages for each operation. You can monitor these logs directly within the
+[MOV user interface](/docs/architecture/implementations/mov/user_interface#manage-logs),
+allowing you to keep track of its activity and delivery status.

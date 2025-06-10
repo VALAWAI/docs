@@ -23,9 +23,9 @@ into a demonstrator of the VALAWAI Toolbox. Currently, it functions as a standal
 proof-of-concept. Achieving TRL 4 requires defining and implementing stable interfaces (APIs) 
 and clear communication protocols to ensure seamless message flow and reliable interaction 
 with upstream VALAWAI services that will feed it messages. This shift is challenging because
- it moves the component beyond isolated functionality, requiring it to become a reliable, 
- integrated part of a larger system, which can expose complexities in data formats, message 
- queues, and error propagation throughout the complete workflow.
+it moves the component beyond isolated functionality, requiring it to become a reliable, 
+integrated part of a larger system, which can expose complexities in data formats, message 
+queues, and error propagation throughout the complete workflow.
  
 A second significant challenge lies in ensuring compatibility and robustness with commercial 
 email servers. Our current validation is limited to a test mail server. To achieve TRL 4, 

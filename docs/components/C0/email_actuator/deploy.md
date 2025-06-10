@@ -237,7 +237,7 @@ a detailed list of individual `checks`. An example response from `/q/health` wou
 }
  ```
  
-AFor a visual health status, you can access the health user interface at 
+For a visual health status, you can access the health user interface at 
 [http://localhost:8080/q/health-ui/](http://localhost:8080/q/health-ui/).
 These health endpoints are invaluable for configuring `docker-compose` health checks, 
 as shown in the example below, ensuring services are truly operational 
