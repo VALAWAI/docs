@@ -36,6 +36,6 @@ you need to know.
     Ready to go live? Follow these clear, step-by-step instructions to successfully deploy 
     the Email Sensor within your environment.
 
-* **[Technology Readiness Level (TRL)](/docs/components/C0/email_sensor/trl)**
+* **[Technology Readiness Level (TRL)](/docs/components/C0/email_sensor/tlr)**
     Understand where the Email Sensor stands. This section provides insight into its 
     **maturity and reliability** of the component.
