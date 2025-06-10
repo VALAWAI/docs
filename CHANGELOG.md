@@ -1,7 +1,7 @@
 # Changes done over the VALAWAI documentation
 
 
-## Version 0.14.0 (June 3, 2025)
+## Version 0.14.0 (June 10, 2025)
 
  - Improve e-mail sensor documentation.
 
