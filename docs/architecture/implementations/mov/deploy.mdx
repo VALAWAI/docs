@@ -85,13 +85,13 @@ For example, to build an image with the tag `latest`, run:
 This will create the container named `valawai/mov:latest`.
 
 
-## Environment Variables
+### Environment Variables
 
 Environment variables allow you to configure the MOV application's runtime
 behavior within the Docker container without rebuilding the image. This section
 describes the available environment variables:
 
-### RabbitMQ Configuration
+#### RabbitMQ Configuration
 
 *   `RABBITMQ_HOST` (Default: `mov-mq`): The hostname or IP address where the RabbitMQ
  service is listening.
@@ -100,7 +100,7 @@ describes the available environment variables:
 *   `RABBITMQ_PASSWORD` (Default: `password`): **CRITICAL:** Change this default password
  immediately for security reasons.
 
-### MongoDB Configuration
+#### MongoDB Configuration
 
 *   `QUARKUS_MONGODB_HOSTS` (Default: `mongo:27017`): The hostname(s) or connection string
  for the MongoDB server.
@@ -110,9 +110,25 @@ describes the available environment variables:
 *   `QUARKUS_MONGODB_CREDENTIALS_PASSWORD` (Default: `password`): **CRITICAL:** Change this default
  password immediately for security reasons.
 
-### Other Configuration
+#### Other Configuration
 
-*   `MOV_URL` (Default: `http://localhost:8080`): The URL where the MOV user interface will be accessible.
+*   `MOV_URL` (Default: `http://localhost:8080`): The URL where the MOV user interface 
+will be accessible.
+*   `MOV_INIT_CLEAN_ALL` (Default: `true`): If is true the MOV has to clean the active 
+components and connection on start up.
+*   `MOV_INIT_DISABLE_CONNECTIONS` (Default: `true`): If is true the MOV has to disable 
+all the connection on start up.
+*   `MOV_INIT_UPDATE_COMPONENTS_LIBRARY` (Default: `UPDATE_IF_STALE`): Define the mode 
+that the MOV must follow when update the components library on start up. The possible 
+values are:
+
+  - `UPDATE_IF_STALE`: The MOV will update the components library if the last update
+   plus an update period is less than the current time on start up.
+  - `UPDATE_ALWAYS`: The MOV will always update the components library on start up.
+  - `UPDATE_NEVER`: The MOV will never update the components library on start up.
+  
+*   `MOV_COMPONENTS_LIBRARY_UPDATE_PERIOD` (Default: `86400`): The time, in seconds, 
+that has to pass before to update the component library.
 
 ### Security Best Practices:
 
