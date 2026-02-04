@@ -24,5 +24,5 @@ topology. You can find more details on this process in the
 
 While the component is running, it regularly fetches new emails and sends log messages. 
 You can monitor these logs directly within the 
-[MOV user interface](/docs/architecture/implementations/mov/user_interface#manage-logs) 
+[MOV user interface](/docs/architecture/implementations/mov/wui/live#manage-logs) 
 allowing you to keep track of its activity.
