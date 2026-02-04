@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Interaction with Master Of VALAWAI
 
-The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov/) plays a central 
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov/events/) plays a central 
 role in managing the communication pathways and overall topology of components within 
 the VALAWAI architecture. Your component interacts with the MOV by publishing messages 
 to specific MOV channels and by subscribing to channels that the MOV provides for control 
@@ -19,19 +19,19 @@ subsection of the [Echo example](/tutorials/how_python_component/echo_example) s
 ## Register component
 
 Upon startup, a VALAWAI component must register (refer to 
-the [registration documentation](/docs/architecture/implementations/mov/register_component)) 
+the [registration documentation](/docs/architecture/implementations/mov/events/register_component)) 
 itself with the Master Of VALAWAI (MOV). This crucial step ensures that your component becomes 
 discoverable by other components and is integrated into the active communication topology 
 of the VALAWAI ecosystem.
 
-Before initiating the [registration process](/docs/architecture/implementations/mov/registered_notification),
+Before initiating the [registration process](/docs/architecture/implementations/mov/events/registered_notification),
 your component needs to be prepared to listen for the MOV's confirmation message, which signifies
 successful registration. This notification is dispatched by the MOV to a specific channel 
 that you define within your `asyncapi.yaml` file. This channel's name must adhere to the predefined pattern:
 **valawai/c[0|1|2]/\w+/control/registered**. You can find a concrete example of this channel definition
 within the [Echo example](/docs/tutorials/how_python_component/echo_example/step_03#adapt-asyncapiyaml-to-implement-the-lifecycle).
 
-To formally [register your component](/docs/architecture/implementations/mov/register_component) 
+To formally [register your component](/docs/architecture/implementations/mov/events/register_component) 
 with the MOV, you must publish a JSON-formatted message to the designated **valawai/component/register** 
 channel. This message must encapsulate the following key information about your component: its type, 
 its unique name, its current version, and the complete content of your `asyncapi.yaml` file, provided 
@@ -81,7 +81,7 @@ the VALAWAI architecture.
 ## Unregister component
 
 When your component is shutting down, it is crucial to 
-[unregister](/docs/architecture/implementations/mov/unregister_component)
+[unregister](/docs/architecture/implementations/mov/events/unregister_component)
 itself from the Master Of VALAWAI (MOV). This action removes the component from the active 
 communication topology, ensuring a clean and accurate representation of the VALAWAI ecosystem.
 
@@ -115,8 +115,8 @@ components.
 
 The Master Of VALAWAI (MOV) is central to maintaining the dynamic topology of the VALAWAI architecture.
  It automatically establishes connections between components upon their successful
-[registration](/docs/architecture/implementations/mov/register_component).  Therefore, explicitly sending
-messages to [create a connection](/docs/architecture/implementations/mov/create_connection) 
+[registration](/docs/architecture/implementations/mov/events/register_component).  Therefore, explicitly sending
+messages to [create a connection](/docs/architecture/implementations/mov/events/create_connection) 
 between components is generally unnecessary.
 
 However, **C2** components have a unique role in potentially influencing the topology based 
@@ -221,18 +221,18 @@ publish_channel.basic_publish(exchange='', routing_key='valawai/topology/change'
 ```
 
 The MOV also provides a channel for querying
-[topology connections](http://localhost:3000/docs/architecture/implementations/mov/connection_query),
+[topology connections](http://localhost:3000/docs/architecture/implementations/mov/events/connection_query),
 but this advanced feature is not covered in this introductory tutorial as it represents 
 a less common interaction pattern.
 
 
 ## Add log message
 
-The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov/) enables the deployment 
+The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov/events/) enables the deployment 
 of components across various hosts. To facilitate debugging and monitoring in this distributed 
 environment, the MOV provides a comprehensive logging system. Components can 
-[send log messages](/docs/architecture/implementations/mov/add_log) that are viewable in the 
-[web user interface (WUI)](/docs/architecture/implementations/mov/user_interface#manage-logs) of the MOV.
+[send log messages](/docs/architecture/implementations/mov/events/add_log) that are viewable in the 
+[web user interface (WUI)](/docs/architecture/implementations/mov/wui/live#manage-logs) of the MOV.
 
 The Python code snippet below demonstrates how to construct and publish a log message:
 
@@ -256,5 +256,5 @@ publish_channel.basic_publish(exchange='', routing_key='valawai/log/add', body=b
 
 In this message structure, `payload` and `component_id` are optional parameters. However, including 
 the component_id allows you to easily filter log messages specific to that component within the 
-[MOV web user interface (WUI)](/docs/architecture/implementations/mov/user_interface#manage-logs), 
+[MOV web user interface (WUI)](/docs/architecture/implementations/mov/wui/live#manage-logs), 
 which can be invaluable for targeted troubleshooting.

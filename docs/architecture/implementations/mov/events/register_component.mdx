@@ -48,12 +48,12 @@ within the system, thereby facilitating the automatic updating of the VALAWAI co
 If the specifications for a new component include a designated communication channel 
 for notification during the registration process, the MOV sends an acknowledgment message 
 upon successful registration within the system (for further details, please refer to
-Section [registered component](/docs/architecture/implementations/mov/registered_notification)).
+Section [registered component](/docs/architecture/implementations/mov/events/registered_notification)).
 
 For components classified as type C2, the MOV provides additional functionality. If a C2
 component incorporates a notification channel for messages exchanged over topology connections,
 the MOV proactively searches for any existing registered connections that align with 
 the anticipated message notification requirements. For more information on this process, 
-please refer to Section [Notify C2 components](/docs/architecture/implementations/mov/notify_c2_components).
+please refer to Section [Notify C2 components](/docs/architecture/implementations/mov/events/notify_c2_components).
 This ensures that C2 components remain informed and can effectively communicate as integral 
 components of the overall system.

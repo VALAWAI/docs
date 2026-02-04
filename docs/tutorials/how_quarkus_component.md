@@ -475,7 +475,7 @@ use when developing your component.
 
 ### Topology services
 
-One of the first things that any component must do is to be [registered](/docs/architecture/implementations/mov/register_component)
+One of the first things that any component must do is to be [registered](/docs/architecture/implementations/mov/events/register_component)
 into the Master Of VALAWAI (MOV) to be added to the topology. In this process, the component
 provides its **asynapi.yaml** to the MOV, and it automatically creates the connections
 between this new component and any other component if they are compatible. Thus,
@@ -483,7 +483,7 @@ the MOV checks the publishing channels of the new component and checks if any ot
 component defines a subscription to the same content. Also, it does the vice-verse, thus,
 it checks the subscription of the new component exists any component that can publish
 a compatible message. On the other hand, when the component is not more active it must
-[unregister](/docs/architecture/implementations/mov/unregister_component) and the MOV will disable any topology connection that this component will
+[unregister](/docs/architecture/implementations/mov/events/unregister_component) and the MOV will disable any topology connection that this component will
 be involved. 
 
 Now that we know what we have to do, it is time to describe how to do it in Qarkus.
@@ -517,7 +517,7 @@ The first thing to do is to add the  **asyncapi-yaml** in the Java resources bec
 ```
 
 Now we have **asyncapi-yaml** in the resources, we can define the message to
-[register the component](/docs/architecture/implementations/mov/register_component). The next
+[register the component](/docs/architecture/implementations/mov/events/register_component). The next
 class is an example of registering the component C1 temperature controller.
 
 ```java
@@ -588,7 +588,7 @@ public class RegisterComponentPayload {
 }
 ```
 
-On the other hand, we need to define the message to [unregister a component](/docs/architecture/implementations/mov/unregister_component). The next class is an example of this
+On the other hand, we need to define the message to [unregister a component](/docs/architecture/implementations/mov/events/unregister_component). The next class is an example of this
 type of message.
 
 
@@ -633,7 +633,7 @@ mp.messaging.outgoing.send_unregister_component.default-routing-key=valawai/comp
 
 Apart from the channels to register and unregister the component, line 7 defines
 the channel that will be used by the MOV to [notify the component when it has been
-registered](/docs/architecture/implementations/mov/registered_notification). Remember that the name
+registered](/docs/architecture/implementations/mov/events/registered_notification). Remember that the name
 of this channel has to match the pattern **valawai/c[0|1|2]/\w+/control/registered**.
 
 Finaly, you only must define a service to capture the start-uo event in the Quarkus
@@ -763,9 +763,9 @@ public class ComponentLifeCycle {
 ### Logging service
 
 The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) provides different services
-and one of them is a [centralized log system](/docs/architecture/implementations/mov/add_log).
+and one of them is a [centralized log system](/docs/architecture/implementations/mov/events/add_log).
 This service stores the log messages and shows them in a
-[web user interface (WUI)](/docs/architecture/implementations/mov/user_interface#manage-logs).
+[web user interface (WUI)](/docs/architecture/implementations/mov/wui/live#manage-logs).
 This service helps in the developing process because you can see what happens in different
 components in a unique view. Otherwise, you must access each docker component container
 and see the logs.
@@ -1047,9 +1047,9 @@ A [C2 component](/docs/architecture/value_awareness_architecture#c2-component)
 is a special component that may need to listen to what the other components do to decide
 witch topology connections must be enabled or disabled.
 The [Master Of VALAWAI (MOV)](/docs/architecture/implementations/mov) helps in this process because when
-a C2 component is [registered](/docs/architecture/implementations/mov/registered_notification),
+a C2 component is [registered](/docs/architecture/implementations/mov/events/registered_notification),
 it checks if exist any subscribed channel that must be [notified when a message is sent
-through a topology connection](/docs/architecture/implementations/mov/notify_c2_components).
+through a topology connection](/docs/architecture/implementations/mov/events/notify_c2_components).
 Thus, the channel name must match the pattern **valawai/c2/\w+/control/\w+** and
 the payload contains the fields: connection_id, source, target, message_payload,
 and timestamp.
@@ -1420,7 +1420,7 @@ public class EventListener {
 
 This component when wants to enable or disable a topology connection has to send
 to the queue **valawai/topology/change** a message with the action and the connection
-identifier as you can see on the [MOV tutorial](/docs/architecture/implementations/mov/modify_connection).
+identifier as you can see on the [MOV tutorial](/docs/architecture/implementations/mov/events/modify_connection).
 Thus, you need to define a class for the message something like you can see below.
 
 ```java

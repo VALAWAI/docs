@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # Create topology connection
 
-Upon component registration (as described in section [register component](/docs/architecture/implementations/mov/register_component)),
+Upon component registration (as described in section [register component](/docs/architecture/implementations/mov/events/register_component)),
 the Master of VALAWAI automatically establishes connections between the new component and 
 any other registered components. Although this service is rarely utilized, it is provided 
 to address any potential scenarios. For instance, if a connection is removed and subsequently 
@@ -43,7 +43,7 @@ import create_connection_json from '!!raw-loader!./create-connection.json';
 
 Upon the registration of the topology connection, the MOV will determine whether any registered 
 `C2` entities must be notified of the messages exchanged on the connection, as outlined in
-Section [Notify C2 components](/docs/architecture/implementations/mov/notify_c2_components).
+Section [Notify C2 components](/docs/architecture/implementations/mov/events/notify_c2_components).
 Consequently, the MOV will identify all `C2` components that have subscribed to a channel
 with the name **valawai/c2/\textbackslash w+/control/\w+**. Additionally, it will verify
 that the schema of the notification message aligns with the messages exchanged in the topology

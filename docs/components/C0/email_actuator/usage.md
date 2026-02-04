@@ -25,5 +25,5 @@ more details on this process in the
 
 While the component is running, it processes requests to send emails and generates 
 log messages for each operation. You can monitor these logs directly within the
-[MOV user interface](/docs/architecture/implementations/mov/user_interface#manage-logs),
+[MOV user interface](/docs/architecture/implementations/mov/wui/live#manage-logs),
 allowing you to keep track of its activity and delivery status.

@@ -7,8 +7,8 @@ sidebar_position: 7
 As outlined in the value awareness architecture, the data and control flow of messages are
 exchanged by the VALAWAi components, as described by a topology that will be managed by 
 the Master Of VALAWAI (MOV). In the previous section, we described the services to create connections
-(see section [create connection](/docs/architecture/implementations/mov/create_connection))
-and search for connections (see section [Connection query](/docs/architecture/implementations/mov/connection_query)).
+(see section [create connection](/docs/architecture/implementations/mov/events/create_connection))
+and search for connections (see section [Connection query](/docs/architecture/implementations/mov/events/connection_query)).
 The remaining service is the capability of the `C2` components to enable, disable, 
 or remove these connections. For this purpose, the `C2` component must be
 sent to the queue **valawai/topology/change** a message with the following payload:

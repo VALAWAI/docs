@@ -21,7 +21,7 @@ The web interface offers the next key functionalities for managing components wi
 the VALAWAI architecture:
 
  - **Component Registration**: Components can self-register by sending
-    a registration message (see Section [register component](/docs/architecture/implementations/mov/register_component)).
+    a registration message (see Section [register component](/docs/architecture/implementations/mov/events/register_component)).
     Users can also manually register components via the web interface. This
     is accomplished by clicking the ___Register a new component___ button and completing
     the displayed form with the component's type, name, version, and AsyncAPI
@@ -29,7 +29,7 @@ the VALAWAI architecture:
 
  - **Component Discovery**: The MOV provides a robust mechanism for
     querying information about registered components (see Section
-    [components query](/docs/architecture/implementations/mov/component_query)). 
+    [components query](/docs/architecture/implementations/mov/events/component_query)). 
     This functionality is accessible to both components and users. The user interface
     allows for searching based on the following criteria:
 
@@ -50,7 +50,7 @@ the VALAWAI architecture:
 
  - **Component Unregistration**: Typically, a component's last action
     within the VALAWAI architecture is to unregister itself from the MOV (see Section
-    [unregister component](/docs/architecture/implementations/mov/unregister_component)). 
+    [unregister component](/docs/architecture/implementations/mov/events/unregister_component)). 
     Users can also manually unregister components through the web interface. 
     This is done by searching for the component and
     clicking the ___Unregister___ action. A confirmation page then appears.
@@ -70,9 +70,9 @@ The web interface offers the next key functionalities for managing the VALAWAI t
 
  - **Connection Creation**: While the MOV automatically establishes
     connections between components upon registration, as detailed in Section 
-    [register component](/docs/architecture/implementations/mov/register_component), 
+    [register component](/docs/architecture/implementations/mov/events/register_component), 
     the system also supports manual connection creation by both components and users 
-    (see Section [create connection](/docs/architecture/implementations/mov/create_connection)).
+    (see Section [create connection](/docs/architecture/implementations/mov/events/create_connection)).
     To create a connection via the user interface, select the ___Create a new 
     connection___ button. This action will display a form prompting for the following
     information:
@@ -91,7 +91,7 @@ The web interface offers the next key functionalities for managing the VALAWAI t
 
  - **Connection Discovery**: The MOV allows both components and users
     to query for existing connections within the VALAWAI architecture (see Section 
-    [connections query](/docs/architecture/implementations/mov/connection_query)). 
+    [connections query](/docs/architecture/implementations/mov/events/connection_query)). 
     Users can leverage the interface's search functionality by entering partial or 
     exact matches for either the source or target component's name. The search results 
     are then presented, sorted by the following criteria:
@@ -108,7 +108,7 @@ The web interface offers the next key functionalities for managing the VALAWAI t
 
  - **Connection Modification**: As explained in the [VALAWAI architecture](/docs/architecture/value_awareness_architecture) 
     documentation, C2 components are responsible for managing connections
-    between other components (see Section [modify connection](/docs/architecture/implementations/mov/modify_connection)). The web
+    between other components (see Section [modify connection](/docs/architecture/implementations/mov/events/modify_connection)). The web
     interface provides users with the ability to modify these connections as well. 
     Through the interface, users can perform the following actions on existing 
     connections registered within the MOV:
@@ -132,7 +132,7 @@ the Master of VALAWAI (MOv) as you can see in the next image.
 
 ![Screen shot of the logs view](/img/tutorials/mov/logs.png)
 
-These log messages transmitted to the MOV (see Section [add log message](/docs/architecture/implementations/mov/add_log)). For each log entry, the following information is displayed:
+These log messages transmitted to the MOV (see Section [add log message](/docs/architecture/implementations/mov/events/add_log)). For each log entry, the following information is displayed:
 
  - ___Timestamp___: The precise time at which the log message was generated.
  - ___Log Level___: The severity level of the message, categorized as

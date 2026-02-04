@@ -50,7 +50,7 @@ Once your message is encoded, you can publish it using the `basic_publish()` met
 of your connection's channel. For direct queue targeting, the `routing_key` should be 
 the name of the destination queue, and the exchange parameter should be an empty string ('').
 
-The following code illustrates how to send a [log message to the Master of VALAWAI](/docs/architecture/implementations/mov/add_log).
+The following code illustrates how to send a [log message to the Master of VALAWAI](/docs/architecture/implementations/mov/events/add_log).
 
 ```python
 import json

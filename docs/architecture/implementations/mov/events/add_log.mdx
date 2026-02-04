@@ -9,7 +9,7 @@ awareness application. This enables the utilization of RabbitMQ's distributed ar
 components to be deployed on different hosts. This capability empowers different components to operate
 on separate machines while maintaining continuous and seamless communication.
 To facilitate development, the MOV facilitates the sending of log messages by components to it, 
-which can be visualized in a user interface (as demonstrated in section [MOV user interface](/docs/architecture/implementations/mov/user_interface).
+which can be visualized in a user interface (as demonstrated in section [MOV user interface](/docs/architecture/implementations/mov/wui).
 These messages must be sent to the channel **valawai/log/add** with a payload similar to 
 the following:
 
@@ -23,4 +23,4 @@ This payload defines the logging level at line 2. It can be **ERROR**, **WARN**,
 Optionally, you can define an optional payload value (line 3). This payload must be a JSON 
 value encoded as a string. Finally, if you want, you can define the identifier of the component (line 5)
 that has generated the log message. This identifier is the one obtained when the component
-is registered, as you can see in the section [register component](/docs/architecture/implementations/mov/register_component).
+is registered, as you can see in the section [register component](/docs/architecture/implementations/mov/events/register_component).
