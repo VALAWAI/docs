@@ -8,7 +8,6 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
 	title: 'VALAWAI documentation',
@@ -20,7 +19,11 @@ const config = {
 	projectName: 'docs', // Usually your repo name.
 	deploymentBranch: 'gh-pages',
 	onBrokenLinks: 'throw',
-	onBrokenMarkdownLinks: 'warn',
+	markdown: {
+		hooks: {
+			onBrokenMarkdownLinks: 'warn',
+		},
+	},
 
 	// Even if you don't use internationalization, you can use this field to set
 	// useful metadata like html lang. For example, if your site is Chinese, you
@@ -172,7 +175,7 @@ const config = {
 			prism: {
 				theme: prismThemes.github,
 				darkTheme: prismThemes.dracula,
-				additionalLanguages: ['bash', 'java', 'json', 'properties', 'xml-doc','toml', 'docker'],
+				additionalLanguages: ['bash', 'java', 'json', 'properties', 'xml-doc', 'toml', 'docker'],
 			},
 			codeblock: {
 				showGithubLink: true,
