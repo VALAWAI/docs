@@ -6,7 +6,7 @@ sidebar_position: 1
 
 This section of the documentation describes how the MOV user interface is used to monitor 
 the real-time status and activity of the topology it manages. It provides a comprehensive 
-guide to understanding your system's dynamic behavior, component health, and data flow.
+guide to understanding your system's dynamic behaviour, component health, and data flow.
 
 
 ## Manage components

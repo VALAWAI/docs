@@ -4,7 +4,7 @@ sidebar_position: 0
 
 # Introduction
 
-Our values shape our behavior and understanding of ourselves and others. Just 
+Our values shape our behaviour and understanding of ourselves and others. Just 
 as values are fundamental to human interaction, imbuing AI systems with an understanding
 of values is crucial for building trustworthy and ethical artificial intelligence. 
 What we consider self-evident in human interactions must be explicitly programmed into AI.

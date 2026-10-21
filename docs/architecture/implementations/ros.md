@@ -96,7 +96,7 @@ mechanisms.
 ## Logging
 
 ROS 2 incorporates a comprehensive logging framework, enabling developers to track 
-system behavior and events at various log levels (debug, info, warning, error).  
+system behaviour and events at various log levels (debug, info, warning, error).  
 Centralized logging facilitates easy access and analysis, providing a robust logging 
 system comparable to MOV's.
 

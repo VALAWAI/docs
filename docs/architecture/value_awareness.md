@@ -15,7 +15,7 @@ future events or appropriate actions.
 Within VALAWAI, we focus specifically on *value-aware* AI, which we define as:
 
 > "An AI system that is capable of capturing the relevant (human) value system, 
-> understanding that value system, abiding by it, and explaining its own behavior 
+> understanding that value system, abiding by it, and explaining its own behaviour 
 > and that of others in terms of that value system."
 
 Achieving value awareness requires, we argue, four key technical capabilities:
@@ -33,15 +33,15 @@ certain values, and perform other logical operations on value representations.
 This capability is essential for understanding the complex interplay of values 
 within a given context.
 
-3.  **Value Alignment:** Mechanisms are required to assess whether a given behavior 
+3.  **Value Alignment:** Mechanisms are required to assess whether a given behaviour 
 aligns with the preferred values.  This involves comparing actions or decisions 
 against the represented values and determining the degree of congruence or conflict.  
 This alignment process may involve quantitative measures or qualitative assessments.
 
 4.  **Value-Based Explainability:** For transparency and to enhance human 
-understanding of AI behavior, the AI must be able to explain how its actions 
+understanding of AI behaviour, the AI must be able to explain how its actions 
 (or the actions of others) relate to the underlying value system. This explainability 
-component clarifies the connection between behavior and values, supporting both 
+component clarifies the connection between behaviour and values, supporting both 
 value-aligned decision-making and the value-aligned design of AI systems.
 
 These four capabilities enable value-aware AI to achieve a range of functionalities, 
@@ -51,7 +51,7 @@ including:
 AI systems, potentially providing feedback or supporting certification processes.
 
 2.  **Implicit Value Deconstruction:** Inferring the values implicitly used by a human 
-or AI system based on observed behavior, and providing feedback to make them aware of 
+or AI system based on observed behaviour, and providing feedback to make them aware of 
 these values.
 
 3.  **Value-Driven Action Advisement:** Advising a course of action to a human or AI 
@@ -60,8 +60,8 @@ system that is compatible with a given value system.
 4.  **Autonomous Value-Aligned Action:** Autonomously performing actions that are 
 compatible with a given value system.
 
-Furthermore, value-aware AI can be applied not only to behaviors but also to the *motivators* 
-of behavior, such as norms.  This leads to additional capabilities:
+Furthermore, value-aware AI can be applied not only to behaviours but also to the *motivators* 
+of behaviour, such as norms.  This leads to additional capabilities:
 
 5.  **Norm-Value Alignment Analysis:** Analyzing the alignment of norms with values, 
 providing feedback on norms, or supporting norm certification processes.

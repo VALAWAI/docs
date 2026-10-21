@@ -2,9 +2,35 @@
 sidebar_position: 4
 ---
 
+# Technology Readiness Level (TRL)
 
-# Technology Readiness Level (TLR)
+The **Patient Treatment UI** is a web-based C0 component developed for the VALAWAI project's
+medical protocol demonstrator. It simulates clinician interactions for patient management,
+personalized treatment planning, and outcome monitoring, illustrating the potential of the
+VALAWAI architecture in healthcare environments. Operating as both a sensor and an actuator
+within a simulated environment, the component relies exclusively on synthetic or thoroughly
+anonymized data rather than real patient information to maintain strict privacy standards
+while demonstrating core system capabilities.
 
-The Patient Treatment UI is a web-based C0 component for a VALAWAI project demonstration. It simulates doctor interactions for patient management, treatment planning, and feedback, showcasing the VALAWAI architecture's potential in patient care. This component is a proof-of-concept, not for clinical use, designed to illustrate system capabilities and potential benefits without using real patient data, acting as a sensor and actuator within a simulated environment.
-Given this, the Patient Treatment UI is at TRL 3: Analytical and experimental critical function and/or characteristic proof-of-concept. This level is based on its explicit design as a proof-of-concept that simulates core functionalities in a controlled, non-operational setting, proving basic feasibility.
-To reach TRL 4: Component and/or breadboard validation in a laboratory environment, the UI must shift from pure simulation to basic integration with actual, nascent VALAWAI components. This involves defining stable APIs and communication protocols to genuinely interact with other VALAWAI modules, rather than just internal simulations. Additionally, using controlled, representative data is crucial. This data will be synthetic or thoroughly anonymized to address privacy concerns, accurately mimicking the structure, volume, and complexity of real patient data where obtaining permissions for actual hospital data is difficult. Testing needs to extend to integration tests within a "breadboard" laboratory setup, demonstrating the UI's functionality as part of a rudimentary, integrated VALAWAI system, along with implementing basic error handling for component interactions.
+Given its current stage, the Patient Treatment UI is classified at **TRL 3: 
+Analytical and experimental critical function and/or characteristic proof-of-concept**.
+This rating reflects its successful unit-level validation in controlled laboratory settings
+and high-profile demonstrations, where its foundational capabilities were verified using
+internal simulations.
+
+To advance to **TRL 4: Component and/or breadboard validation in a laboratory environment**,
+the component must transition from standalone simulation to basic system-level integration.
+Key requirements for reaching
+TRL 4 include:
+
+* **API & Protocol Integration:** Establishing stable AsyncAPI communication protocols and
+interfaces to enable direct, seamless interactions with C1 decision-making components
+(such as the NIT Protocol Manager) and C2 reflective modules (such as treatment valuators).
+
+* **Realistic Data Representation:** Employing controlled, representative synthetic data
+that accurately mirrors the structure, volume, and complexity of actual clinical records
+to bypass data-privacy barriers during initial testing.
+
+* **Laboratory Integration Testing:** Conducting end-to-end integration tests within a
+"breadboard" laboratory setup to evaluate component interaction, verify ethical value
+calculus computations, and demonstrate robust error handling during component communication.

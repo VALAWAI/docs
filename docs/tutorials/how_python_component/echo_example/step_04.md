@@ -85,7 +85,7 @@ Here's a brief overview of the purpose of each file:
  - `echo_payload.py`: Defines the data structure (using Pydantic for validation) for the content 
  of both incoming and outgoing messages.
  - `test_echo_payload.py`: Includes unit tests to ensure the `echo_payload.py` model functions as expected.
- - `test_echo_handler.py`: Contains unit tests to verify the behavior of the message handling logic in `echo_handler.py`.
+ - `test_echo_handler.py`: Contains unit tests to verify the behaviour of the message handling logic in `echo_handler.py`.
 
 Let's delve into the details of each file.
 

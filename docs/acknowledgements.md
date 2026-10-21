@@ -16,12 +16,12 @@ skilled consortium of the following partners:
 
 * **[Fundació Institut Hospital del Mar d'Investigacions Mèdiques (IMIM)](https://www.imim.es/en_index.html):**
 IMIM plays a crucial role in the [Medical protocols](/docs/use_cases/medical_protocols/) use case, 
-contributing to the definition of an integrative model for moral cognition in AI and the development of behavioral
+contributing to the definition of an integrative model for moral cognition in AI and the development of behavioural
 and neuroscience studies.
 
 * **[Fondazione Istituto Italiano di Tecnologia (IIT)](https://www.iit.it/en-US/):** 
 IIT contributes significantly to the [Social robots](/docs/use_cases/social_robots/) use case,
- developing experiments for behavioral testing of human-robot interaction.
+ developing experiments for behavioural testing of human-robot interaction.
 
 * **[Ghent University](https://www.ugent.be/en):** Ghent University also plays a key role 
 in the [Social robots](/docs/use_cases/social_robots/) use case.

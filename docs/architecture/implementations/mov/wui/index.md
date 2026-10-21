@@ -32,7 +32,7 @@ into distinct sections.
 This section is dedicated to monitoring the real-time status and activity of your running topologies.
 
 - View Live status: See a graphical representation of your active topologies, including component 
-health and connection states, to observe their dynamic behavior.
+health and connection states, to observe their dynamic behaviour.
 - Active components: Inspect the individual components that are currently active within the
 topology managed by the MOV.
 - Live connections: View the current status of the connections defined in the topology

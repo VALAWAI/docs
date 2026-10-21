@@ -17,7 +17,7 @@ The components defined in the [RGNW toolbox](/docs/architecture/value_awareness_
  on that analysis. See the [C1 components](/docs/components/C1) documentation for more details.
 
  - [C2 Components](/docs/components/C2): This reflective layer analyzes the value alignment 
- of behavior. These components are a key innovation of VALAWAI, and they are where value-based 
+ of behaviour. These components are a key innovation of VALAWAI, and they are where value-based 
  reasoning takes place. This involves capabilities such as value acquisition, value representation 
  and reasoning, value alignment mechanisms, and value-driven explainability. See the [C2 components](/docs/components/C2)
  documentation for more details.

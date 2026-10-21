@@ -1,4 +1,4 @@
-# E-mail sensor
+# E-mail Sensor (C0)
 
 The Email Sensor (C0) monitors a user's email server, intelligently extracting relevant data 
 from incoming messages. This information is then published, making it accessible for use 

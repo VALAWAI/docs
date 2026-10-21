@@ -29,7 +29,7 @@ It also clarifies the scope and limitations of the project's approach to value a
 *   **[VALAWAI Architecture](/docs/architecture/value_awareness_architecture):** 
 This section provides a detailed description of the VALAWAI architecture itself.  
 It outlines the different components of the architecture, their interactions, and
-how they contribute to value-aware behavior.  Diagrams and visual representations 
+how they contribute to value-aware behaviour.  Diagrams and visual representations 
 are included to illustrate the architecture's structure and data flow.  This section
 also explains how the architecture incorporates the principles of the chosen neural
 models (GNW/RGNW).

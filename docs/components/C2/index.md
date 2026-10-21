@@ -6,7 +6,7 @@ sidebar_position: 3
 
 C2 components are responsible for reflection within the VALAWAI framework. Critically, 
 this reflection is *value-driven*.  The set of values acts as parameters that guide 
-the behavior of C2 components. While the current implementation focuses on value-driven 
+the behaviour of C2 components. While the current implementation focuses on value-driven 
 reflection, the architecture is designed to be flexible and adaptable to other drivers 
 of reflection.
 
