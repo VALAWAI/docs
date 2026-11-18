@@ -36,3 +36,6 @@ component preprocesses text from Twitter posts, getting it ready for further ana
 
 * **Topic Detection Model:** The [Topic detection model](/docs/components/C0/topic_detection_model)
  extracts topics from Twitter posts.
+
+* **Text Renderer:** The [Text renderer](/docs/components/C0/text_renderer)
+ visualize plain, markdown and html text.

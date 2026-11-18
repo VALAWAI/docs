@@ -23,3 +23,6 @@ generates replies to received emails.
 
 *   **NIT Protocol Manager:** The [NIT protocol manager](/docs/components/C1/nit_protocol_manager) 
 verifies whether a given treatment adheres to the NIT protocol.
+
+*   **Treatment Report Generator:** The [NIT protocol manager](/docs/components/C1/treatment_report_generator) 
+generate a human readable report from a treatement.
