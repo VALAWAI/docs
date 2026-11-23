@@ -11,7 +11,7 @@ Here are the essential characteristics and specifications for the Text Renderer:
  - **Name**: Text Renderer
  - **Repository**: [https://github.com/VALAWAI/C0_text_renderer](https://github.com/VALAWAI/C0_text_renderer)
  - **Versions**:
-   * **Stable version**: [1.0.0](https://github.com/VALAWAI/C0_text_renderer/tree/1.0.0)
+   * **Stable version**: [1.0.1](https://github.com/VALAWAI/C0_text_renderer/tree/1.0.1)
    * **API**:  [1.0.0](https://raw.githubusercontent.com/VALAWAI/C0_text_renderer/main/asyncapi.yaml)
    * **Required MOV API**: [1.2.0 ](https://raw.githubusercontent.com/valawai/MOV/ASYNCAPI_1.2.0/asyncapi.yml)
  - **Developed By**: [IIIA-CSIC](https://www.iiia.csic.es)
