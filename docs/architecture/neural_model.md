@@ -15,7 +15,7 @@ The Global Neuronal Workspace (GNW) model, originally proposed by Stanislas Deha
 and Jean-Pierre Changeux [[Dehaene et al., 2011]](/references#DehaeneStanislas2011TGNW),
 builds upon the earlier Global Workspace model (GW) of Baars [[Baars, 1997]](/references#Baars1997-BAAITT-2),
 which itself was inspired by Blackboard Systems developed in AI in the late 1960s
-[[Engelmore and Morgan, 1988]](/references#Engelmore:1988:BS). The term "Neuronal"
+[[Engelmore and Morgan, 1988]](/references#engelmore_1998). The term "Neuronal"
 signifies that the GNW incorporates testable hypotheses about the neurophysiological
 implementation of a Global Workspace. Dehaene, Changeux, et al. [[Dehaene et al., 2011]](/references#DehaeneStanislas2011TGNW)
 suggest the existence of a network of widely distributed excitatory neurons in

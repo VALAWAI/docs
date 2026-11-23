@@ -8,7 +8,7 @@ The C0 Text Renderer component is designed for deployment within a VALAWAI infra
 
 ---
 
-## 1. Building the Docker Image
+## 1. Building the Docker Image {#building-the-docker-image}
 
 The recommended method for creating the C0 Text Renderer Docker image involves the following steps:
 

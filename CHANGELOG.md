@@ -1,9 +1,9 @@
 # Changes done over the VALAWAI documentation
 
-
-## Version 0.15.0 (October 7, 2026)
+## Version 0.15.0 (November 23, 2026)
 
  - Upgrade docusaurus and react.
+ - Upgrade component documentation.
 
 
 ## Version 0.14.1 (June 10, 2025)

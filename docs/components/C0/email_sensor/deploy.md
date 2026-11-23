@@ -8,7 +8,7 @@ The C0 e-mail sensor component is designed for deployment within a VALAWAI infra
 
 ---
 
-## 1. Building the Docker Image
+## 1. Building the Docker Image {#building-the-docker-image}
 
 The recommended method for creating the C0 E-mail sensor Docker image involves the following steps:
 
@@ -31,7 +31,7 @@ The recommended method for creating the C0 E-mail sensor Docker image involves t
 
 ---
 
-## 2. Configuration & Environment Variables
+## 2. Configuration & Environment Variables {#docker-image-environment-variables}
 
 This section details the primary environment variables available for configuring the Docker image, grouped by their specific functions. For a complete list of all possible configuration options supported by Quarkus, please refer to the official [Quarkus configuration documentation](https://quarkus.io/guides/all-config).
 

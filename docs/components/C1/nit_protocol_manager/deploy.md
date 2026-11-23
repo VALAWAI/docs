@@ -8,7 +8,7 @@ The C1 NIT protocol manager component is designed for deployment within a VALAWA
 
 ---
 
-## 1. Building the Docker Image
+## 1. Building the Docker Image {#building-the-docker-image}
 
 The recommended method for creating the C1 NIT protocol manager Docker image involves the following steps:
 

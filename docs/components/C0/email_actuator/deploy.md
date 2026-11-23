@@ -8,7 +8,7 @@ The C0 e-mail actuator component is designed for deployment within a VALAWAI inf
 
 ---
 
-## 1. Building the Docker Image
+## 1. Building the Docker Image {#building-the-docker-image}
 
 The recommended method for creating the C0 E-mail actuator Docker image involves the following steps:
 

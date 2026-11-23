@@ -16,7 +16,7 @@ The following sections detail the process of creating and deploying this contain
 
 ---
 
-## 1. Building the Docker Image
+## 1. Building the Docker Image {#building-the-docker-image}
 
 The recommended method for creating the C0 Patient treatment UI Docker image involves the following steps:
 
@@ -179,7 +179,7 @@ patient_treatment_ui:
 
 ## 4. Deploying via Docker Compose
 
-This guide explains how to deploy the C0 Patient treatment UI using the [Docker Compose file](https://github.com/VALAWAI/C0_patient_treatment_ui/blob/main/docker-compose.yml) in the [repository](https://github.com/VALAWAI/C0_patient_treatment_ui). Before you begin, ensure you have the [`valawai/c0_patient_treatment_ui:latest`](#1-building-the-docker-image) Docker image and the Master Of VALAWAI (MOV) image built (refer to the [MOV deployment documentation](/docs/architecture/implementations/mov/deploy#building-the-docker-image) for details).
+This guide explains how to deploy the C0 Patient treatment UI using the [Docker Compose file](https://github.com/VALAWAI/C0_patient_treatment_ui/blob/main/docker-compose.yml) in the [repository](https://github.com/VALAWAI/C0_patient_treatment_ui). Before you begin, ensure you have the [`valawai/c0_patient_treatment_ui:latest`](#building-the-docker-image) Docker image and the Master Of VALAWAI (MOV) image built (refer to the [MOV deployment documentation](/docs/architecture/implementations/mov/deploy#building-the-docker-image) for details).
 
 ### Full Deployment (MOV, RabbitMQ, MongoDB, and PostgreSQL)
 To deploy the C0 Patient treatment UI along with the MOV, RabbitMQ, MongoDB, and a PostgreSQL database, use the `all` Docker Compose profile:
